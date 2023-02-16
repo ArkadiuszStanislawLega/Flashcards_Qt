@@ -15,6 +15,13 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
+    <item alignment="Qt::AlignLeft|Qt::AlignVCenter">
+     <widget class="QLabel" name="l_output">
+      <property name="text">
+       <string>Wartosc</string>
+      </property>
+     </widget>
+    </item>
     <item>
      <widget class="QPushButton" name="b_get_tag">
       <property name="text">

@@ -17,6 +17,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_b_get_tag_clicked()
 {
-    this->_model->ReadTag();
+    Question *q = new Question();
+    q->set_answer("Cost tam");
+    q->set_value("Value val");
+    if(DbQuestion::isCreate(q)){
+            Question *q1 = DbQuestion::read(1);
+            qDebug() << q1->to_string();
+            this->_model->ReadTag();
+        ui->l_output->setText(q1->to_string());
+    }
 }
 

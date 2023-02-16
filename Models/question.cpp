@@ -10,7 +10,7 @@ Question::Question(){
 	this->_answer = "";
 }
 
-Question::Question(long id, string value, string answer, vector<Tag*> tags){
+Question::Question(long id, QString value, QString answer, vector<Tag*> tags){
 	this->_id = id;
 	this->_value = value;
 	this->_answer = answer;
@@ -21,11 +21,11 @@ vector<Tag*> Question::get_tags(){
 	return this->_tags;
 }
 
-string Question::get_value(){
+QString Question::get_value(){
 	return this->_value;
 }
 
-string Question::get_answer(){
+QString Question::get_answer(){
 	return this->_answer;
 }
 
@@ -33,11 +33,11 @@ long Question::get_id(){
 	return this->_id;
 }
 
-void Question::set_answer(string value){
+void Question::set_answer(QString value){
 	this->_answer = value;
 }
 
-void Question::set_value(string value){
+void Question::set_value(QString value){
 	this->_value = value;
 }
 
@@ -51,8 +51,8 @@ bool Question::is_tag_already_related(Tag *t){
 }
 
 
-string Question::to_string(){
-	return std::to_string(this->_id) + ". " + this->_value + " " + this->_answer; 
+QString Question::to_string(){
+    return QString::number(this->_id) + ". " + this->_value + " " + this->_answer;
 }
 
 void Question::set_tags(vector<Tag*> t){

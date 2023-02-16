@@ -17,9 +17,9 @@ public:
 private:
     QSqlDatabase _database;
     void CreateTables();
-    void CreateTableQuestionsTags();
     void CreateTableQuestions();
     void CreateTableTags();
+    void CreateTableQuestionsTags();
 };
 
 #endif // DBMANAGER_H

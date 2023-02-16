@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include "Models/model.h"
+#include "Models/question.h"
+#include "Database/dbquestion.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

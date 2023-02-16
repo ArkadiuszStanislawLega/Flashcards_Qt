@@ -65,7 +65,7 @@ void DbManager::CreateTableQuestions(){
             "(id integer primary key autoincrement not null,"
             "Value Text not null,"
             "Answer Text not null);";
-    query.exec((create_table_questions))
+    query.exec(create_table_questions);
 }
 
 void DbManager::CreateTableTags(){

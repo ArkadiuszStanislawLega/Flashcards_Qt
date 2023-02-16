@@ -1,0 +1,44 @@
+#include "dbquestion.h"
+
+DbQuestion::DbQuestion()
+{
+}
+
+bool DbQuestion::isCreate(Question *q){
+        QSqlQuery query;
+
+        query.prepare(INSERT + TABLE_QUESTIONS +
+                     "(" + COLUMN_VALUE + ", " + COLUMN_ANSWER +
+                       ")" + VALUES + "(:" + COLUMN_VALUE + ", :" + COLUMN_ANSWER + ")");
+
+        query.bindValue(":" + COLUMN_VALUE, q->get_value());
+        query.bindValue(":" + COLUMN_ANSWER, q->get_answer());
+
+        return query.exec();
+}
+
+Question *DbQuestion::read(int id){
+    Question *q = new Question();
+    QSqlQuery query;
+    query.prepare(SELECT + "* " + FROM + TABLE_QUESTIONS + " " +
+                  WHERE + COLUMN_ID + " = (:" + COLUMN_ID + ")");
+    query.bindValue(":" + COLUMN_ID, id);
+    if (query.exec())
+    {
+       if (query.next())
+       {
+           int id, idValue, idAnswer;
+
+           id = query.record().indexOf(COLUMN_ID);
+           idValue = query.record().indexOf(COLUMN_VALUE);
+           idAnswer = query.record().indexOf(COLUMN_ANSWER);
+
+           q->set_id(query.value(id).toInt());
+           q->set_answer(query.value(idAnswer).toString());
+           q->set_value(query.value(idValue).toString());
+
+           return q;
+       }
+    }
+    return q;
+}
