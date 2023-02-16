@@ -42,3 +42,18 @@ Question *DbQuestion::read(int id){
     }
     return q;
 }
+
+int DbQuestion::findId(QString value, QString answer){
+    QSqlQuery query;
+    query.prepare("SELECT * FROM Questions where Value = :value and Answer = :answer");
+    query.bindValue(":value", value);
+    query.bindValue(":answer", answer);
+    if(query.exec()){
+        while(query.next()){
+            int idColumn;
+            idColumn = query.record().indexOf(COLUMN_ID);
+
+            return query.value(idColumn).toInt();
+        }
+    }
+}

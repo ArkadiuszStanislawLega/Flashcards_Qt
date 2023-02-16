@@ -15,11 +15,43 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Value:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTextEdit" name="te_question_value"/>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Answer:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTextEdit" name="te_question_answer"/>
+    </item>
     <item alignment="Qt::AlignLeft|Qt::AlignVCenter">
      <widget class="QLabel" name="l_output">
       <property name="text">
        <string>Wartosc</string>
       </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="b_add_question">
+      <property name="text">
+       <string>Add Question</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="horizontalFrame">
+      <layout class="QHBoxLayout" name="horizontalLayout"/>
      </widget>
     </item>
     <item>

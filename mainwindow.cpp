@@ -28,3 +28,14 @@ void MainWindow::on_b_get_tag_clicked()
     }
 }
 
+void MainWindow::on_b_add_question_clicked()
+{
+   Question *q = new Question();
+   q->set_value(ui->te_question_value->toPlainText());
+   q->set_answer(ui->te_question_answer->toPlainText());
+   if(DbQuestion::isCreate(q)){
+       Question *qa = DbQuestion::read(DbQuestion::findId(q->get_value(), q->get_answer()));
+       ui->l_output->setText(qa->to_string());
+   }
+}
+

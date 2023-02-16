@@ -21,6 +21,8 @@ public:
 private slots:
     void on_b_get_tag_clicked();
 
+    void on_b_add_question_clicked();
+
 private:
     Ui::MainWindow *ui;
     Model *_model;

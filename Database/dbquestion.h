@@ -20,6 +20,7 @@ public:
     static Question *read(int);
     static bool isUpdate(Question *);
     static bool isRemove(int );
+    static int findId(QString, QString);
 };
 
 #endif // DBQUESTION_H
