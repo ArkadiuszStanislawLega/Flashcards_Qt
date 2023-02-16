@@ -15,7 +15,11 @@ public:
     void ReadTag(int id);
 
 private:
-    QSqlDatabase database;
+    QSqlDatabase _database;
+    void CreateTables();
+    void CreateTableQuestionsTags();
+    void CreateTableQuestions();
+    void CreateTableTags();
 };
 
 #endif // DBMANAGER_H

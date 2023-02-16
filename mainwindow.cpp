@@ -17,7 +17,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_b_get_tag_clicked()
 {
-    qDebug() << "JESTEM TUTAJ";
     this->_model->ReadTag();
 }
 
