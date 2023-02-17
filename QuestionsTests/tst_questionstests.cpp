@@ -17,6 +17,7 @@ private slots:
     void isCreate();
     void read();
     void findId();
+    void isUpdate();
 };
 
 QuestionsTests::QuestionsTests()
@@ -50,6 +51,18 @@ void QuestionsTests::findId(){
     QCOMPARE(1, DbQuestion::findId(test_value, test_value));
 }
 
+void QuestionsTests::isUpdate(){
+    QString test_value_2 = "TEST2";
+    Question *q = new Question(1, test_value, test_value, {});
+    q->set_answer(test_value_2);
+    q->set_value(test_value_2);
+
+    QVERIFY(DbQuestion::isUpdate(q));
+
+    q = DbQuestion::read(1);
+    QCOMPARE(test_value_2, q->get_answer());
+    QCOMPARE(test_value_2, q->get_value());
+}
 QTEST_APPLESS_MAIN(QuestionsTests)
 
 #include "tst_questionstests.moc"

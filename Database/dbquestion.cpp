@@ -60,3 +60,9 @@ int DbQuestion::findId(QString value, QString answer){
         }
     }
 }
+
+bool DbQuestion::isUpdate(Question *q){
+    QSqlQuery query;
+
+    return false;
+}
