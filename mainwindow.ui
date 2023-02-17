@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>803</width>
+    <height>653</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,7 +35,7 @@
     <item>
      <widget class="QTextEdit" name="te_question_answer"/>
     </item>
-    <item alignment="Qt::AlignLeft|Qt::AlignVCenter">
+    <item>
      <widget class="QLabel" name="l_output">
       <property name="text">
        <string>Wartosc</string>
@@ -43,22 +43,40 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="b_add_question">
-      <property name="text">
-       <string>Add Question</string>
-      </property>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QPushButton" name="b_remove_question">
+        <property name="text">
+         <string>Remove Question</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="b_add_question">
+        <property name="text">
+         <string>Add Question</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="b_update_question">
+        <property name="text">
+         <string>Update Question</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="b_get_tag">
+        <property name="text">
+         <string>Get Tag</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
      <widget class="QFrame" name="horizontalFrame">
       <layout class="QHBoxLayout" name="horizontalLayout"/>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="b_get_tag">
-      <property name="text">
-       <string>Get Tag</string>
-      </property>
      </widget>
     </item>
    </layout>
@@ -68,7 +86,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>803</width>
      <height>22</height>
     </rect>
    </property>

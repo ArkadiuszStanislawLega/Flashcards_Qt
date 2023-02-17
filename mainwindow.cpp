@@ -34,8 +34,29 @@ void MainWindow::on_b_add_question_clicked()
    q->set_value(ui->te_question_value->toPlainText());
    q->set_answer(ui->te_question_answer->toPlainText());
    if(DbQuestion::isCreate(q)){
-       Question *qa = DbQuestion::read(DbQuestion::findId(q->get_value(), q->get_answer()));
-       ui->l_output->setText(qa->to_string());
+       this->_selected_question = DbQuestion::read(DbQuestion::findId(q->get_value(), q->get_answer()));
+       ui->l_output->setText(this->_selected_question->to_string());
    }
+}
+
+
+void MainWindow::on_b_remove_question_clicked()
+{
+    if(this->_selected_question != nullptr){
+       if (DbQuestion::isRemoved(this->_selected_question->get_id())){
+           this->_selected_question = nullptr;
+           ui->l_output->setText("Skasowano");
+       }
+    }
+}
+
+void MainWindow::on_b_update_question_clicked()
+{
+    this->_selected_question->set_answer(ui->te_question_answer->toPlainText());
+    this->_selected_question->set_value(ui->te_question_value->toPlainText());
+    if(DbQuestion::isUpdate(this->_selected_question)){
+        this->_selected_question = DbQuestion::read(this->_selected_question->get_id());
+        ui->l_output->setText(this->_selected_question->to_string());
+    }
 }
 

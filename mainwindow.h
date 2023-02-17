@@ -23,9 +23,14 @@ private slots:
 
     void on_b_add_question_clicked();
 
+    void on_b_remove_question_clicked();
+
+    void on_b_update_question_clicked();
+
 private:
     Ui::MainWindow *ui;
     Model *_model;
+    Question *_selected_question;
 
 };
 #endif // MAINWINDOW_H
