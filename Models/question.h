@@ -19,20 +19,20 @@ class Question{
 	private:
 		static int read_related_tag(void *, int, char **, char **);
         QString _value, _answer;
-		long _id;
+        int _id;
 		vector<Tag*> _tags;
 
 	public:
 		Question();
-        Question(long, QString, QString, vector<Tag*>);
+        Question(int, QString, QString, vector<Tag*>);
 
-		long get_id();
+        int get_id();
         QString get_value();
         QString get_answer();
 		vector<Tag*> get_tags();
 		bool is_tag_already_related(Tag *);
 
-		void set_id(long);	
+        void set_id(int);
         void set_value(QString);
         void set_answer(QString);
 		void set_tags(vector<Tag*>);

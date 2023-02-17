@@ -1,6 +1,6 @@
 #include "question.h"
 
-void Question::set_id(long value){
+void Question::set_id(int value){
 	this->_id = value;
 }
 
@@ -10,7 +10,7 @@ Question::Question(){
 	this->_answer = "";
 }
 
-Question::Question(long id, QString value, QString answer, vector<Tag*> tags){
+Question::Question(int id, QString value, QString answer, vector<Tag*> tags){
 	this->_id = id;
 	this->_value = value;
 	this->_answer = answer;
@@ -29,7 +29,7 @@ QString Question::get_answer(){
 	return this->_answer;
 }
 
-long Question::get_id(){
+int Question::get_id(){
 	return this->_id;
 }
 

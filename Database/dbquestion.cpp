@@ -48,7 +48,6 @@ int DbQuestion::findId(QString value, QString answer){
     query.prepare(SELECT + "* " + FROM + TABLE_QUESTIONS + " " + WHERE +
                   COLUMN_VALUE + "=:" + COLUMN_VALUE + " " + AND +
                   COLUMN_ANSWER + "=:" + COLUMN_ANSWER);
-    //query.prepare("SELECT * FROM Questions where Value = :value and Answer = :answer");
     query.bindValue(":" + COLUMN_VALUE, value);
     query.bindValue(":" + COLUMN_ANSWER, answer);
     if(query.exec()){
@@ -59,10 +58,17 @@ int DbQuestion::findId(QString value, QString answer){
             return query.value(idColumn).toInt();
         }
     }
+    return -1;
 }
 
 bool DbQuestion::isUpdate(Question *q){
     QSqlQuery query;
-
-    return false;
+    query.prepare(UPDATE + TABLE_QUESTIONS + " " + SET +
+            COLUMN_VALUE + "=:" + COLUMN_VALUE + ", " +
+            COLUMN_ANSWER + "=:" + COLUMN_ANSWER + " " +
+            WHERE + COLUMN_ID + "=:" + COLUMN_ID);
+    query.bindValue(":" + COLUMN_VALUE, q->get_value());
+    query.bindValue(":" + COLUMN_ANSWER, q->get_answer());
+    query.bindValue(":" + COLUMN_ID, q->get_id());
+    return query.exec();
 }
