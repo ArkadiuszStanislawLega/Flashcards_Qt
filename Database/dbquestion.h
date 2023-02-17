@@ -1,8 +1,8 @@
 #ifndef DBQUESTION_H
 #define DBQUESTION_H
 
-#include "Models/question.h"
-#include "Constants/strings.h"
+#include "../Models/question.h"
+#include "../Constants/strings.h"
 #include <vector>
 #include <QSqlQuery>
 #include <QSqlRecord>
