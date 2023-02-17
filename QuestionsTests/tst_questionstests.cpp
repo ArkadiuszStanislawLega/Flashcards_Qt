@@ -19,6 +19,7 @@ private slots:
     void findId();
     void read();
     void isUpdate();
+    void getAllQestions();
     void isRemoved();
 };
 
@@ -67,6 +68,10 @@ void QuestionsTests::isUpdate(){
 
 void QuestionsTests::isRemoved(){
     QVERIFY(DbQuestion::isRemoved(this->question_id));
+}
+
+void QuestionsTests::getAllQuestions(){
+    QCOMPARE(1, DbQuestion::getAllQuestions().size());
 }
 QTEST_APPLESS_MAIN(QuestionsTests)
 
