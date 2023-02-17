@@ -72,3 +72,10 @@ bool DbQuestion::isUpdate(Question *q){
     query.bindValue(":" + COLUMN_ID, q->get_id());
     return query.exec();
 }
+
+bool DbQuestion::isRemoved(int id){
+    QSqlQuery query;
+    query.prepare(DELETE + TABLE_QUESTIONS + " " + WHERE +
+                  COLUMN_ID + "=:" + COLUMN_ID);
+    return query.exec();
+}

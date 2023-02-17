@@ -19,7 +19,7 @@ public:
     static bool isCreate(Question *);
     static Question *read(int);
     static bool isUpdate(Question *);
-    static bool isRemove(int );
+    static bool isRemoved(int );
     static int findId(QString, QString);
 };
 
