@@ -19,7 +19,7 @@ private slots:
     void findId();
     void read();
     void isUpdate();
-    void getAllQestions();
+    void getAllQuestions();
     void isRemoved();
 };
 
@@ -66,13 +66,14 @@ void QuestionsTests::isUpdate(){
     QCOMPARE(test_value_2, q->get_value());
 }
 
+void QuestionsTests::getAllQuestions(){
+    QCOMPARE(1, DbQuestion::getAllQuestions().size());
+}
+
 void QuestionsTests::isRemoved(){
     QVERIFY(DbQuestion::isRemoved(this->question_id));
 }
 
-void QuestionsTests::getAllQuestions(){
-    QCOMPARE(1, DbQuestion::getAllQuestions().size());
-}
 QTEST_APPLESS_MAIN(QuestionsTests)
 
 #include "tst_questionstests.moc"

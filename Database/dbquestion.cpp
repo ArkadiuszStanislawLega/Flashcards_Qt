@@ -21,7 +21,7 @@ Question *DbQuestion::read(int id){
     Question *q = new Question();
     QSqlQuery query;
     query.prepare(SELECT + "* " + FROM + TABLE_QUESTIONS + " " +
-                  WHERE + COLUMN_ID + " = (:" + COLUMN_ID + ")");
+                  WHERE + COLUMN_ID + " = (:" + COLUMN_ID + ") limit 1");
     query.bindValue(":" + COLUMN_ID, id);
     if (query.exec())
     {
@@ -77,5 +77,31 @@ bool DbQuestion::isRemoved(int id){
     QSqlQuery query;
     query.prepare(DELETE + TABLE_QUESTIONS + " " + WHERE +
                   COLUMN_ID + "=:" + COLUMN_ID);
+    query.bindValue(":" + COLUMN_ID, id);
     return query.exec();
+}
+
+vector<Question *> DbQuestion::getAllQuestions(){
+   vector<Question *> questions;
+   QSqlQuery query;
+   query.prepare(SELECT + "* " + FROM + TABLE_QUESTIONS);
+
+   if(query.exec()){
+       while(query.next()){
+           Question *q = new Question();
+           int columnId, columnValue, columnAnswer;
+
+           columnId = query.record().indexOf(COLUMN_ID);
+           columnValue = query.record().indexOf(COLUMN_VALUE);
+           columnAnswer = query.record().indexOf(COLUMN_ANSWER);
+
+           q->set_id(query.value(columnId).toInt());
+           q->set_answer(query.value(columnAnswer).toString());
+           q->set_value(query.value(columnValue).toString());
+
+           questions.push_back(q);
+       }
+   }
+
+   return questions;
 }
