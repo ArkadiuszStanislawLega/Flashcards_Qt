@@ -22,7 +22,18 @@ bool DbTag::isCreate(Tag *t){
 
 int DbTag::findId(QString tag){
     if(tag != ""){
+        QSqlQuery query;
+        query.prepare(SELECT + "* " + FROM + TABLE_TAGS + " " + WHERE +
+                      COLUMN_TAG + "=:" + COLUMN_TAG);
+        query.bindValue(":" + COLUMN_TAG, tag);
+        if(query.exec()){
+            while(query.next()){
+               int idColumn;
+               idColumn = query.record().indexOf(COLUMN_ID);
 
+               return query.value(idColumn).toInt();
+            }
+        }
     }
     return -1;
 }
