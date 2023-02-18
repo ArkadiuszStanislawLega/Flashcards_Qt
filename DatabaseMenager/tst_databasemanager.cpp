@@ -96,7 +96,9 @@ void DatabaseManager::isFindIdTag(){
 }
 
 void DatabaseManager::readTag(){
-
+    Tag *t = DbTag::read(this->tag_id);
+    QCOMPARE(this->tag_id, t->get_id());
+    QCOMPARE(test_value, t->get_tag());
 }
 
 void DatabaseManager::isUpdateTag(){
