@@ -91,7 +91,8 @@ void DatabaseManager::isCreateTag(){
 }
 
 void DatabaseManager::isFindIdTag(){
-
+    this->tag_id = DbTag::findId(test_value);
+    QVERIFY(this->tag_id > 0);
 }
 
 void DatabaseManager::readTag(){

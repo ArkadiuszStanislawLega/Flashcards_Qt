@@ -15,6 +15,7 @@ public:
     DbTag();
     static vector<Tag *> getAllTags();
     static bool isCreate(Tag *);
+    static int findId(QString);
     static Tag *read(int);
     static bool isUpdate(Tag *);
     static bool isRemoved(int);

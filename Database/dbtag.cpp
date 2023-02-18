@@ -20,6 +20,13 @@ bool DbTag::isCreate(Tag *t){
     return false;
 }
 
+int DbTag::findId(QString tag){
+    if(tag != ""){
+
+    }
+    return -1;
+}
+
 Tag *DbTag::read(int id){
     Tag *tag = new Tag();
     if(id > 0){
