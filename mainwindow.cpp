@@ -7,13 +7,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     this->_model = new Model();
+    this->_selected_question = nullptr;
+    this->_selected_tag = nullptr;
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
 
 void MainWindow::on_b_get_tag_clicked()
 {
@@ -39,13 +40,12 @@ void MainWindow::on_b_add_question_clicked()
    }
 }
 
-
 void MainWindow::on_b_remove_question_clicked()
 {
     if(this->_selected_question != nullptr){
        if (DbQuestion::isRemoved(this->_selected_question->get_id())){
            this->_selected_question = nullptr;
-           ui->l_output->setText("Skasowano");
+           ui->l_output->setText("Usunieto pytanie.");
        }
     }
 }
@@ -60,3 +60,32 @@ void MainWindow::on_b_update_question_clicked()
     }
 }
 
+void MainWindow::on_b_add_tag_clicked()
+{
+    this->_selected_tag = new Tag();
+    this->_selected_tag->set_tag(ui->le_tag->text());
+    if(DbTag::isCreate(this->_selected_tag)){
+        this->_selected_tag = DbTag::read(DbTag::findId(this->_selected_tag->get_tag()));
+        ui->l_output->setText(this->_selected_tag->get_tag());
+    }
+}
+
+void MainWindow::on_b_update_tag_clicked()
+{
+    if(this->_selected_tag != nullptr){
+        this->_selected_tag->set_tag(ui->le_tag->text());
+        if(DbTag::isUpdate(this->_selected_tag)){
+            this->_selected_tag = DbTag::read(this->_selected_tag->get_id());
+            ui->l_output->setText(this->_selected_tag->get_tag());
+        }
+    }
+}
+
+void MainWindow::on_b_remove_tag_clicked()
+{
+    if(this->_selected_tag != nullptr){
+        if(DbTag::isRemoved(this->_selected_tag->get_id())){
+            ui->l_output->setText("Tag usuniety.");
+        }
+    }
+}

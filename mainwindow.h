@@ -5,6 +5,7 @@
 #include "Models/model.h"
 #include "Models/question.h"
 #include "Database/dbquestion.h"
+#include "Database/dbtag.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -27,10 +28,16 @@ private slots:
 
     void on_b_update_question_clicked();
 
+    void on_b_add_tag_clicked();
+
+    void on_b_update_tag_clicked();
+
+    void on_b_remove_tag_clicked();
+
 private:
     Ui::MainWindow *ui;
     Model *_model;
     Question *_selected_question;
-
+    Tag *_selected_tag;
 };
 #endif // MAINWINDOW_H
