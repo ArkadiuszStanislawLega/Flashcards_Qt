@@ -4,36 +4,36 @@
 #include "../Database/dbmanager.h"
 #include "../Constants/strings.h"
 
-class QuestionsTests : public QObject
+class DatabaseManager : public QObject
 {
     Q_OBJECT
     const QString test_value = "TEST";
     int question_id {0};
 
 public:
-    QuestionsTests();
-    ~QuestionsTests();
+    DatabaseManager();
+    ~DatabaseManager();
 
 private slots:
-    void isCreate();
-    void findId();
-    void read();
-    void isUpdate();
+    void isCreateQuestion();
+    void findIdQuestion();
+    void readQuestion();
+    void isUpdateQuestion();
     void getAllQuestions();
-    void isRemoved();
+    void isRemovedQuestion();
 };
 
-QuestionsTests::QuestionsTests()
+DatabaseManager::DatabaseManager()
 {
     DbManager(DATABASE_NAME);
 }
 
-QuestionsTests::~QuestionsTests()
+DatabaseManager::~DatabaseManager()
 {
 
 }
 
-void QuestionsTests::isCreate()
+void DatabaseManager::isCreateQuestion()
 {
     Question *q = new Question();
     q->set_answer(test_value);
@@ -41,19 +41,19 @@ void QuestionsTests::isCreate()
     QVERIFY(DbQuestion::isCreate(q));
 }
 
-void QuestionsTests::findId(){
+void DatabaseManager::findIdQuestion(){
     this->question_id = DbQuestion::findId(test_value, test_value);
     QVERIFY(this->question_id > 0);
 }
 
-void QuestionsTests::read(){
+void DatabaseManager::readQuestion(){
     Question *q = DbQuestion::read(this->question_id);
     QCOMPARE(this->question_id, q->get_id());
     QCOMPARE(test_value, q->get_answer());
     QCOMPARE(test_value, q->get_value());
 }
 
-void QuestionsTests::isUpdate(){
+void DatabaseManager::isUpdateQuestion(){
     QString test_value_2 = "TEST2";
     Question *q = new Question(this->question_id, test_value, test_value, {});
     q->set_answer(test_value_2);
@@ -66,14 +66,14 @@ void QuestionsTests::isUpdate(){
     QCOMPARE(test_value_2, q->get_value());
 }
 
-void QuestionsTests::getAllQuestions(){
+void DatabaseManager::getAllQuestions(){
     QCOMPARE(1, DbQuestion::getAllQuestions().size());
 }
 
-void QuestionsTests::isRemoved(){
+void DatabaseManager::isRemovedQuestion(){
     QVERIFY(DbQuestion::isRemoved(this->question_id));
 }
 
-QTEST_APPLESS_MAIN(QuestionsTests)
+QTEST_APPLESS_MAIN(DatabaseManager)
 
-#include "tst_questionstests.moc"
+#include "tst_databasemanager.moc"
