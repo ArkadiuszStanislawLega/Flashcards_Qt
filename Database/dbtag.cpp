@@ -7,7 +7,15 @@ DbTag::DbTag()
 
 bool DbTag::isCreate(Tag *t){
     if(t != nullptr){
+       QSqlQuery query;
 
+       query.prepare(INSERT + TABLE_TAGS +
+                     "(" + COLUMN_TAG + ")" +
+                     VALUES + "(:" + COLUMN_TAG + ")");
+
+       query.bindValue(":" + COLUMN_TAG, t->get_tag());
+
+       return query.exec();
     }
     return false;
 }
