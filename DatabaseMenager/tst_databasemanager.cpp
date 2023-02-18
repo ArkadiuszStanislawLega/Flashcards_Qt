@@ -117,7 +117,7 @@ void DatabaseManager::getAllTags(){
 }
 
 void DatabaseManager::isRemovedTag(){
-
+    QVERIFY(DbTag::isRemoved(this->tag_id));
 }
 
 QTEST_APPLESS_MAIN(DatabaseManager)
