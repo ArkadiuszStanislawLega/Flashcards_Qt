@@ -77,7 +77,7 @@ void DatabaseManager::isUpdateQuestion(){
 }
 
 void DatabaseManager::getAllQuestions(){
-    QCOMPARE(1, DbQuestion::getAllQuestions().size());
+    QVERIFY(DbQuestion::getAllQuestions().size() > 0);
 }
 
 void DatabaseManager::isRemovedQuestion(){

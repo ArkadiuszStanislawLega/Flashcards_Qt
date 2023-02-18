@@ -99,7 +99,11 @@ vector<Tag *> DbTag::getAllTags(){
 
 bool DbTag::isRemoved(int id){
     if(id > 0){
-
+        QSqlQuery query;
+        query.prepare(DELETE + TABLE_TAGS + " " + WHERE +
+                      COLUMN_ID + "=:" + COLUMN_ID);
+        query.bindValue(":" + COLUMN_ID, id);
+        return query.exec();
     }
     return false;
 }
