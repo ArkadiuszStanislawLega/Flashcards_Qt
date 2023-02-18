@@ -76,17 +76,30 @@ bool DbTag::isUpdate(Tag *t){
    return false;
 }
 
+vector<Tag *> DbTag::getAllTags(){
+    vector<Tag *> tags;
+    QSqlQuery query;
+    query.prepare(SELECT + "* " + FROM + TABLE_TAGS);
+    if(query.exec()){
+        while(query.next()){
+            Tag *t = new Tag();
+            int idColumn, tagColumn;
+
+            idColumn = query.record().indexOf(COLUMN_ID);
+            tagColumn = query.record().indexOf(COLUMN_TAG);
+
+            t->set_id(query.value(idColumn).toInt());
+            t->set_tag(query.value(tagColumn).toString());
+
+            tags.push_back(t);
+        }
+    }
+    return tags;
+}
+
 bool DbTag::isRemoved(int id){
     if(id > 0){
 
     }
     return false;
-}
-
-int findId(QString tag){
-    if (tag != nullptr)
-    {
-
-    }
-    return -1;
 }

@@ -113,7 +113,7 @@ void DatabaseManager::isUpdateTag(){
 }
 
 void DatabaseManager::getAllTags(){
-    QCOMPARE(1, DbQuestion::getAllQuestions().size());
+    QVERIFY(DbTag::getAllTags().size() > 0);
 }
 
 void DatabaseManager::isRemovedTag(){
