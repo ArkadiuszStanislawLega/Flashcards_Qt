@@ -12,6 +12,7 @@ CONFIG += c++17
 SOURCES += \
     Database/dbmanager.cpp \
     Database/dbquestion.cpp \
+    Database/dbtag.cpp \
     Models/model.cpp \
     Models/question.cpp \
     Models/tag.cpp \
@@ -23,6 +24,7 @@ HEADERS += \
     Constants/values.h \
     Database/dbmanager.h \
     Database/dbquestion.h \
+    Database/dbtag.h \
     Models/model.h \
     Models/question.h \
     Models/tag.h \

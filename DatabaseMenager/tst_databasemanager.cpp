@@ -2,6 +2,7 @@
 #include "../Models/question.h"
 #include "../Models/tag.h"
 #include "../Database/dbquestion.h"
+#include "../Database/dbtag.h"
 #include "../Database/dbmanager.h"
 #include "../Constants/strings.h"
 
@@ -84,8 +85,9 @@ void DatabaseManager::isRemovedQuestion(){
 }
 
 void DatabaseManager::isCreateTag(){
-
-
+    Tag *t = new Tag();
+    t->set_tag(test_value);
+    QVERYFY(DbTag::isCreate(t));
 }
 
 void DatabaseManager::isFindIdTag(){
