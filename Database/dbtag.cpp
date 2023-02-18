@@ -41,7 +41,24 @@ int DbTag::findId(QString tag){
 Tag *DbTag::read(int id){
     Tag *tag = new Tag();
     if(id > 0){
+        QSqlQuery query;
+        query.prepare(SELECT + "* " + FROM + TABLE_TAGS + " " +
+                      WHERE + COLUMN_ID + "=(:" + COLUMN_ID + ") limit 1");
+        query.bindValue(":" + COLUMN_ID, id);
 
+        if(query.exec()){
+            if(query.next()){
+                int idColumn, tagColumn;
+
+                idColumn = query.record().indexOf(COLUMN_ID);
+                tagColumn = query.record().indexOf(COLUMN_TAG);
+
+                tag->set_id(query.value(idColumn).toInt());
+                tag->set_tag(query.value(tagColumn).toString());
+
+                return tag;
+            }
+        }
     }
     return tag;
 }
