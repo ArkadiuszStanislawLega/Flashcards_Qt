@@ -18,7 +18,7 @@ public:
     static Tag *read(int);
     static bool isUpdate(Tag *);
     static bool isRemoved(int);
-    static int finId(Qstring);
+    static int finId(QString);
 };
 
 #endif // DBTAG_H

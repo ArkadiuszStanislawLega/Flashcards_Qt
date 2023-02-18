@@ -5,7 +5,7 @@ Tag::Tag(){
 	this->_tag = "";
 }
 
-Tag::Tag(long id, string tag){
+Tag::Tag(long id, QString tag){
 	this->_id = id;
 	this->_tag = tag;
 }
@@ -14,7 +14,7 @@ long Tag::get_id(){
 	return this->_id;
 }
 
-string Tag::get_tag(){
+QString Tag::get_tag(){
 	return this->_tag;
 }
 
@@ -22,7 +22,7 @@ void Tag::set_id(long id){
 	this->_id = id;
 }
 
-void Tag::set_tag(string tag){
+void Tag::set_tag(QString tag){
 	this->_tag = tag;
 }
 

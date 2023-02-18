@@ -87,7 +87,7 @@ void DatabaseManager::isRemovedQuestion(){
 void DatabaseManager::isCreateTag(){
     Tag *t = new Tag();
     t->set_tag(test_value);
-    QVERYFY(DbTag::isCreate(t));
+    QVERIFY(DbTag::isCreate(t));
 }
 
 void DatabaseManager::isFindIdTag(){
@@ -99,6 +99,10 @@ void DatabaseManager::readTag(){
 }
 
 void DatabaseManager::isUpdateTag(){
+
+}
+
+void DatabaseManager::getAllTags(){
 
 }
 

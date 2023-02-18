@@ -34,7 +34,7 @@ bool DbTag::isRemoved(int id){
     return false;
 }
 
-int findId(Qstring tag){
+int findId(QString tag){
     if (tag != nullptr)
     {
 
