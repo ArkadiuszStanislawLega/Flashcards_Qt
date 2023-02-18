@@ -1,5 +1,6 @@
 #include <QtTest>
 #include "../Models/question.h"
+#include "../Models/tag.h"
 #include "../Database/dbquestion.h"
 #include "../Database/dbmanager.h"
 #include "../Constants/strings.h"
@@ -9,6 +10,7 @@ class DatabaseManager : public QObject
     Q_OBJECT
     const QString test_value = "TEST";
     int question_id {0};
+    int tag_id {0};
 
 public:
     DatabaseManager();
@@ -21,6 +23,13 @@ private slots:
     void isUpdateQuestion();
     void getAllQuestions();
     void isRemovedQuestion();
+
+    void isCreateTag();
+    void isFindIdTag();
+    void readTag();
+    void isUpdateTag();
+    void getAllTags();
+    void isRemovedTag();
 };
 
 DatabaseManager::DatabaseManager()
@@ -72,6 +81,27 @@ void DatabaseManager::getAllQuestions(){
 
 void DatabaseManager::isRemovedQuestion(){
     QVERIFY(DbQuestion::isRemoved(this->question_id));
+}
+
+void DatabaseManager::isCreateTag(){
+
+
+}
+
+void DatabaseManager::isFindIdTag(){
+
+}
+
+void DatabaseManager::readTag(){
+
+}
+
+void DatabaseManager::isUpdateTag(){
+
+}
+
+void DatabaseManager::isRemovedTag(){
+
 }
 
 QTEST_APPLESS_MAIN(DatabaseManager)
