@@ -102,7 +102,14 @@ void DatabaseManager::readTag(){
 }
 
 void DatabaseManager::isUpdateTag(){
+    QString test_value_2 = "TEST2";
+    Tag *t = new Tag(this->question_id, test_value);
+    t->set_tag(test_value_2);
 
+    QVERIFY(DbTag::isUpdate(t));
+
+    t = DbTag::read(this->tag_id);
+   QCOMPARE(test_value_2, t->get_tag());
 }
 
 void DatabaseManager::getAllTags(){
