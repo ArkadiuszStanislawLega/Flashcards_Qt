@@ -65,7 +65,13 @@ Tag *DbTag::read(int id){
 
 bool DbTag::isUpdate(Tag *t){
     if(t != nullptr){
-
+        QSqlQuery query;
+        query.prepare(UPDATE + TABLE_TAGS + " " + SET +
+                      COLUMN_TAG + "=:" + COLUMN_TAG + " " +
+                      WHERE + COLUMN_ID + "=:" + COLUMN_ID);
+        query.bindValue(":" + COLUMN_TAG, t->get_tag());
+        query.bindValue(":" + COLUMN_ID, t->get_id());
+        return query.exec();
     }
    return false;
 }

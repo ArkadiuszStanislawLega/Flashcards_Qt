@@ -10,16 +10,16 @@ class Question;
 
 class Tag{
 	private:
-		long _id;
+        int _id;
         QString _tag;
 	public:
 		Tag();
-        Tag(long, QString);
+        Tag(int, QString);
 
-		long get_id();
+        int get_id();
         QString get_tag();
 
-		void set_id(long);
+        void set_id(int);
         void set_tag(QString);
 		bool is_question_already_related(Question *);
 };
