@@ -107,19 +107,24 @@ vector<Question *> DbQuestion::getAllQuestions(){
 }
 
 bool DbQuestion::isRelationCreated(Question *q, Tag *t){
-        if (q != nullptr && t != nullptr)
-        {
-
-        }
-        return false;
+    if (q != nullptr && t != nullptr)
+    {
+        QSqlQuery query;
+        query.prepare(INSERT + TABLE_QUESTIONS_TAGS + "(" + COLUMN_QUESTION_ID + ", " + COLUMN_TAG_ID  + ")" +
+                       VALUES + "(:" + COLUMN_QUESTION_ID + ", :" + COLUMN_TAG_ID + ")");
+        query.bindValue(":" + COLUMN_QESTION_ID, q->get_id());
+        query.bindValue(":" + COLUMN_TAG_ID, t->get_id());
+        return query.exec();
+    }
+    return false;
 }
 
 bool DbQuestion::isRelationRemoved(Question *q, Tag *t){
-        if (q != nullptr && t != nullptr)
-        {
+    if (q != nullptr && t != nullptr)
+    {
 
-        }
-        return false;
+    }
+    return false;
 }
 
 bool DbQuestion::isAllRelationRemoved(Question *q){
