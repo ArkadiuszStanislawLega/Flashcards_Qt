@@ -142,7 +142,9 @@ void DatabaseManager::readAllRelatedTags(){
 }
 
 void DatabaseManager::isRelationRemoved(){
-
+    Tag *t = new Tag(this->tag_id, test_value);
+    Question *q = new Question(this->question_id, test_value, test_value, {});
+    QVERIFY(DbQuestion::isRelationRemoved(q, t));
 }
 
 QTEST_APPLESS_MAIN(DatabaseManager)
