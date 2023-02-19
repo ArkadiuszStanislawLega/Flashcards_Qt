@@ -23,13 +23,19 @@ private slots:
     void readQuestion();
     void isUpdateQuestion();
     void getAllQuestions();
-    void isRemovedQuestion();
 
     void isCreateTag();
     void isFindIdTag();
     void readTag();
     void isUpdateTag();
     void getAllTags();
+
+    void isRelationCreated();
+    void readAllRelatedQuestions();
+    void readAllRelatedTags();
+    void isRelationRemoved();
+
+    void isRemovedQuestion();
     void isRemovedTag();
 };
 
@@ -118,6 +124,22 @@ void DatabaseManager::getAllTags(){
 
 void DatabaseManager::isRemovedTag(){
     QVERIFY(DbTag::isRemoved(this->tag_id));
+}
+
+void DatabaseManager::isRelationCreated(){
+
+}
+
+void DatabaseManager::readAllRelatedQuestions(){
+
+}
+
+void DatabaseManager::readAllRelatedTags(){
+
+}
+
+void DatabaseManager::isRelationRemoved(){
+
 }
 
 QTEST_APPLESS_MAIN(DatabaseManager)
