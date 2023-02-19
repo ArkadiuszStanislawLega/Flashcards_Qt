@@ -122,7 +122,13 @@ bool DbQuestion::isRelationCreated(Question *q, Tag *t){
 bool DbQuestion::isRelationRemoved(Question *q, Tag *t){
     if (q != nullptr && t != nullptr)
     {
-
+        QSqlQuery query;
+        query.prepare(	DELETE + TABLE_QUESTIONS_TAGS + " " +
+                        WHERE + TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID + "=:" + COLUMN_QUESTION_ID + " " +
+                        AND + TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + "=:" + COLUMN_TAG_ID);
+        query.bindValue(":" + COLUMN_QUESTION_ID, q->get_id());
+        query.bindValue(":" + COLUMN_TAG_ID, t->get_id());
+        return query.exec();
     }
     return false;
 }
