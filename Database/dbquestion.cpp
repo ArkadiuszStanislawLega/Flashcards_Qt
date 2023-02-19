@@ -105,3 +105,35 @@ vector<Question *> DbQuestion::getAllQuestions(){
 
    return questions;
 }
+
+bool DbQuestion::isRelationCreated(Question *q, Tag *t){
+        if (q != nullptr && t != nullptr)
+        {
+
+        }
+        return false;
+}
+
+bool DbQuestion::isRelationRemoved(Question *q, Tag *t){
+        if (q != nullptr && t != nullptr)
+        {
+
+        }
+        return false;
+}
+
+bool DbQuestion::isAllRelationRemoved(Question *q){
+    if (q != nullptr){
+
+    }
+    return false;
+}
+
+vector<Tag *> readRelatedTags(Question *q){
+    vector<Tag *> tags;
+    if(q != nullptr){
+
+    }
+    return tags;
+}
+

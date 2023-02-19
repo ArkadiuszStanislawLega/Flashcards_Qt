@@ -2,6 +2,7 @@
 #define DBQUESTION_H
 
 #include "../Models/question.h"
+#include "../Models/tag.h"
 #include "../Constants/strings.h"
 #include <vector>
 #include <QSqlQuery>
@@ -21,6 +22,10 @@ public:
     static bool isUpdate(Question *);
     static bool isRemoved(int );
     static int findId(QString, QString);
+    static bool isRelationCreated(Question *, Tag *);
+    static bool isRelationRemoved(Question *, Tag *);
+    static bool isAllRelationRemoved(Question *);
+    static vector<Tag *> readRelatedTags(Question *);
 };
 
 #endif // DBQUESTION_H
