@@ -2,6 +2,8 @@
 #define STRINGS
 #include <QString>
 
+static const QString ERROR_CONNECTION_WITH_DATABASE = "Error: connection with database failed";
+static const QString CONNECTION_OK = "Database: connection ok";
 static const QString DATABASE_NAME = "fiszka.db";
 static const QString TABLE_QUESTIONS = "Questions";
 static const QString TABLE_TAGS  = "Tags";
