@@ -137,7 +137,8 @@ void DatabaseManager::readAllRelatedQuestions(){
 }
 
 void DatabaseManager::readAllRelatedTags(){
-
+    Question *q = new Question(this->question_id, test_value, test_value, {});
+    QVERIFY(DbQuestion::readRelatedTags(q).size() > 0);
 }
 
 void DatabaseManager::isRelationRemoved(){
