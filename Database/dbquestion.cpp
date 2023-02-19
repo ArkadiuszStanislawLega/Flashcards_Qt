@@ -107,8 +107,7 @@ vector<Question *> DbQuestion::getAllQuestions(){
 }
 
 bool DbQuestion::isRelationCreated(Question *q, Tag *t){
-    if (q != nullptr && t != nullptr)
-    {
+    if (q != nullptr && t != nullptr){
         QSqlQuery query;
         query.prepare(INSERT + TABLE_QUESTIONS_TAGS + "(" + COLUMN_QUESTION_ID + ", " + COLUMN_TAG_ID  + ")" +
                        VALUES + "(:" + COLUMN_QUESTION_ID + ", :" + COLUMN_TAG_ID + ")");
@@ -120,8 +119,7 @@ bool DbQuestion::isRelationCreated(Question *q, Tag *t){
 }
 
 bool DbQuestion::isRelationRemoved(Question *q, Tag *t){
-    if (q != nullptr && t != nullptr)
-    {
+    if (q != nullptr && t != nullptr){
         QSqlQuery query;
         query.prepare(	DELETE + TABLE_QUESTIONS_TAGS + " " +
                         WHERE + TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID + "=:" + COLUMN_QUESTION_ID + " " +
@@ -133,9 +131,13 @@ bool DbQuestion::isRelationRemoved(Question *q, Tag *t){
     return false;
 }
 
-bool DbQuestion::isAllRelationRemoved(Question *q){
+bool DbQuestion::isAllRelationWithQuestionRemoved(Question *q){
     if (q != nullptr){
-
+       QSqlQuery query;
+       query.prepare(DELETE + TABLE_QUESTIONS_TAGS + " " +
+                     WHERE + COLUMN_QUESTION_ID + "=:" + COLUMN_QUESTION_ID);
+       query.bindValue(":" + COLUMN_QUESTION_ID, q->get_id());
+       return query.exec();
     }
     return false;
 }

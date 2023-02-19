@@ -24,7 +24,7 @@ public:
     static int findId(QString, QString);
     static bool isRelationCreated(Question *, Tag *);
     static bool isRelationRemoved(Question *, Tag *);
-    static bool isAllRelationRemoved(Question *);
+    static bool isAllRelationWithQuestionRemoved(Question *);
     static vector<Tag *> readRelatedTags(Question *);
 };
 
