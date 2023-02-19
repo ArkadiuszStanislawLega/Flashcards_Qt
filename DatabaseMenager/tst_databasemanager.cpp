@@ -127,7 +127,9 @@ void DatabaseManager::isRemovedTag(){
 }
 
 void DatabaseManager::isRelationCreated(){
-
+    Tag *t = new Tag(this->tag_id, test_value);
+    Question *q = new Question(this->question_id, test_value, test_value, {});
+    QVERIFY(DbQuestion::isRelationCreated(q, t));
 }
 
 void DatabaseManager::readAllRelatedQuestions(){

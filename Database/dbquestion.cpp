@@ -110,10 +110,12 @@ bool DbQuestion::isRelationCreated(Question *q, Tag *t){
     if (q != nullptr && t != nullptr)
     {
         QSqlQuery query;
-        query.prepare(INSERT + TABLE_QUESTIONS_TAGS + "(" + COLUMN_QUESTION_ID + ", " + COLUMN_TAG_ID  + ")" +
+        QString w = (INSERT + TABLE_QUESTIONS_TAGS + "(" + COLUMN_QUESTION_ID + ", " + COLUMN_TAG_ID  + ")" +
                        VALUES + "(:" + COLUMN_QUESTION_ID + ", :" + COLUMN_TAG_ID + ")");
-        query.bindValue(":" + COLUMN_QESTION_ID, q->get_id());
+        query.prepare(w);
+        query.bindValue(":" + COLUMN_QUESTION_ID, q->get_id());
         query.bindValue(":" + COLUMN_TAG_ID, t->get_id());
+        qDebug() << w;
         return query.exec();
     }
     return false;

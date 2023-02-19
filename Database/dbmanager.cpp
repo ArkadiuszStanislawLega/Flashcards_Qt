@@ -30,29 +30,6 @@ DbManager::DbManager(const QString &path){
     }
 }
 
-void DbManager::ReadTag(int id){
-    int idValue, idAnswer;
-    QSqlQuery query("Select * from Questions");
-    idValue = query.record().indexOf("Value");
-    idAnswer = query.record().indexOf("Answer");
-
-    while(query.next()){
-        QString value, answer;
-        value = query.value(idValue).toString();
-        answer = query.value(idAnswer).toString();
-        qDebug() << value << answer;
-    }
-
-    QSqlQuery query1("SELECT * FROM Tags");
-           int tag = query1.record().indexOf("Tag");
-           int i = 0;
-           while (query1.next())
-           {
-              QString name = query1.value(tag).toString();
-              qDebug() << name;
-           }
-}
-
 void DbManager::CreateTables(){
     this->CreateTableQuestions();
     this->CreateTableTags();
@@ -78,11 +55,12 @@ void DbManager::CreateTableTags(){
 
 void DbManager::CreateTableQuestionsTags(){
     QSqlQuery query;
-    QString create_table_questions_tags = "create table if not exists QuestionsTags"
-              "(id integer primary key autoincrement not null,"
-              "Question_id integer not null,"
-              "Tag_id integer not null,"
-              "foreign key (Question_id) references Questions(Id),"
-              "foreign key (Tag_id) references Tags(Id));";
-    query.exec(create_table_questions_tags);
+    QString w = CREATE_TABLE_IF_NOT_EXISTS + TABLE_QUESTIONS_TAGS + "(" +
+                  COLUMN_ID + " " + PRIMARY_KEY + ", " +
+                  COLUMN_QUESTION_ID + " " + INTEGER_NOT_NULL + ", " +
+                  COLUMN_TAG_ID + " " + INTEGER_NOT_NULL + "," +
+                  FOREIGN_KEY + "(" + COLUMN_QUESTION_ID + ")" + REFERENCES + TABLE_QUESTIONS + "(" + COLUMN_ID + ")" +
+                  FOREIGN_KEY + "(" + COLUMN_TAG_ID + ")" + REFERENCES + TABLE_TAGS + "(" + COLUMN_ID + "))";
+    qDebug() << w;
+    query.exec(w);
 }

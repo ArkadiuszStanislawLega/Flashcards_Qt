@@ -2,10 +2,6 @@
 
 Model::Model()
 {
-    const QString db_name = "fiszka.db";
+    const QString db_name = DATABASE_NAME;
     this->_database = DbManager(db_name);
-}
-
-void Model::ReadTag(){
-    this->_database.ReadTag(2);
 }

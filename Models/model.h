@@ -2,6 +2,7 @@
 #define MODEL_H
 
 #include "../Database/dbmanager.h"
+#include "../Constants/strings.h"
 
 class Model
 {

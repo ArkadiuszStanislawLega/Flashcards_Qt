@@ -1,6 +1,7 @@
 #ifndef DBMANAGER_H
 #define DBMANAGER_H
 
+#include "../Constants/strings.h"
 #include <qstring.h>
 #include <QSqlDatabase>
 #include <QDebug>
