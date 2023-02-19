@@ -25,6 +25,7 @@ public:
     static bool isRelationCreated(Question *, Tag *);
     static bool isRelationRemoved(Question *, Tag *);
     static bool isAllRelationWithQuestionRemoved(Question *);
+    static bool isRelationWithTagRemoved(Tag *);
     static vector<Tag *> readRelatedTags(Question *);
 };
 
