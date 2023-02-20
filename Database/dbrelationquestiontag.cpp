@@ -56,10 +56,10 @@ vector<Tag *> DbRelationQuestionTag::readRelatedTags(Question *q){
     vector<Tag *> tags;
     if(q != nullptr){
         QSqlQuery query;
-        query.prepare(	SELECT + TABLE_TAGS + "." + COLUMN_ID + ", " + COLUMN_TAG + " " + FROM + TABLE_TAGS + " " +
+        query.prepare(SELECT + TABLE_TAGS + "." + COLUMN_ID + ", " + COLUMN_TAG + " " + FROM + TABLE_TAGS + " " +
                         INNER_JOIN + TABLE_QUESTIONS_TAGS + " " + ON + TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + "=" + TABLE_TAGS + "." + COLUMN_ID + " " +
                         INNER_JOIN + TABLE_QUESTIONS + " " + ON + TABLE_QUESTIONS + "." + COLUMN_ID + "=" + TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID + " " +
-                        WHERE + TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID + "=:" + COLUMN_QUESTION_ID + ";");
+                        WHERE + TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID + "=:" + COLUMN_QUESTION_ID);
         query.bindValue(":" + COLUMN_QUESTION_ID, q->get_id());
         if(query.exec()){
             while(query.next()){
@@ -81,13 +81,13 @@ vector<Tag *> DbRelationQuestionTag::readRelatedTags(Question *q){
 
 vector<Question *> DbRelationQuestionTag::readRelatedQuestions(Tag *t){
     vector<Question *> questions;
-    if(q != nullptr){
+    if(t != nullptr){
         QSqlQuery query;
-        query.prepare(	SELECT + TABLE_TAGS + "." + COLUMN_ID + ", " + COLUMN_TAG + " " + FROM + TABLE_TAGS + " " +
-                        INNER_JOIN + TABLE_QUESTIONS_TAGS + " " + ON + TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + "=" + TABLE_TAGS + "." + COLUMN_ID + " " +
-                        INNER_JOIN + TABLE_QUESTIONS + " " + ON + TABLE_QUESTIONS + "." + COLUMN_ID + "=" + TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID + " " +
-                        WHERE + TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + "=:" + COLUMN_TAG_ID + ";");
-        query.bindValue(":" + COLUMN_TAG_ID, t->get_id());
+        query.prepare(SELECT + TABLE_QUESTIONS + "." + COLUMN_ID + ", " + COLUMN_VALUE + ", " + COLUMN_ANSWER + " " + FROM + TABLE_QUESTIONS + " " +
+                        INNER_JOIN + TABLE_QUESTIONS_TAGS + " " + ON + TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID + "=" + TABLE_QUESTIONS + "." + COLUMN_ID + " " +
+                        INNER_JOIN + TABLE_TAGS + " " + ON + TABLE_TAGS + "." + COLUMN_ID + "=" + TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + " " +
+                        WHERE + TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + "=:" + COLUMN_ID);
+        query.bindValue(":" + COLUMN_ID, t->get_id());
         if(query.exec()){
             while(query.next()){
                 Question *q = new Question();
@@ -101,7 +101,7 @@ vector<Question *> DbRelationQuestionTag::readRelatedQuestions(Tag *t){
                 q->set_value(query.value(valueColumn).toString());
                 q->set_answer(query.value(answerColumn).toString());
 
-                tags.push_back(t);
+                questions.push_back(q);
             }
         }
     }

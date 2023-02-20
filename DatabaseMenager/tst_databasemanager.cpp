@@ -138,6 +138,37 @@ void DatabaseManager::isRelationCreated(){
 }
 
 void DatabaseManager::readAllRelatedQuestions(){
+    Tag *t = new Tag(this->tag_id, test_value);
+    Question *q1, *q2;
+    QString q1_value, q2_value;
+
+    q1 = new Question();
+    q2 = new Question();
+
+    q1_value = "test1";
+    q2_value = "test2";
+
+    q1->set_answer(q1_value);
+    q1->set_value(q1_value);
+
+    q2->set_answer(q2_value);
+    q2->set_value(q2_value);
+
+    DbQuestion::isCreate(q1);
+    DbQuestion::isCreate(q2);
+
+    q1->set_id(DbQuestion::findId(q1_value, q1_value));
+    q2->set_id(DbQuestion::findId(q2_value, q2_value));
+
+    DbRelationQuestionTag::isRelationCreated(q1, t);
+    DbRelationQuestionTag::isRelationCreated(q2, t);
+
+    QVERIFY(DbRelationQuestionTag::readRelatedQuestions(t).size() > 0);
+
+    DbRelationQuestionTag::isRelationRemoved(q1, t);
+    DbRelationQuestionTag::isRelationRemoved(q2, t);
+    DbQuestion::isRemoved(q1->get_id());
+    DbQuestion::isRemoved(q2->get_id());
 }
 
 void DatabaseManager::isRelationWithTagRemoved(){
