@@ -80,5 +80,30 @@ vector<Tag *> DbRelationQuestionTag::readRelatedTags(Question *q){
 }
 
 vector<Question *> DbRelationQuestionTag::readRelatedQuestions(Tag *t){
+    vector<Question *> questions;
+    if(q != nullptr){
+        QSqlQuery query;
+        query.prepare(	SELECT + TABLE_TAGS + "." + COLUMN_ID + ", " + COLUMN_TAG + " " + FROM + TABLE_TAGS + " " +
+                        INNER_JOIN + TABLE_QUESTIONS_TAGS + " " + ON + TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + "=" + TABLE_TAGS + "." + COLUMN_ID + " " +
+                        INNER_JOIN + TABLE_QUESTIONS + " " + ON + TABLE_QUESTIONS + "." + COLUMN_ID + "=" + TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID + " " +
+                        WHERE + TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + "=:" + COLUMN_TAG_ID + ";");
+        query.bindValue(":" + COLUMN_TAG_ID, t->get_id());
+        if(query.exec()){
+            while(query.next()){
+                Question *q = new Question();
+                int idColumn, valueColumn, answerColumn;
 
+                idColumn = query.record().indexOf(COLUMN_ID);
+                valueColumn = query.record().indexOf(COLUMN_VALUE);
+                answerColumn = query.record().indexOf(COLUMN_ANSWER);
+
+                q->set_id(query.value(idColumn).toInt());
+                q->set_value(query.value(valueColumn).toString());
+                q->set_answer(query.value(answerColumn).toString());
+
+                tags.push_back(t);
+            }
+        }
+    }
+    return questions;
 }
