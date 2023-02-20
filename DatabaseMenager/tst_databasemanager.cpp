@@ -163,6 +163,9 @@ void DatabaseManager::isRelationWithTagRemoved(){
     QVERIFY(DbQuestion::isAllRelationWithQuestionRemoved(q));
     QVERIFY(DbQuestion::readRelatedTags(q).size() == 0);
     QVERIFY(DbQuestion::readRelatedTags(q1).size() == 0);
+
+    DbQuestion::isRemoved(q->get_id());
+    DbQuestion::isRemoved(q1->get_id());
 }
 
 void DatabaseManager::readAllRelatedTags(){
@@ -180,7 +183,6 @@ void DatabaseManager::isAllRealtionWithQuestionRemoved(){
     Question *q;
     Tag *t1, *t2;
     QString tag1, tag2;
-
     q = new Question(this->question_id, test_value, test_value, {});
     t1 = new Tag();
     t2 = new Tag();
