@@ -20,6 +20,10 @@ public:
     static bool isUpdate(Tag *);
     static bool isRemoved(int);
     static int finId(QString);
+    static bool isRelationCreated(Tag *, Question *);
+    static bool isRelationRemoved(Tag *, Question *);
+    static bool isRelationWithTagRemoved(Tag *);
+
 };
 
 #endif // DBTAG_H

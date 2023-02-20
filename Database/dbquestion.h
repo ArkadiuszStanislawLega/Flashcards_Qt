@@ -4,6 +4,7 @@
 #include "../Models/question.h"
 #include "../Models/tag.h"
 #include "../Constants/strings.h"
+#include "dbrelationquestiontag.h"
 #include <vector>
 #include <QSqlQuery>
 #include <QSqlRecord>
@@ -22,11 +23,6 @@ public:
     static bool isUpdate(Question *);
     static bool isRemoved(int );
     static int findId(QString, QString);
-    static bool isRelationCreated(Question *, Tag *);
-    static bool isRelationRemoved(Question *, Tag *);
-    static bool isAllRelationWithQuestionRemoved(Question *);
-    static bool isRelationWithTagRemoved(Tag *);
-    static vector<Tag *> readRelatedTags(Question *);
 };
 
 #endif // DBQUESTION_H
