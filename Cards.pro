@@ -37,6 +37,7 @@ HEADERS += \
     mainwindow.h
 
 FORMS += \
+    create_question.ui \
     mainwindow.ui
 
 # Default rules for deployment.

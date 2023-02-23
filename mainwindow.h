@@ -19,21 +19,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private slots:
-    void on_b_get_tag_clicked();
-
-    void on_b_add_question_clicked();
-
-    void on_b_remove_question_clicked();
-
-    void on_b_update_question_clicked();
-
-    void on_b_add_tag_clicked();
-
-    void on_b_update_tag_clicked();
-
-    void on_b_remove_tag_clicked();
-
 private:
     Ui::MainWindow *ui;
     Model *_model;
