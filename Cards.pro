@@ -10,6 +10,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Controllers/controller.cpp \
     Database/dbmanager.cpp \
     Database/dbquestion.cpp \
     Database/dbrelationquestiontag.cpp \
@@ -17,12 +18,14 @@ SOURCES += \
     Models/model.cpp \
     Models/question.cpp \
     Models/tag.cpp \
+    Views/view.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     Constants/strings.h \
     Constants/values.h \
+    Controllers/controller.h \
     Database/dbmanager.h \
     Database/dbquestion.h \
     Database/dbrelationquestiontag.h \
@@ -30,6 +33,7 @@ HEADERS += \
     Models/model.h \
     Models/question.h \
     Models/tag.h \
+    Views/view.h \
     mainwindow.h
 
 FORMS += \
