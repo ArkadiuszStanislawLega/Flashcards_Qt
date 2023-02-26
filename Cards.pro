@@ -37,6 +37,7 @@ HEADERS += \
     mainwindow.h
 
 FORMS += \
+    Views/questionview.ui \
     create_question.ui \
     mainwindow.ui
 
