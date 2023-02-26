@@ -34,70 +34,7 @@
        <attribute name="title">
         <string>Tab 1</string>
        </attribute>
-       <widget class="QWidget" name="horizontalLayoutWidget_2">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>2</y>
-          <width>781</width>
-          <height>501</height>
-         </rect>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
-           <item>
-            <widget class="QLabel" name="l_value">
-             <property name="text">
-              <string>Value:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QTextEdit" name="te_question_value"/>
-           </item>
-           <item>
-            <widget class="QLabel" name="l_answer">
-             <property name="text">
-              <string>Answer:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QTextEdit" name="te_question_answer"/>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_4">
-             <item>
-              <widget class="QPushButton" name="b_add_question">
-               <property name="text">
-                <string>Add Question</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="b_update_question">
-               <property name="text">
-                <string>Update Question</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="b_remove_question">
-               <property name="text">
-                <string>Remove Question</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="QListView" name="lv_questions"/>
-         </item>
-        </layout>
-       </widget>
+       <widget class="QuestionView" name="quesiton_view"/>
       </widget>
       <widget class="QWidget" name="tab_tags">
        <attribute name="title">
