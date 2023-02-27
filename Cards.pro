@@ -42,6 +42,7 @@ HEADERS += \
 
 FORMS += \
     Views/questionview.ui \
+    Views/relationview.ui \
     Views/tagview.ui \
     mainwindow.ui
 
