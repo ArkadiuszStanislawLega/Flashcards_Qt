@@ -17,11 +17,11 @@ public:
 signals:
 
 private slots:
-    void on_b_add_clicked();
+    void on_b_update_question_clicked();
 
-    void on_b_update_clicked();
+    void on_b_remove_question_clicked();
 
-    void on_b_remove_clicked();
+    void on_b_create_question_clicked();
 
 private:
     Ui::QuestionView *ui;

@@ -32,89 +32,16 @@
       </property>
       <widget class="QWidget" name="tab_questions">
        <attribute name="title">
-        <string>Tab 1</string>
+        <string>Questions</string>
        </attribute>
-       <widget class="QuestionView" name="quesiton_view" native="true">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>100</width>
-          <height>30</height>
-         </rect>
-        </property>
-       </widget>
+       <widget class="QuestionView" name="quesiton_view" native="true"/>
       </widget>
       <widget class="QWidget" name="tab_tags">
        <attribute name="title">
-        <string>Tab 2</string>
+        <string>Tags</string>
        </attribute>
-       <widget class="QFrame" name="horizontalFrame">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>390</y>
-          <width>784</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout"/>
+       <widget class="TagView" name="tag_view" native="true"/>
        </widget>
-       <widget class="QWidget" name="horizontalLayoutWidget_3">
-        <property name="geometry">
-         <rect>
-          <x>6</x>
-          <y>3</y>
-          <width>537</width>
-          <height>194</height>
-         </rect>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_3">
-           <item alignment="Qt::AlignLeft|Qt::AlignTop">
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>Tag:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="le_tag"/>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_7">
-             <item>
-              <widget class="QPushButton" name="b_add_tag">
-               <property name="text">
-                <string>Add Tag</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="b_remove_tag">
-               <property name="text">
-                <string>Remove Tag</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="b_update_tag">
-               <property name="text">
-                <string>Update Tag</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="QListView" name="listView_2"/>
-         </item>
-        </layout>
-       </widget>
-      </widget>
       <widget class="QWidget" name="tab_relations">
        <attribute name="title">
         <string>Page</string>
