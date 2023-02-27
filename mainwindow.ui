@@ -28,7 +28,7 @@
     <item>
      <widget class="QTabWidget" name="tabs">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_questions">
        <attribute name="title">
@@ -44,7 +44,7 @@
       </widget>
       <widget class="QWidget" name="tab_relations">
        <attribute name="title">
-        <string>Page</string>
+        <string>Relations</string>
        </attribute>
        <widget class="RelationView" name="relation_view" native="true"/>
       </widget>
@@ -58,12 +58,17 @@
   <customwidget>
    <class>QuestionView</class>
    <extends>QWidget</extends>
-   <header>questionview.h</header>
+   <header>Views/questionview.h</header>
   </customwidget>
   <customwidget>
    <class>TagView</class>
    <extends>QWidget</extends>
-   <header>tagview.h</header>
+   <header>Views/tagview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>RelationView</class>
+   <extends>QWidget</extends>
+   <header>Views/relationview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
