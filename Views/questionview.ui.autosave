@@ -41,21 +41,21 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="QPushButton" name="b_add">
+          <widget class="QPushButton" name="b_add_question">
            <property name="text">
-            <string>Add</string>
+            <string>Create</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="b_update">
+          <widget class="QPushButton" name="b_update_question">
            <property name="text">
             <string>Update</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="b_remove">
+          <widget class="QPushButton" name="b_remove_question">
            <property name="text">
             <string>Remove</string>
            </property>

@@ -19,45 +19,45 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="l_value">
          <property name="text">
-          <string>TextLabel</string>
+          <string>Value:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QTextEdit" name="textEdit"/>
+        <widget class="QTextEdit" name="te_value"/>
        </item>
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="l_answer">
          <property name="text">
-          <string>TextLabel</string>
+          <string>Answer:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QTextEdit" name="textEdit_2"/>
+        <widget class="QTextEdit" name="te_answer"/>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="QPushButton" name="pushButton_3">
+          <widget class="QPushButton" name="b_add">
            <property name="text">
-            <string>PushButton</string>
+            <string>Add</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="b_update">
            <property name="text">
-            <string>PushButton</string>
+            <string>Update</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_2">
+          <widget class="QPushButton" name="b_remove">
            <property name="text">
-            <string>PushButton</string>
+            <string>Remove</string>
            </property>
           </widget>
          </item>
@@ -68,7 +68,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QListView" name="listView"/>
+    <widget class="QListView" name="lv_created_quesions"/>
    </item>
   </layout>
  </widget>

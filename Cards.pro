@@ -40,6 +40,7 @@ HEADERS += \
 
 FORMS += \
     Views/questionview.ui \
+    Views/tagview.ui \
     mainwindow.ui
 
 # Default rules for deployment.

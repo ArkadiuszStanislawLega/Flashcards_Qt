@@ -16,6 +16,13 @@ public:
 
 signals:
 
+private slots:
+    void on_b_add_clicked();
+
+    void on_b_update_clicked();
+
+    void on_b_remove_clicked();
+
 private:
     Ui::QuestionView *ui;
 };
