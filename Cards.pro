@@ -19,6 +19,7 @@ SOURCES += \
     Models/question.cpp \
     Models/tag.cpp \
     Views/questionview.cpp \
+    Views/tagview.cpp \
     Views/view.cpp \
     main.cpp \
     mainwindow.cpp
@@ -35,6 +36,7 @@ HEADERS += \
     Models/question.h \
     Models/tag.h \
     Views/questionview.h \
+    Views/tagview.h \
     Views/view.h \
     mainwindow.h
 
