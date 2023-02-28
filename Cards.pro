@@ -18,6 +18,7 @@ SOURCES += \
     Models/model.cpp \
     Models/question.cpp \
     Models/tag.cpp \
+    Views/learnview.cpp \
     Views/questionview.cpp \
     Views/relationview.cpp \
     Views/tagview.cpp \
@@ -36,6 +37,7 @@ HEADERS += \
     Models/model.h \
     Models/question.h \
     Models/tag.h \
+    Views/learnview.h \
     Views/questionview.h \
     Views/relationview.h \
     Views/tagview.h \
