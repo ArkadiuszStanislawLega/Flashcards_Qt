@@ -13,6 +13,7 @@ class LearnView : public QWidget
     Q_OBJECT
 public:
     explicit LearnView(QWidget *parent = nullptr);
+    void testing();
 
 signals:
 

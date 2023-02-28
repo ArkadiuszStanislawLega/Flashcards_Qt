@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>406</width>
-    <height>364</height>
+    <height>387</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -68,6 +68,13 @@
         <enum>QFrame::Raised</enum>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_8">
+        <item alignment="Qt::AlignRight">
+         <widget class="QLabel" name="l_questions_counter">
+          <property name="text">
+           <string>20/24</string>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QProgressBar" name="pb_answers">
           <property name="value">

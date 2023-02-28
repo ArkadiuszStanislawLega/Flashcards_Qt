@@ -6,6 +6,10 @@ LearnView::LearnView(QWidget *parent)
     ui->setupUi(this);
 }
 
+void LearnView::testing(){
+        ui->l_questions_counter->setText("costam");
+}
+
 void LearnView::on_b_start_clicked()
 {
 
