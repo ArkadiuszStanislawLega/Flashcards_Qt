@@ -43,6 +43,7 @@ HEADERS += \
     mainwindow.h
 
 FORMS += \
+    Views/learnview.ui \
     Views/questionview.ui \
     Views/relationview.ui \
     Views/tagview.ui \

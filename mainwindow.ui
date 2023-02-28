@@ -48,6 +48,12 @@
        </attribute>
        <widget class="RelationView" name="relation_view" native="true"/>
       </widget>
+      <widget class="QWidget" name="tab_learn">
+       <attribute name="title">
+        <string>Learn</string>
+       </attribute>
+       <widget class="LearnView" name="learn_view" native="true"/>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -69,6 +75,11 @@
    <class>RelationView</class>
    <extends>QWidget</extends>
    <header>Views/relationview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>LearnView</class>
+   <extends>QWidget</extends>
+   <header>Views/learnview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
