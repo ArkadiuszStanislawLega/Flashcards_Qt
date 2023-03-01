@@ -9,3 +9,4 @@ Controller::Controller(Model *model, View *view)
 void Controller::show_app(){
     this->_view->show_app();
 }
+

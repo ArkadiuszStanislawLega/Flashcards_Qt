@@ -32,5 +32,4 @@ void View::initialize_views(){
 
 void View::show_app(){
     this->_main_window.show();
-    this->_learn_view->testing();
 }
