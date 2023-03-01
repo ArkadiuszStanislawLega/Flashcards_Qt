@@ -38,6 +38,7 @@ private:
     QSqlRelationalTableModel *_table_model;
     void initialQuestionsListView();
     void cleanTextEditors();
+    void printInfo(const QString &);
 };
 
 #endif // QUESTIONVIEW_H

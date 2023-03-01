@@ -64,7 +64,7 @@ static const QString SUCCESFULLY_REMOVED = "has been succesfuly removed from dat
 static const QString QUESTIONS_LIST_TO_REMOVED = "List of the questions to removed";
 static const QString CHOOSE_QUESTION = "Choose one question";
 static const QString NO_QUESTIONS_TO_REMOVE = "There are no questions to remove";
-static const QString QUESTIONS_SUCCESFULLY_REMOVED = "The question has been succesfully deleted";
+static const QString QUESTION_SUCCESFULLY_REMOVED = "The question has been succesfully deleted";
 static const QString INFO_QUESTIONS_NUMBER_IN_SERIES = "Enter number of questions you want to do in series. The number must be less than";
 static const QString VALUE = "Value";
 static const QString ANSWER = "Answer";
@@ -91,6 +91,7 @@ static const QString LIST_OF_TAGS = "List of tags";
 static const QString NO_TAGS = "No tags";
 static const QString NO_QUESTIONS = "No questions";
 static const QString ALREADY_HAVING_TAG = "This question already having this same tag";
+static const QString QUESTION_UPDATED = "Question has been sucessfully updated";
 
 static const QString TAG_MENU = "TAG MENU";
 static const QString SELECT_TAG = "Select tag";

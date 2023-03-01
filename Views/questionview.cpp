@@ -18,11 +18,14 @@ void QuestionView::cleanTextEditors(){
    ui->te_value->setText("");
 }
 
+void QuestionView::printInfo(const QString &value){
+    this->ui->l_info->setText(value);
+}
 
 QuestionView::QuestionView(QWidget *parent)
     : QWidget{parent}, ui(new Ui::QuestionView)
 {
-    ui->setupUi(this);
+    this->ui->setupUi(this);
     this->_selected_question = nullptr;
     this->initialQuestionsListView();
 }
@@ -36,8 +39,9 @@ void QuestionView::on_b_create_question_clicked()
     if(DbQuestion::isCreate(q)){
         this->_table_model->select();
         this->cleanTextEditors();
+        this->printInfo(QUESTION_CREATED_CORRECTLY);
     } else {
-        qDebug() << DATABASE_ERROR;
+        this->printInfo(DATABASE_ERROR);
     }
 
     delete(q);
@@ -57,8 +61,9 @@ void QuestionView::on_b_update_question_clicked()
 
             if(DbQuestion::isUpdate(this->_selected_question)){
                 this->_table_model->select();
+                this->printInfo(QUESTION_UPDATED);
             } else {
-                qDebug() << DATABASE_ERROR;
+                this->printInfo(DATABASE_ERROR);
             }
         }
     }
@@ -71,13 +76,12 @@ void QuestionView::on_b_remove_question_clicked()
             this->_selected_question = nullptr;
             this->_table_model->select();
             this->cleanTextEditors();
+            this->printInfo(QUESTION_SUCCESFULLY_REMOVED);
         } else {
-            qDebug() << DATABASE_ERROR;
+            this->printInfo(DATABASE_ERROR);
         }
     }
 }
-
-
 
 void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index)
 {
