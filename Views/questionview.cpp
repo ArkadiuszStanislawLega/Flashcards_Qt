@@ -2,12 +2,14 @@
 
 void QuestionView::initialQuestionsListView(){
     int column_value_index;
-    this->_table_model = new QSqlTableModel;
+    this->_table_model = new QSqlRelationalTableModel;
     this->_table_model->setTable(TABLE_QUESTIONS);
     this->_table_model->select();
+    this->_table_model->setRelation(_table_model->fieldIndex("Questions"), QSqlRelation("Id", "Value", "Answer"));
     column_value_index = this->_table_model->record().indexOf(COLUMN_VALUE);
 
     ui->lv_created_quesions->setModel(this->_table_model);
+    ui->lv_created_quesions->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->lv_created_quesions->setModelColumn(column_value_index);
 }
 
@@ -16,6 +18,7 @@ QuestionView::QuestionView(QWidget *parent)
     : QWidget{parent}, ui(new Ui::QuestionView)
 {
     ui->setupUi(this);
+    this->_selected_question = new Question();
     this->initialQuestionsListView();
 }
 
@@ -39,4 +42,25 @@ void QuestionView::on_b_remove_question_clicked()
 
 }
 
+
+
+void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index)
+{
+    int id_column_index, value_column_index, answer_column_index;
+    QString id, value, answer;
+
+    id_column_index = this->_table_model->record().indexOf(COLUMN_ID);
+    value_column_index = this->_table_model->record().indexOf(COLUMN_VALUE);
+    answer_column_index = this->_table_model->record().indexOf(COLUMN_ANSWER);
+
+    id = this->_table_model->index(index.row(), id_column_index).data(Qt::DisplayRole).toString();
+    value = this->_table_model->index(index.row(), value_column_index).data(Qt::DisplayRole).toString();
+    answer = this->_table_model->index(index.row(), answer_column_index).data(Qt::DisplayRole).toString();
+
+    this->_selected_question->set_id(id.toInt());
+    this->_selected_question->set_value(value);
+    this->_selected_question->set_answer(answer);
+
+    qDebug() << this->_selected_question->to_string();
+}
 
