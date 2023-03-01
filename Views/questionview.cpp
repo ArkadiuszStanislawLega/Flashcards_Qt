@@ -13,6 +13,11 @@ void QuestionView::initialQuestionsListView(){
     ui->lv_created_quesions->setModelColumn(column_value_index);
 }
 
+void QuestionView::cleanTextEditors(){
+   ui->te_answer->setText("");
+   ui->te_value->setText("");
+}
+
 
 QuestionView::QuestionView(QWidget *parent)
     : QWidget{parent}, ui(new Ui::QuestionView)
@@ -28,18 +33,48 @@ void QuestionView::on_b_create_question_clicked()
     q->set_answer(ui->te_answer->toPlainText());
     q->set_value(ui->te_value->toPlainText());
 
-    DbQuestion::isCreate(q);
-    this->_table_model->select();
+    if(DbQuestion::isCreate(q)){
+        this->_table_model->select();
+        this->cleanTextEditors();
+    } else {
+        qDebug() << DATABASE_ERROR;
+    }
+
+    delete(q);
 }
 
 void QuestionView::on_b_update_question_clicked()
 {
+    QString answer, value;
 
+    if(this->_selected_question != nullptr){
+        answer = ui->te_answer->toPlainText();
+        value = ui->te_value->toPlainText();
+
+        if(answer != "" && value != ""){
+            this->_selected_question->set_answer(answer);
+            this->_selected_question->set_value(value);
+
+            if(DbQuestion::isUpdate(this->_selected_question)){
+                this->_table_model->select();
+            } else {
+                qDebug() << DATABASE_ERROR;
+            }
+        }
+    }
 }
 
 void QuestionView::on_b_remove_question_clicked()
 {
-
+    if(this->_selected_question != nullptr){
+        if(DbQuestion::isRemoved(this->_selected_question->get_id())){
+            this->_selected_question = nullptr;
+            this->_table_model->select();
+            this->cleanTextEditors();
+        } else {
+            qDebug() << DATABASE_ERROR;
+        }
+    }
 }
 
 

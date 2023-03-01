@@ -37,6 +37,7 @@ private:
     Ui::QuestionView *ui;
     QSqlRelationalTableModel *_table_model;
     void initialQuestionsListView();
+    void cleanTextEditors();
 };
 
 #endif // QUESTIONVIEW_H
