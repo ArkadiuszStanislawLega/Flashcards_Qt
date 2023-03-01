@@ -5,7 +5,7 @@ void QuestionView::initialQuestionsListView(){
     this->_table_model = new QSqlRelationalTableModel;
     this->_table_model->setTable(TABLE_QUESTIONS);
     this->_table_model->select();
-    this->_table_model->setRelation(_table_model->fieldIndex("Questions"), QSqlRelation("Id", "Value", "Answer"));
+    this->_table_model->setRelation(_table_model->fieldIndex(TABLE_QUESTIONS), QSqlRelation(COLUMN_ID, COLUMN_VALUE, COLUMN_ANSWER));
     column_value_index = this->_table_model->record().indexOf(COLUMN_VALUE);
 
     ui->lv_created_quesions->setModel(this->_table_model);
@@ -57,12 +57,9 @@ void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index)
     value = this->_table_model->index(index.row(), value_column_index).data(Qt::DisplayRole).toString();
     answer = this->_table_model->index(index.row(), answer_column_index).data(Qt::DisplayRole).toString();
 
-    this->_selected_question = new Question();
-    this->_selected_question->set_id(id);
-    this->_selected_question->set_value(value);
-    this->_selected_question->set_answer(answer);
+    this->_selected_question = new Question(id, value, answer, {});
 
-    ui->te_answer->setText(this->_selected_question->get_answer());
-    ui->te_value->setText(this->_selected_question->get_value());
+    ui->te_answer->setText(answer);
+    ui->te_value->setText(value);
 }
 

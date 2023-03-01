@@ -35,7 +35,6 @@ private slots:
 private:
     Question *_selected_question;
     Ui::QuestionView *ui;
-    //QSqlTableModel *_table_model;
     QSqlRelationalTableModel *_table_model;
     void initialQuestionsListView();
 };
