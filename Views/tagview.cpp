@@ -50,7 +50,6 @@ void TagView::on_b_remove_tag_clicked()
     }
 }
 
-
 void TagView::on_lv_created_tags_clicked(const QModelIndex &index)
 {
    int id, id_column_index, tag_column_index;
