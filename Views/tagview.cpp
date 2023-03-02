@@ -32,12 +32,22 @@ void TagView::on_b_create_tag_clicked()
 
 void TagView::on_b_update_tag_clicked()
 {
-
+    if(this->_selected_tag != nullptr){
+        this->_selected_tag->set_tag(ui->te_create_tag->toPlainText());
+        if(DbTag::isUpdate(this->_selected_tag)){
+            this->_table_model->select();
+        }
+    }
 }
 
 void TagView::on_b_remove_tag_clicked()
 {
-
+    if(this->_selected_tag != nullptr){
+        if(DbTag::isRemoved(this->_selected_tag->get_id())){
+            this->_table_model->select();
+            this->_selected_tag = nullptr;
+        }
+    }
 }
 
 
