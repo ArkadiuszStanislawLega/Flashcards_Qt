@@ -36,6 +36,16 @@ QuestionView::QuestionView(QWidget *parent)
 
 void QuestionView::on_b_create_question_clicked()
 {
+    if(ui->te_answer->toPlainText() == ""){
+        this->printInfo(FIELD_ANSWER_CANT_EMPTY, true);
+        return;
+    }
+
+    if(ui->te_value->toPlainText() == ""){
+        this->printInfo(FIELD_VALUE_CANT_EMPTY, true);
+        return;
+    }
+
     Question *q = new Question();
     q->set_answer(ui->te_answer->toPlainText());
     q->set_value(ui->te_value->toPlainText());
@@ -53,38 +63,47 @@ void QuestionView::on_b_create_question_clicked()
 
 void QuestionView::on_b_update_question_clicked()
 {
-    QString answer, value;
+    if(this->_selected_question == nullptr){
+        this->printInfo(INFO_FIRST_SELECT_QUESTION, true);
+        return;
+    }
 
-    if(this->_selected_question != nullptr){
-        answer = ui->te_answer->toPlainText();
-        value = ui->te_value->toPlainText();
+    if(ui->te_answer->toPlainText() == ""){
+        this->printInfo(FIELD_ANSWER_CANT_EMPTY, true);
+        return;
+    }
 
-        if(answer != "" && value != ""){
-            this->_selected_question->set_answer(answer);
-            this->_selected_question->set_value(value);
+    if(ui->te_value->toPlainText() == ""){
+        this->printInfo(FIELD_VALUE_CANT_EMPTY, true);
+        return;
+    }
 
-            if(DbQuestion::isUpdate(this->_selected_question)){
-                this->_table_model->select();
-                this->printInfo(QUESTION_UPDATED);
-                this->cleanTextEditors();
-            } else {
-                this->printInfo(DATABASE_ERROR, true);
-            }
-        }
+    this->_selected_question->set_answer(this->ui->te_answer->toPlainText());
+    this->_selected_question->set_value(this->ui->te_value->toPlainText());
+
+    if(DbQuestion::isUpdate(this->_selected_question)){
+        this->_table_model->select();
+        this->printInfo(QUESTION_UPDATED);
+        this->cleanTextEditors();
+    } else {
+        this->printInfo(DATABASE_ERROR, true);
     }
 }
 
 void QuestionView::on_b_remove_question_clicked()
 {
-    if(this->_selected_question != nullptr){
-        if(DbQuestion::isRemoved(this->_selected_question->get_id())){
-            this->_selected_question = nullptr;
-            this->_table_model->select();
-            this->cleanTextEditors();
-            this->printInfo(QUESTION_SUCCESFULLY_REMOVED);
-        } else {
-            this->printInfo(DATABASE_ERROR, true);
-        }
+    if(this->_selected_question == nullptr){
+        this->printInfo(INFO_FIRST_SELECT_QUESTION, true);
+        return;
+    }
+
+    if(DbQuestion::isRemoved(this->_selected_question->get_id())){
+        this->_selected_question = nullptr;
+        this->_table_model->select();
+        this->cleanTextEditors();
+        this->printInfo(QUESTION_SUCCESFULLY_REMOVED);
+    } else {
+        this->printInfo(DATABASE_ERROR, true);
     }
 }
 

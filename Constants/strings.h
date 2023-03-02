@@ -107,4 +107,7 @@ static const QString SELECT_QUESTION_TO_REMOVE_FROM_TAG = "Select the qestion to
 static const QString EMPTY_LIST_RELATED_QUESTIONS_WITH_TAG = "I have nothing to do here, the list of connected questions with a tag is empty.";
 static const QString REMOVED_RELATION_QUESTION_AND_TAG_SUCCESFULLY = "Removing relation of the question with the tag has been succesfully finished";
 static const QString TAG_ALREADY_CONNECTED_WITH_QUESTION = "Selected question is already related with this tag";
+static const QString FIELD_TAG_CANT_EMPTY = "The tag field can't be empty.";
+static const QString FIELD_VALUE_CANT_EMPTY = "The value field can't be empty.";
+static const QString FIELD_ANSWER_CANT_EMPTY = "The answer field can't be empty.";
 #endif

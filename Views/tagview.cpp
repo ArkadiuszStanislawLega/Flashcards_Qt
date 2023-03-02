@@ -35,57 +35,64 @@ void TagView::initialTagsListView(){
 
 void TagView::on_b_create_tag_clicked()
 {
-    if(ui->te_create_tag->toPlainText() != ""){
-            Tag *tag = new Tag();
-            tag->set_tag(ui->te_create_tag->toPlainText());
-            if(DbTag::isCreate(tag)){
-               this->printInfo(TAG_CREATED_CORRECTLY);
-            } else {
-               this->printInfo(DATABASE_ERROR, true);
-            }
-            this->_table_model->select();
-            this->cleanTextEditors();
-            delete tag;
-    } else {
-        this->printInfo("Field tag, can't be empty.", true);
+    if(ui->te_create_tag->toPlainText() == ""){
+        this->printInfo(FIELD_TAG_CANT_EMPTY, true);
+        return;
     }
+
+    Tag *tag = new Tag();
+    tag->set_tag(ui->te_create_tag->toPlainText());
+
+    if(DbTag::isCreate(tag)){
+       this->printInfo(TAG_CREATED_CORRECTLY);
+    } else {
+       this->printInfo(DATABASE_ERROR, true);
+    }
+
+    this->_table_model->select();
+    this->cleanTextEditors();
+    delete tag;
 }
 
 void TagView::on_b_update_tag_clicked()
 {
     if(this->ui->te_create_tag->toPlainText() == ""){
-        this->printInfo("Field tag, can't be empty.", true);
+        this->printInfo(FIELD_TAG_CANT_EMPTY, true);
         return;
     }
 
     if(this->_selected_tag == nullptr){
-        this->printInfo("Select tag to update.", true);
+        this->printInfo(SELECT_TAG_FIRST, true);
         return;
     }
 
     this->_selected_tag->set_tag(ui->te_create_tag->toPlainText());
+
     if(DbTag::isUpdate(this->_selected_tag)){
         this->_table_model->select();
         this->printInfo(TAG_UPDATE_SUCCESFULLY);
     } else {
         this->printInfo(DATABASE_ERROR, true);
     }
+
     this->cleanTextEditors();
 }
 
 void TagView::on_b_remove_tag_clicked()
 {
-    if(this->_selected_tag != nullptr){
-        if(DbTag::isRemoved(this->_selected_tag->get_id())){
-            this->_table_model->select();
-            this->_selected_tag = nullptr;
-            this->printInfo(TAG_SUCCESFULLY_REMOVED);
-        } else {
-            this->printInfo(DATABASE_ERROR, true);
-        }
-    } else {
+    if(this->_selected_tag == nullptr){
         this->printInfo("Select tag to remove.", true);
+        return;
     }
+
+    if(DbTag::isRemoved(this->_selected_tag->get_id())){
+        this->_table_model->select();
+        this->_selected_tag = nullptr;
+        this->printInfo(TAG_SUCCESFULLY_REMOVED);
+    } else {
+        this->printInfo(DATABASE_ERROR, true);
+    }
+
     this->cleanTextEditors();
 }
 
