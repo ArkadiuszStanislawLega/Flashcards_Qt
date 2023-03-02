@@ -21,16 +21,12 @@ void TagView::cleanTextEditors(){
 }
 
 void TagView::initialTagsListView(){
-    int tag_index_column;
-
     this->_table_model = new QSqlRelationalTableModel;
     this->_table_model->setTable(TABLE_TAGS);
     this->_table_model->select();
 
-    tag_index_column = this->_table_model->record().indexOf(COLUMN_TAG);
-
     this->ui->lv_created_tags->setModel(this->_table_model);
-    this->ui->lv_created_tags->setModelColumn(tag_index_column);
+    this->ui->lv_created_tags->setModelColumn(this->_table_model->record().indexOf(COLUMN_TAG));
 }
 
 void TagView::on_b_create_tag_clicked()
@@ -81,7 +77,7 @@ void TagView::on_b_update_tag_clicked()
 void TagView::on_b_remove_tag_clicked()
 {
     if(this->_selected_tag == nullptr){
-        this->printInfo("Select tag to remove.", true);
+        this->printInfo(SELECT_TAG_FIRST, true);
         return;
     }
 

@@ -19,7 +19,17 @@
      <item>
       <widget class="QLabel" name="l_tags">
        <property name="text">
-        <string>Tags:</string>
+        <string>Available tags to add:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBox"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Tags in question:</string>
        </property>
       </widget>
      </item>
