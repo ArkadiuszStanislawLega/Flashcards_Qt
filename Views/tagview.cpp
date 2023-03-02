@@ -5,24 +5,29 @@ TagView::TagView(QWidget *parent)
 {
     ui->setupUi(this);
     this->_selected_tag = nullptr;
+    this->initialTagsListView();
 }
 
 void TagView::initialTagsListView(){
     int tag_index_column;
+
     this->_table_model = new QSqlRelationalTableModel;
     this->_table_model->setTable(TABLE_TAGS);
     this->_table_model->select();
-    this->_table_model->setRelation(this->_table_model->fieldIndex(TABLE_TAGS), QSqlRelation(TABLE_TAGS, COLUMN_ID, COLUMN_TAG));
+
     tag_index_column = this->_table_model->record().indexOf(COLUMN_TAG);
 
     this->ui->lv_created_tags->setModel(this->_table_model);
-    this->ui->lv_created_tags->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->ui->lv_created_tags->setModelColumn(tag_index_column);
 }
 
 void TagView::on_b_create_tag_clicked()
 {
-
+    Tag *tag = new Tag();
+    tag->set_tag(ui->te_create_tag->toPlainText());
+    DbTag::isCreate(tag);
+    this->_table_model->select();
+    delete tag;
 }
 
 void TagView::on_b_update_tag_clicked()
@@ -33,5 +38,22 @@ void TagView::on_b_update_tag_clicked()
 void TagView::on_b_remove_tag_clicked()
 {
 
+}
+
+
+void TagView::on_lv_created_tags_clicked(const QModelIndex &index)
+{
+   int id, id_column_index, tag_column_index;
+   QString tag;
+
+   id_column_index = this->_table_model->record().indexOf(COLUMN_ID);
+   tag_column_index = this->_table_model->record().indexOf(COLUMN_TAG);
+
+   id = this->_table_model->index(index.row(), id_column_index).data(Qt::DisplayRole).toInt();
+   tag = this->_table_model->index(index.row(), tag_column_index).data(Qt::DisplayRole).toString();
+
+   this->_selected_tag = new Tag(id, tag);
+
+   this->ui->te_create_tag->setText(tag);
 }
 

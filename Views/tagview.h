@@ -27,6 +27,8 @@ private slots:
     void on_b_update_tag_clicked();
     void on_b_remove_tag_clicked();
 
+    void on_lv_created_tags_clicked(const QModelIndex &index);
+
 private:
     Ui::TagView *ui;
     Tag *_selected_tag;
