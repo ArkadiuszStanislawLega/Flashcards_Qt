@@ -8,6 +8,14 @@ TagView::TagView(QWidget *parent)
     this->initialTagsListView();
 }
 
+void TagView::printInfo(const QString &value, bool isError=false){
+   QPalette pal =this->ui->l_info->palette();
+   pal.setColor(QPalette::Window, QColor(isError ? Qt::red : Qt::transparent));
+
+   this->ui->l_info->setText(value);
+   this->ui->l_info->setPalette(pal);
+}
+
 void TagView::initialTagsListView(){
     int tag_index_column;
 

@@ -5,6 +5,7 @@
 #include <QSqlRelationalTableModel>
 #include <QSqlTableModel>
 #include <QStringListModel>
+#include <QPalette>
 #include "ui_tagview.h"
 #include "../Models/tag.h"
 #include "../Database/dbtag.h"
@@ -34,6 +35,7 @@ private:
     Tag *_selected_tag;
     QSqlRelationalTableModel *_table_model;
     void initialTagsListView();
+    void printInfo(const QString &, bool isError=false);
 };
 
 #endif // TAGVIEW_H
