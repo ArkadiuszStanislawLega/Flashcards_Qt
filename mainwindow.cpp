@@ -7,11 +7,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     setWindowTitle("Cards");
-    this->_model = new Model();
-    this->_selected_question = nullptr;
-    this->_selected_tag = nullptr;
-    QLabel *l = findChild<QLabel*>("l_output");
-    l->setText("dstalem sie");
 }
 
 MainWindow::~MainWindow()

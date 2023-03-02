@@ -56,6 +56,16 @@
       </widget>
      </widget>
     </item>
+    <item>
+     <widget class="QLabel" name="l_info">
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>

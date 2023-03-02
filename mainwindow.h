@@ -17,12 +17,10 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
+    void printInfo(const QString &value, bool isError = false);
     ~MainWindow();
 
 private:
     Ui::MainWindow *ui;
-    Model *_model;
-    Question *_selected_question;
-    Tag *_selected_tag;
 };
 #endif // MAINWINDOW_H
