@@ -70,7 +70,11 @@
       </layout>
      </item>
      <item>
-      <widget class="QListView" name="lv_created_quesions"/>
+      <widget class="QListView" name="lv_created_quesions">
+      <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      </widget>
      </item>
     </layout>
    </item>

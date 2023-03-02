@@ -1,16 +1,12 @@
 #include "questionview.h"
 
 void QuestionView::initialQuestionsListView(){
-    int column_value_index;
     this->_table_model = new QSqlRelationalTableModel;
     this->_table_model->setTable(TABLE_QUESTIONS);
     this->_table_model->select();
-    this->_table_model->setRelation(_table_model->fieldIndex(TABLE_QUESTIONS), QSqlRelation(COLUMN_ID, COLUMN_VALUE, COLUMN_ANSWER));
-    column_value_index = this->_table_model->record().indexOf(COLUMN_VALUE);
 
     this->ui->lv_created_quesions->setModel(this->_table_model);
-    this->ui->lv_created_quesions->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    this->ui->lv_created_quesions->setModelColumn(column_value_index);
+    this->ui->lv_created_quesions->setModelColumn(this->_table_model->record().indexOf(COLUMN_VALUE));
 }
 
 void QuestionView::cleanTextEditors(){
@@ -58,7 +54,7 @@ void QuestionView::on_b_create_question_clicked()
         this->printInfo(DATABASE_ERROR, true);
     }
 
-    delete(q);
+    delete q;
 }
 
 void QuestionView::on_b_update_question_clicked()
