@@ -14,72 +14,68 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="vl_main">
-        <item>
-        <layout class="QHBoxLayout" name="hl_left">
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-          <widget class="QLabel" name="l_tag">
-            <property name="text">
-             <string>Tag:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QTextEdit" name="te_create_tag"/>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="hl_buttons">
-
-            <item>
-             <widget class="QPushButton" name="b_create_tag">
-              <property name="text">
-               <string>Create</string>
-              </property>
-             </widget>
-            </item>
-
-            <item>
-             <widget class="QPushButton" name="b_update_tag">
-              <property name="text">
-               <string>Update</string>
-              </property>
-             </widget>
-            </item>
-
-            <item>
-             <widget class="QPushButton" name="b_remove_tag">
-              <property name="text">
-               <string>Remove</string>
-              </property>
-             </widget>
-            </item>
-
-           </layout>
-          </item>
-          </layout>
-          </item>
-        <item>
-         <widget class="QListView" name="lv_created_tags">
-          <property name="editTriggers">
-           <set>QAbstractItemView::NoEditTriggers</set>
-          </property>
-         </widget>
-        </item>
-        </layout>
-        </item>
-        <item>
-         <widget class="QLabel" name="label">
-           <property name="autoFillBackground">
-            <bool>true</bool>
-           </property>
+   <item>
+    <layout class="QHBoxLayout" name="hl_left">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QLabel" name="l_tag">
+         <property name="text">
+          <string>Tag:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextEdit" name="te_create_tag"/>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="hl_buttons">
+         <item>
+          <widget class="QPushButton" name="b_create_tag">
            <property name="text">
-            <string/>
+            <string>Create</string>
            </property>
-         </widget>
-        </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="b_update_tag">
+           <property name="text">
+            <string>Update</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="b_remove_tag">
+           <property name="text">
+            <string>Remove</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QListView" name="lv_created_tags">
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="l_info">
+     <property name="autoFillBackground">
+      <bool>true</bool>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
   </layout>
-  </widget>
+ </widget>
  <resources/>
  <connections/>
 </ui>

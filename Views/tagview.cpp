@@ -8,12 +8,16 @@ TagView::TagView(QWidget *parent)
     this->initialTagsListView();
 }
 
-void TagView::printInfo(const QString &value, bool isError=false){
+void TagView::printInfo(const QString &value, bool isError){
    QPalette pal =this->ui->l_info->palette();
    pal.setColor(QPalette::Window, QColor(isError ? Qt::red : Qt::transparent));
 
    this->ui->l_info->setText(value);
    this->ui->l_info->setPalette(pal);
+}
+
+void TagView::cleanTextEditors(){
+    this->ui->te_create_tag->setText("");
 }
 
 void TagView::initialTagsListView(){
@@ -31,21 +35,42 @@ void TagView::initialTagsListView(){
 
 void TagView::on_b_create_tag_clicked()
 {
-    Tag *tag = new Tag();
-    tag->set_tag(ui->te_create_tag->toPlainText());
-    DbTag::isCreate(tag);
-    this->_table_model->select();
-    delete tag;
+    if(ui->te_create_tag->toPlainText() != ""){
+            Tag *tag = new Tag();
+            tag->set_tag(ui->te_create_tag->toPlainText());
+            if(DbTag::isCreate(tag)){
+               this->printInfo(TAG_CREATED_CORRECTLY);
+            } else {
+               this->printInfo(DATABASE_ERROR, true);
+            }
+            this->_table_model->select();
+            this->cleanTextEditors();
+            delete tag;
+    } else {
+        this->printInfo("Field tag, can't be empty.", true);
+    }
 }
 
 void TagView::on_b_update_tag_clicked()
 {
-    if(this->_selected_tag != nullptr){
-        this->_selected_tag->set_tag(ui->te_create_tag->toPlainText());
-        if(DbTag::isUpdate(this->_selected_tag)){
-            this->_table_model->select();
-        }
+    if(this->ui->te_create_tag->toPlainText() == ""){
+        this->printInfo("Field tag, can't be empty.", true);
+        return;
     }
+
+    if(this->_selected_tag == nullptr){
+        this->printInfo("Select tag to update.", true);
+        return;
+    }
+
+    this->_selected_tag->set_tag(ui->te_create_tag->toPlainText());
+    if(DbTag::isUpdate(this->_selected_tag)){
+        this->_table_model->select();
+        this->printInfo(TAG_UPDATE_SUCCESFULLY);
+    } else {
+        this->printInfo(DATABASE_ERROR, true);
+    }
+    this->cleanTextEditors();
 }
 
 void TagView::on_b_remove_tag_clicked()
@@ -54,8 +79,14 @@ void TagView::on_b_remove_tag_clicked()
         if(DbTag::isRemoved(this->_selected_tag->get_id())){
             this->_table_model->select();
             this->_selected_tag = nullptr;
+            this->printInfo(TAG_SUCCESFULLY_REMOVED);
+        } else {
+            this->printInfo(DATABASE_ERROR, true);
         }
+    } else {
+        this->printInfo("Select tag to remove.", true);
     }
+    this->cleanTextEditors();
 }
 
 void TagView::on_lv_created_tags_clicked(const QModelIndex &index)

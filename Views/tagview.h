@@ -36,6 +36,7 @@ private:
     QSqlRelationalTableModel *_table_model;
     void initialTagsListView();
     void printInfo(const QString &, bool isError=false);
+    void cleanTextEditors();
 };
 
 #endif // TAGVIEW_H
