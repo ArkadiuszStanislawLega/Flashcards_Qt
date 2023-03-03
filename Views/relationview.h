@@ -25,8 +25,9 @@ signals:
 
 private:
     Ui::RelationView *ui;
-    QSqlRelationalTableModel *_questions_table_model;
+    QSqlRelationalTableModel *_questions_table_model, *_tags_combo_box_model;
     void initialQuestionsListView();
+    void initialTagsComboBox();
 };
 
 #endif // RELATIONVIEW_H
