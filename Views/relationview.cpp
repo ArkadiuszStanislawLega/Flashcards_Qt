@@ -22,8 +22,8 @@ void RelationView::initialTagsComboBox(){
     this->_tags_combo_box_model->setTable(TABLE_TAGS);
     this->_tags_combo_box_model->select();
 
-    this->ui->comboBox->setModel(this->_tags_combo_box_model);
-    this->ui->comboBox->setModelColumn(this->_tags_combo_box_model->record().indexOf(COLUMN_TAG));
+    this->ui->cb_tags->setModel(this->_tags_combo_box_model);
+    this->ui->cb_tags->setModelColumn(this->_tags_combo_box_model->record().indexOf(COLUMN_TAG));
 }
 
 
