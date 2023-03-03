@@ -34,7 +34,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QListView" name="lv_tags"/>
+      <widget class="QListView" name="lv_question_tags"/>
      </item>
      <item>
       <widget class="QPushButton" name="b_create_relation">
