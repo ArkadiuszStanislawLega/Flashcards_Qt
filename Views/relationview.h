@@ -2,6 +2,13 @@
 #define RELATIONVIEW_H
 
 #include <QWidget>
+#include <QSqlRelationalTableModel>
+#include "../Models/question.h"
+#include "../Models/tag.h"
+#include "../Database/dbquestion.h"
+#include "../Database/dbtag.h"
+#include "../Database/dbrelationquestiontag.h"
+#include "../Constants/strings.h"
 #include "ui_relationview.h"
 
 namespace Ui{
@@ -18,6 +25,8 @@ signals:
 
 private:
     Ui::RelationView *ui;
+    QSqlRelationalTableModel *_questions_table_model;
+    void initialQuestionsListView();
 };
 
 #endif // RELATIONVIEW_H
