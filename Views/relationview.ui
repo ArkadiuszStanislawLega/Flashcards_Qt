@@ -13,58 +13,70 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+
+  <item>
+  <layout class="QHBoxLayout" name="horizontal_content">
+  <item>
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <widget class="QLabel" name="l_questions">
+      <property name="text">
+       <string>Questions:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QListView" name="lv_questions"/>
+    </item>
+    <item>
+     <widget class="QPushButton" name="b_remove_relation">
+      <property name="text">
+       <string>Remove</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </item>
+  <item>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="l_tags">
+      <property name="text">
+       <string>Available tags to add:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="cb_tags"/>
+    </item>
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Tags in question:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QListView" name="lv_question_tags"/>
+    </item>
+    <item>
+     <widget class="QPushButton" name="b_create_relation">
+      <property name="text">
+       <string>Create</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </item>
+  </layout>
+  </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QLabel" name="l_tags">
-       <property name="text">
-        <string>Available tags to add:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="cb_tags"/>
-     </item>
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Tags in question:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QListView" name="lv_question_tags"/>
-     </item>
-     <item>
-      <widget class="QPushButton" name="b_create_relation">
-       <property name="text">
-        <string>Create</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QLabel" name="l_questions">
-       <property name="text">
-        <string>Questions:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QListView" name="lv_questions"/>
-     </item>
-     <item>
-      <widget class="QPushButton" name="b_remove_relation">
-       <property name="text">
-        <string>Remove</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QLabel" name="l_info">
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
