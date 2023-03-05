@@ -6,7 +6,6 @@
 #include <QSqlRelation>
 #include <QSqlQueryModel>
 #include <QStringListModel>
-#include <vector>
 #include "../Models/question.h"
 #include "../Models/tag.h"
 #include "../Database/dbquestion.h"
@@ -14,8 +13,6 @@
 #include "../Database/dbrelationquestiontag.h"
 #include "../Constants/strings.h"
 #include "ui_relationview.h"
-
-using std::vector;
 
 namespace Ui{
         class RelationView;
