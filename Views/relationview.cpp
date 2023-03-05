@@ -8,6 +8,14 @@ RelationView::RelationView(QWidget *parent)
     this->initialTagsComboBox();
 }
 
+void RelationView::printInfo(const QString &value, bool isError){
+    QPalette pal = this->ui->l_info->palette();
+    pal.setColor(QPalette::Window, QColor( isError ? Qt::red : Qt::transparent));
+
+    this->ui->l_info->setText(value);
+    this->ui->l_info->setPalette(pal);
+}
+
 void RelationView::initialQuestionsListView(){
     this->_questions_table_model = new QSqlRelationalTableModel;
     this->_questions_table_model->setTable(TABLE_QUESTIONS);
@@ -81,28 +89,40 @@ void RelationView::on_lv_question_tags_clicked(const QModelIndex &index)
 void RelationView::on_b_create_relation_clicked()
 {
     if(this->_selected_cb == nullptr){
+        this->printInfo(TAG_FROM_COMBO_BOX_SHOULD_BE_SELECTED, true);
         return;
     }
 
     if(this->_selected_question == nullptr){
+        this->printInfo(SELECT_QUESTION_FIRST);
         return;
     }
 
-    DbRelationQuestionTag::isRelationCreated(this->_selected_question, this->_selected_cb);
-    this->_questions_table_model->select();
+    if(DbRelationQuestionTag::isRelationCreated(this->_selected_question, this->_selected_cb)){
+        this->_questions_table_model->select();
+        this->printInfo(RELATION_QUESTION_WIT_TAG_CREATED);
+    } else {
+        this->printInfo(DATABASE_ERROR, true);
+    }
 }
 
 void RelationView::on_b_remove_relation_clicked()
 {
     if(this->_from_quest == nullptr){
+        this->printInfo(SELECT_TAG_FROM_QUESTION, true);
         return;
     }
 
     if(this->_selected_question == nullptr){
+        this->printInfo(SELECT_QUESTION_FIRST, true);
         return;
     }
 
-    DbRelationQuestionTag::isRelationRemoved(this->_selected_question, this->_from_quest);
-    this->_questions_table_model->select();
+    if(DbRelationQuestionTag::isRelationRemoved(this->_selected_question, this->_from_quest)){
+        this->_questions_table_model->select();
+        this->printInfo(REMOVED_RELATION_QUESTION_AND_TAG_SUCCESFULLY);
+    } else {
+        printInfo(DATABASE_ERROR, true);
+    }
 }
 

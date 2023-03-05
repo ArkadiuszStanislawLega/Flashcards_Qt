@@ -110,4 +110,8 @@ static const QString TAG_ALREADY_CONNECTED_WITH_QUESTION = "Selected question is
 static const QString FIELD_TAG_CANT_EMPTY = "The tag field can't be empty.";
 static const QString FIELD_VALUE_CANT_EMPTY = "The value field can't be empty.";
 static const QString FIELD_ANSWER_CANT_EMPTY = "The answer field can't be empty.";
+static const QString TAG_FROM_COMBO_BOX_SHOULD_BE_SELECTED = "Tag from combo box should be selected";
+static const QString SELECT_TAG_FROM_QUESTION = "Tag from question should be selected.";
+static const QString SELECT_QUESTION_FIRST = "Quest should be selected.";
+static const QString RELATION_QUESTION_WIT_TAG_CREATED = "Relation between question and tag was corectly created.";
 #endif

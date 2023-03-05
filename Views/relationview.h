@@ -42,6 +42,7 @@ private:
     void initialQuestionsListView();
     void initialQuestionTagsListView();
     void initialTagsComboBox();
+    void printInfo(const QString &, bool isError = false);
 
 };
 
