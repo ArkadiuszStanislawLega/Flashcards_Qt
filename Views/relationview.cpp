@@ -32,13 +32,13 @@ void RelationView::initialQuestionTagsListView(){
     }
 
     QStringListModel *gm_model = new QStringListModel;
+    QList<QString> tags;
+
     this->ui->lv_question_tags->setModel(gm_model);
-    QList<QString> cities;
     for(Tag *tag : this->_selected_question->get_tags()){
-        qDebug() << tag->get_tag();
-        cities.append(tag->get_tag());
+        tags.append(tag->get_tag());
     }
-    gm_model->setStringList(cities);
+    gm_model->setStringList(tags);
 }
 
 void RelationView::on_cb_tags_currentIndexChanged(int index)
@@ -91,12 +91,11 @@ void RelationView::on_b_create_relation_clicked()
 
     DbRelationQuestionTag::isRelationCreated(this->_selected_question, this->_selected_cb);
     this->_questions_table_model->select();
-    DbRelationQuestionTag::readRelatedTags(this->_selected_question);
 }
 
 void RelationView::on_b_remove_relation_clicked()
 {
-    if(this->_selected_cb == nullptr){
+    if(this->_from_quest == nullptr){
         return;
     }
 
@@ -106,6 +105,5 @@ void RelationView::on_b_remove_relation_clicked()
 
     DbRelationQuestionTag::isRelationRemoved(this->_selected_question, this->_from_quest);
     this->_questions_table_model->select();
-    DbRelationQuestionTag::readRelatedTags(this->_selected_question);
 }
 
