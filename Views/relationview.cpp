@@ -76,7 +76,7 @@ void RelationView::on_lv_questions_clicked(const QModelIndex &index)
 
 void RelationView::on_lv_question_tags_clicked(const QModelIndex &index)
 {
-    qDebug() << this->_selected_question->get_tags().at(index.row())->get_tag();
+    this->_from_quest = this->_selected_question->get_tags().at(index.row());
 }
 
 void RelationView::on_b_create_relation_clicked()
@@ -90,10 +90,22 @@ void RelationView::on_b_create_relation_clicked()
     }
 
     DbRelationQuestionTag::isRelationCreated(this->_selected_question, this->_selected_cb);
+    this->_questions_table_model->select();
+    DbRelationQuestionTag::readRelatedTags(this->_selected_question);
 }
 
 void RelationView::on_b_remove_relation_clicked()
 {
+    if(this->_selected_cb == nullptr){
+        return;
+    }
 
+    if(this->_selected_question == nullptr){
+        return;
+    }
+
+    DbRelationQuestionTag::isRelationRemoved(this->_selected_question, this->_from_quest);
+    this->_questions_table_model->select();
+    DbRelationQuestionTag::readRelatedTags(this->_selected_question);
 }
 
