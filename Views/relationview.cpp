@@ -43,7 +43,16 @@ void RelationView::initialQuestionTagsListView(){
 
 void RelationView::on_cb_tags_currentIndexChanged(int index)
 {
+    int id, id_column_index, tag_column_index;
+    QString tag;
 
+    id_column_index = this->_tags_combo_box_model->record().indexOf(COLUMN_ID);
+    tag_column_index = this->_tags_combo_box_model->record().indexOf(COLUMN_TAG);
+
+    id = this->_tags_combo_box_model->index(index, id_column_index).data(Qt::DisplayRole).toInt();
+    tag = this->_tags_combo_box_model->index(index, tag_column_index).data(Qt::DisplayRole).toString();
+
+    this->_selected_cb = new Tag(id, tag);
 }
 
 void RelationView::on_lv_questions_clicked(const QModelIndex &index)
