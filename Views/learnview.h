@@ -2,6 +2,14 @@
 #define LEARNVIEW_H
 
 #include <QWidget>
+#include <QStringListModel>
+#include <vector>
+#include "../Models/question.h"
+#include "../Models/tag.h"
+#include "../Database/dbquestion.h"
+#include "../Database/dbtag.h"
+#include "../Database/dbrelationquestiontag.h"
+#include "../Constants/strings.h"
 #include "ui_learnview.h"
 
 namespace Ui{
@@ -10,7 +18,14 @@ namespace Ui{
 
 class LearnView : public QWidget
 {
+
+private:
     Q_OBJECT
+    Ui::LearnView *ui;
+    QStringListModel *_tags_model;
+
+    void initialTagListView();
+
 public:
     explicit LearnView(QWidget *parent = nullptr);
     void testing();
@@ -22,9 +37,6 @@ private slots:
     void on_b_correct_clicked();
     void on_b_uncorrect_clicked();
     void on_b_show_answer_clicked();
-
-private:
-    Ui::LearnView *ui;
 };
 
 #endif // LEARNVIEW_H

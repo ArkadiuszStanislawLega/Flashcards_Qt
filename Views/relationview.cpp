@@ -97,6 +97,7 @@ void RelationView::on_b_create_relation_clicked()
         this->printInfo(SELECT_QUESTION_FIRST);
         return;
     }
+    //TODO: Validate is relation is not EXIST.
 
     if(DbRelationQuestionTag::isRelationCreated(this->_selected_question, this->_selected_cb)){
         this->_questions_table_model->select();
