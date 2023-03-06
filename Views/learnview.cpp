@@ -7,9 +7,10 @@ void LearnView::initialTagListView()
 
     tags = DbTag::getAllTags();
     for(Tag *t : tags){
-        QString value = t->get_tag() + " [" + std::to_string(DbRelationQuestionTag::readRelatedQuestions(t).size()).c_str() + "]";
+        int question_number = DbRelationQuestionTag::readRelatedQuestions(t).size();
+        QString value = t->get_tag() + " [" + std::to_string(question_number).c_str() + "]";
         cb_values.append(value);
-        qInfo() << value;
+        this->_max_question_number_in_tag.append(question_number);
     }
 
     this->_tags_model->setStringList(cb_values);
@@ -45,6 +46,12 @@ void LearnView::on_b_uncorrect_clicked()
 
 void LearnView::on_b_show_answer_clicked()
 {
+}
+
+
+void LearnView::on_cb_tags_currentIndexChanged(int index)
+{
+    this->ui->sb_questions_number->setMaximum(this->_max_question_number_in_tag[index]);
 
 }
 

@@ -24,6 +24,8 @@ private:
     Ui::LearnView *ui;
     QStringListModel *_tags_model;
 
+    QList<unsigned int> _max_question_number_in_tag;
+
     void initialTagListView();
 
 public:
@@ -37,6 +39,7 @@ private slots:
     void on_b_correct_clicked();
     void on_b_uncorrect_clicked();
     void on_b_show_answer_clicked();
+    void on_cb_tags_currentIndexChanged(int index);
 };
 
 #endif // LEARNVIEW_H
