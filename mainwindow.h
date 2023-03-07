@@ -11,6 +11,8 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+//TODO: Zmienic model question i tag tak zeby dziedziczyl interfejs CRUD.
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT

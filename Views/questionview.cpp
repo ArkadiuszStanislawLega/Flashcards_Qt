@@ -117,6 +117,7 @@ void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index)
     answer = this->_table_model->index(index.row(), answer_column_index).data(Qt::DisplayRole).toString();
 
     this->_selected_question = new Question(id, value, answer, {});
+    this->_selected_question->getAllRelated();
 
     this->ui->te_answer->setText(answer);
     this->ui->te_value->setText(value);

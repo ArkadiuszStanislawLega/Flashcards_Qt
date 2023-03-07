@@ -18,7 +18,7 @@ bool DbQuestion::isCreate(Question *q){
 }
 
 Question *DbQuestion::read(int id){
-    Question *q = new Question();
+    Question *q; // = new Question();
     QSqlQuery query;
     query.prepare(SELECT + "* " + FROM + TABLE_QUESTIONS + " " +
                   WHERE + COLUMN_ID + " = (:" + COLUMN_ID + ") limit 1");
@@ -88,7 +88,7 @@ vector<Question *> DbQuestion::getAllQuestions(){
 
    if(query.exec()){
        while(query.next()){
-           Question *q = new Question();
+           Question *q; //= new Question();
            int columnId, columnValue, columnAnswer;
 
            columnId = query.record().indexOf(COLUMN_ID);

@@ -30,6 +30,7 @@ HEADERS += \
     Constants/strings.h \
     Constants/values.h \
     Controllers/controller.h \
+    Database/DbCRUD.h \
     Database/dbmanager.h \
     Database/dbquestion.h \
     Database/dbrelationquestiontag.h \

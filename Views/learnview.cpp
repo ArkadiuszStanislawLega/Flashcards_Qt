@@ -2,7 +2,7 @@
 
 void LearnView::initialTagListView()
 {
-    std:vector<Tag *> tags;
+    vector<Tag *> tags;
     QList<QString> cb_values;
 
     tags = DbTag::getAllTags();

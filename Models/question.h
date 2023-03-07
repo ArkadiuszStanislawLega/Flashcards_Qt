@@ -2,41 +2,54 @@
 #ifndef QUESTION 
 #define QUESTION
 #include <iostream>
-#include <vector>
 #include <set>
 #include <sqlite3.h>
+#include <QSqlQuery>
 #include <algorithm>
 #include <QString>
+#include <QSqlRecord>
+#include <QList>
 
+#include "../Database/DbCRUD.h"
+#include "../Constants/strings.h"
 #include "tag.h"
 #include "strings.h"
 
-using std::vector;
-
 class Tag;
 
-class Question{
+class Question : public Db_crud<Question, Tag>{
 	private:
-		static int read_related_tag(void *, int, char **, char **);
-        QString _value, _answer;
         int _id;
-		vector<Tag*> _tags;
+        QString _value, _answer;
+        QList<Tag*> _tags;
+        bool is_relation_valid(Tag *t);
 
 	public:
-		Question();
-        Question(int, QString, QString, vector<Tag*>);
+        Question();
+        Question(int);
+        Question(int, QString, QString, QList<Tag*>);
 
         int get_id();
         QString get_value();
         QString get_answer();
-		vector<Tag*> get_tags();
+        QList<Tag*> get_tags();
 		bool is_tag_already_related(Tag *);
 
         void set_id(int);
         void set_value(QString);
         void set_answer(QString);
-		void set_tags(vector<Tag*>);
+        void set_tags(QList<Tag*>);
 			
         QString to_string();
+        bool isCreate();
+        Question *isRead();
+        bool isUpdate();
+        bool isRemoved();
+        int findId();
+        bool isRelationCreated(Tag *);
+        bool isRemovedRelation(Tag *);
+        QList<Question *> getAll();
+        bool isAllRelationRemoved();
+        QList<Tag *> getAllRelated();
 };
 #endif

@@ -77,7 +77,7 @@ void RelationView::on_lv_questions_clicked(const QModelIndex &index)
     answer = this->_questions_table_model->index(index.row(), answer_column_index).data(Qt::DisplayRole).toString();
 
     this->_selected_question = new Question(id, value, answer, {});
-    this->_selected_question->set_tags(DbRelationQuestionTag::readRelatedTags(this->_selected_question));
+    this->_selected_question->getAllRelated();
     initialQuestionTagsListView();
 }
 

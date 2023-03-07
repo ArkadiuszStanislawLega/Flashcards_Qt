@@ -9,6 +9,8 @@
 #include <QDebug>
 #include <QString>
 
+using std::vector;
+
 class DbTag
 {
 public:
