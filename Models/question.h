@@ -11,13 +11,14 @@
 #include <QList>
 
 #include "../Database/DbCRUD.h"
+#include "../Database/manytomany.h"
 #include "../Constants/strings.h"
 #include "tag.h"
 #include "strings.h"
 
 class Tag;
 
-class Question : public Db_crud<Question, Tag>{
+class Question : public Db_crud<Question>, public ManyToMany<Tag>{
 	private:
         int _id;
         QString _value, _answer;
@@ -46,9 +47,10 @@ class Question : public Db_crud<Question, Tag>{
         bool isUpdate();
         bool isRemoved();
         int findId();
+        QList<Question *> getAll();
+
         bool isRelationCreated(Tag *);
         bool isRemovedRelation(Tag *);
-        QList<Question *> getAll();
         bool isAllRelationRemoved();
         QList<Tag *> getAllRelated();
 };
