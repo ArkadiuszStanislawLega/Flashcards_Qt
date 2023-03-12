@@ -60,7 +60,7 @@ void RelationView::on_cb_tags_currentIndexChanged(int index)
     id = this->_tags_combo_box_model->index(index, id_column_index).data(Qt::DisplayRole).toInt();
     tag = this->_tags_combo_box_model->index(index, tag_column_index).data(Qt::DisplayRole).toString();
 
-    this->_selected_cb = new Tag(id, tag);
+    this->_selected_cb = new Tag(this, id, tag);
 }
 
 void RelationView::on_lv_questions_clicked(const QModelIndex &index)
@@ -99,7 +99,7 @@ void RelationView::on_b_create_relation_clicked()
     }
     //TODO: Validate is relation is not EXIST.
 
-    if(DbRelationQuestionTag::isRelationCreated(this->_selected_question, this->_selected_cb)){
+    if(this->_selected_cb->isRelationCreated(this->_selected_question)){
         this->_questions_table_model->select();
         this->printInfo(RELATION_QUESTION_WIT_TAG_CREATED);
     } else {
@@ -119,7 +119,7 @@ void RelationView::on_b_remove_relation_clicked()
         return;
     }
 
-    if(DbRelationQuestionTag::isRelationRemoved(this->_selected_question, this->_from_quest)){
+    if(this->_from_quest->isRemovedRelation(this->_selected_question)){
         this->_questions_table_model->select();
         this->printInfo(REMOVED_RELATION_QUESTION_AND_TAG_SUCCESFULLY);
     } else {

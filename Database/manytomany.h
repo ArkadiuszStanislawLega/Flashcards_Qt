@@ -4,6 +4,7 @@
 
 template<typename T>
 class ManyToMany{
+public:
     virtual bool isRelationCreated(T *) = 0;
     virtual bool isRemovedRelation(T *) = 0;
     virtual QList<T *> getAllRelated() = 0;

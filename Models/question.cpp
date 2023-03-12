@@ -211,7 +211,7 @@ QList<Tag *> Question::getAllRelated()
     }
 
     while(query.next()){
-        Tag *t = new Tag();
+        Tag *t = new Tag(this->parent());
         int idColumn, tagColumn;
 
         idColumn = query.record().indexOf(COLUMN_ID);

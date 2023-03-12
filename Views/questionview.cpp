@@ -26,7 +26,7 @@ QuestionView::QuestionView(QWidget *parent)
     : QWidget{parent}, ui(new Ui::QuestionView)
 {
     this->ui->setupUi(this);
-    this->_selected_question = nullptr;
+    this->_selected_question = new Question(this);
     this->initialQuestionsListView();
 }
 
