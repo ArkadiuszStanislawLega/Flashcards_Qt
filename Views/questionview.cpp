@@ -46,7 +46,7 @@ void QuestionView::on_b_create_question_clicked()
     q->set_answer(ui->te_answer->toPlainText());
     q->set_value(ui->te_value->toPlainText());
 
-    if(DbQuestion::isCreate(q)){
+    if(q->isCreate()){
         this->_table_model->select();
         this->cleanTextEditors();
         this->printInfo(QUESTION_CREATED_CORRECTLY);
@@ -77,7 +77,7 @@ void QuestionView::on_b_update_question_clicked()
     this->_selected_question->set_answer(this->ui->te_answer->toPlainText());
     this->_selected_question->set_value(this->ui->te_value->toPlainText());
 
-    if(DbQuestion::isUpdate(this->_selected_question)){
+    if(this->_selected_question->isUpdate()){
         this->_table_model->select();
         this->printInfo(QUESTION_UPDATED);
         this->cleanTextEditors();
@@ -93,7 +93,7 @@ void QuestionView::on_b_remove_question_clicked()
         return;
     }
 
-    if(DbQuestion::isRemoved(this->_selected_question->get_id())){
+    if(this->_selected_question->isRemoved()){
         this->_selected_question = nullptr;
         this->_table_model->select();
         this->cleanTextEditors();

@@ -8,7 +8,6 @@
 #include <QStringListModel>
 #include "../Models/question.h"
 #include "../Models/tag.h"
-#include "../Database/dbquestion.h"
 #include "../Database/dbtag.h"
 #include "../Database/dbrelationquestiontag.h"
 #include "../Constants/strings.h"

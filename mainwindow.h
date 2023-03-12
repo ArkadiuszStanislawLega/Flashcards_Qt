@@ -4,8 +4,6 @@
 #include <QMainWindow>
 #include "Models/model.h"
 #include "Models/question.h"
-#include "Database/dbquestion.h"
-#include "Database/dbtag.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

@@ -4,7 +4,6 @@
 #include "../Views/view.h"
 #include "../Models/model.h"
 #include "../Models/question.h"
-#include "../Database/dbquestion.h"
 
 class Controller
 {

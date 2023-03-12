@@ -8,7 +8,6 @@
 #include <QSqlRelationalTableModel>
 #include <QDebug>
 #include "../Models/question.h"
-#include "../Database/dbquestion.h"
 #include "../Constants/strings.h"
 #include "ui_questionview.h"
 

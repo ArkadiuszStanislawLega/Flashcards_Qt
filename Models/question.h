@@ -9,6 +9,7 @@
 #include <QString>
 #include <QSqlRecord>
 #include <QList>
+#include <QObject>
 
 #include "../Database/DbCRUD.h"
 #include "../Database/manytomany.h"
@@ -18,15 +19,16 @@
 
 class Tag;
 
-class Question : public Db_crud<Question>, public ManyToMany<Tag>{
-	private:
+class Question : public QObject, public Db_crud<Question>, public ManyToMany<Tag>{
+    private:
+        Q_OBJECT
         int _id;
         QString _value, _answer;
         QList<Tag*> _tags;
         bool is_relation_valid(Tag *t);
 
 	public:
-        Question();
+        Question(QObject *parent = nullptr);
         Question(int);
         Question(int, QString, QString, QList<Tag*>);
 

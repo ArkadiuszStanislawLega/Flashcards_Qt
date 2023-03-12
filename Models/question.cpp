@@ -1,6 +1,6 @@
 #include "question.h"
 
-Question::Question(){
+Question::Question(QObject *parent) : QObject(parent){
 	this->_id = 0;
 	this->_value = "";
 	this->_answer = "";
