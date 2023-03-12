@@ -36,10 +36,10 @@ void TagView::on_b_create_tag_clicked()
         return;
     }
 
-    Tag *tag = new Tag();
+    Tag *tag = new Tag(this);
     tag->set_tag(ui->te_create_tag->toPlainText());
 
-    if(DbTag::isCreate(tag)){
+    if(tag->isCreate()){
        this->printInfo(TAG_CREATED_CORRECTLY);
     } else {
        this->printInfo(DATABASE_ERROR, true);
@@ -64,7 +64,7 @@ void TagView::on_b_update_tag_clicked()
 
     this->_selected_tag->set_tag(ui->te_create_tag->toPlainText());
 
-    if(DbTag::isUpdate(this->_selected_tag)){
+    if(this->_selected_tag->isUpdate()){
         this->_table_model->select();
         this->printInfo(TAG_UPDATE_SUCCESFULLY);
     } else {
@@ -81,7 +81,7 @@ void TagView::on_b_remove_tag_clicked()
         return;
     }
 
-    if(DbTag::isRemoved(this->_selected_tag->get_id())){
+    if(this->_selected_tag->isRemoved()){
         this->_table_model->select();
         this->_selected_tag = nullptr;
         this->printInfo(TAG_SUCCESFULLY_REMOVED);
@@ -103,7 +103,7 @@ void TagView::on_lv_created_tags_clicked(const QModelIndex &index)
    id = this->_table_model->index(index.row(), id_column_index).data(Qt::DisplayRole).toInt();
    tag = this->_table_model->index(index.row(), tag_column_index).data(Qt::DisplayRole).toString();
 
-   this->_selected_tag = new Tag(id, tag);
+   this->_selected_tag = new Tag(this, id, tag);
 
    this->ui->te_create_tag->setText(tag);
 }

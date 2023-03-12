@@ -2,12 +2,14 @@
 
 void LearnView::initialTagListView()
 {
-    std:vector<Tag *> tags;
+    QList<Tag *> tags;
     QList<QString> cb_values;
+    Tag *tag = new Tag(this);
 
-    tags = DbTag::getAllTags();
+    tags = tag->getAll();
+
     for(Tag *t : tags){
-        int question_number = DbRelationQuestionTag::readRelatedQuestions(t).size();
+        int question_number =  t->getAllRelated().size();
         QString value = t->get_tag() + " [" + std::to_string(question_number).c_str() + "]";
         cb_values.append(value);
         this->_max_question_number_in_tag.append(question_number);

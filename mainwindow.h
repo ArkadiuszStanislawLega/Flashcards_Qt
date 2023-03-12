@@ -4,12 +4,12 @@
 #include <QMainWindow>
 #include "Models/model.h"
 #include "Models/question.h"
-#include "Database/dbquestion.h"
-#include "Database/dbtag.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
+
+//TODO: Zmienic model question i tag tak zeby dziedziczyl interfejs CRUD.
 
 class MainWindow : public QMainWindow
 {

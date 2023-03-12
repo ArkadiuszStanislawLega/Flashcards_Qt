@@ -8,7 +8,6 @@
 #include <QPalette>
 #include "ui_tagview.h"
 #include "../Models/tag.h"
-#include "../Database/dbtag.h"
 #include "../Constants/strings.h"
 
 namespace Ui{
