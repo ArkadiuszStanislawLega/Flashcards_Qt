@@ -17,7 +17,7 @@ void TagView::printInfo(const QString &value, bool isError){
 }
 
 void TagView::cleanTextEditors(){
-    this->ui->te_create_tag->setText("");
+    this->ui->te_create_tag->clear();
 }
 
 void TagView::initialTagsListView(){
@@ -107,4 +107,3 @@ void TagView::on_lv_created_tags_clicked(const QModelIndex &index)
 
    this->ui->te_create_tag->setText(tag);
 }
-

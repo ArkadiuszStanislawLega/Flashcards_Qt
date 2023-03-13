@@ -11,7 +11,7 @@
 #include <QList>
 #include <QObject>
 
-#include "../Database/DbCRUD.h"
+#include "../Database/crud.h"
 #include "../Database/manytomany.h"
 #include "../Constants/strings.h"
 #include "tag.h"
@@ -19,7 +19,7 @@
 
 class Tag;
 
-class Question : public QObject, public Db_crud<Question>, public ManyToMany<Tag>{
+class Question : public QObject, public Crud<Question>, public ManyToMany<Tag>{
     private:
         Q_OBJECT
         int _id;

@@ -7,12 +7,12 @@
 
 #include "strings.h"
 #include "question.h"
-#include "../Database/DbCRUD.h"
+#include "../Database/crud.h"
 #include "../Database/manytomany.h"
 
 class Question;
 
-class Tag : public QObject, public Db_crud<Tag>, public ManyToMany<Question>{
+class Tag : public QObject, public Crud<Tag>, public ManyToMany<Question>{
     private:
         Q_OBJECT
         int _id;

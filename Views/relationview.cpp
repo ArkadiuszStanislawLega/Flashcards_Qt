@@ -1,9 +1,8 @@
 #include "relationview.h"
 
 RelationView::RelationView(QWidget *parent)
-    : QWidget{parent}, ui(new Ui::RelationView)
-{
-    ui->setupUi(this);
+    : QWidget{parent}, ui(new Ui::RelationView){
+    this->ui->setupUi(this);
     this->initialQuestionsListView();
     this->initialTagsComboBox();
 }
@@ -49,8 +48,7 @@ void RelationView::initialQuestionTagsListView(){
     gm_model->setStringList(tags);
 }
 
-void RelationView::on_cb_tags_currentIndexChanged(int index)
-{
+void RelationView::on_cb_tags_currentIndexChanged(int index){
     int id, id_column_index, tag_column_index;
     QString tag;
 
@@ -63,8 +61,7 @@ void RelationView::on_cb_tags_currentIndexChanged(int index)
     this->_selected_cb = new Tag(id, tag, this);
 }
 
-void RelationView::on_lv_questions_clicked(const QModelIndex &index)
-{
+void RelationView::on_lv_questions_clicked(const QModelIndex &index){
     int id, id_column_index, value_column_index, answer_column_index;
     QString value, answer;
 
@@ -81,13 +78,11 @@ void RelationView::on_lv_questions_clicked(const QModelIndex &index)
     initialQuestionTagsListView();
 }
 
-void RelationView::on_lv_question_tags_clicked(const QModelIndex &index)
-{
+void RelationView::on_lv_question_tags_clicked(const QModelIndex &index){
     this->_from_quest = this->_selected_question->get_tags().at(index.row());
 }
 
-void RelationView::on_b_create_relation_clicked()
-{
+void RelationView::on_b_create_relation_clicked(){
     if(this->_selected_cb == nullptr){
         this->printInfo(TAG_FROM_COMBO_BOX_SHOULD_BE_SELECTED, true);
         return;
@@ -107,8 +102,7 @@ void RelationView::on_b_create_relation_clicked()
     }
 }
 
-void RelationView::on_b_remove_relation_clicked()
-{
+void RelationView::on_b_remove_relation_clicked(){
     if(this->_from_quest == nullptr){
         this->printInfo(SELECT_TAG_FROM_QUESTION, true);
         return;
@@ -126,4 +120,3 @@ void RelationView::on_b_remove_relation_clicked()
         printInfo(DATABASE_ERROR, true);
     }
 }
-

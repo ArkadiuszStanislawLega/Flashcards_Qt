@@ -1,9 +1,9 @@
-#ifndef DBCRUD_H
-#define DBCRUD_H
+#ifndef CRUD_H
+#define CRUD_H
 #include <QList>
 
 template<typename T>
-class Db_crud{
+class Crud{
 public:
     virtual bool isCreate() = 0;
     virtual T *isRead() = 0;
@@ -13,4 +13,4 @@ public:
     virtual QList<T *> getAll() = 0;
 };
 
-#endif // DBCRUD_H
+#endif // CRUD_H

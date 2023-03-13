@@ -10,8 +10,8 @@ void QuestionView::initialQuestionsListView(){
 }
 
 void QuestionView::cleanTextEditors(){
-   this->ui->te_answer->setText("");
-   this->ui->te_value->setText("");
+    this->ui->te_value->clear();
+    this->ui->te_answer->clear();
 }
 
 void QuestionView::printInfo(const QString &value, bool isError=false){
@@ -23,15 +23,13 @@ void QuestionView::printInfo(const QString &value, bool isError=false){
 }
 
 QuestionView::QuestionView(QWidget *parent)
-    : QWidget{parent}, ui(new Ui::QuestionView)
-{
+    : QWidget{parent}, ui(new Ui::QuestionView){
     this->ui->setupUi(this);
     this->_selected_question = new Question(this);
     this->initialQuestionsListView();
 }
 
-void QuestionView::on_b_create_question_clicked()
-{
+void QuestionView::on_b_create_question_clicked(){
     if(ui->te_answer->toPlainText() == ""){
         this->printInfo(FIELD_ANSWER_CANT_EMPTY, true);
         return;
@@ -57,8 +55,7 @@ void QuestionView::on_b_create_question_clicked()
     delete q;
 }
 
-void QuestionView::on_b_update_question_clicked()
-{
+void QuestionView::on_b_update_question_clicked(){
     if(this->_selected_question == nullptr){
         this->printInfo(INFO_FIRST_SELECT_QUESTION, true);
         return;
@@ -86,8 +83,7 @@ void QuestionView::on_b_update_question_clicked()
     }
 }
 
-void QuestionView::on_b_remove_question_clicked()
-{
+void QuestionView::on_b_remove_question_clicked(){
     if(this->_selected_question == nullptr){
         this->printInfo(INFO_FIRST_SELECT_QUESTION, true);
         return;
@@ -103,8 +99,7 @@ void QuestionView::on_b_remove_question_clicked()
     }
 }
 
-void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index)
-{
+void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index){
     int id, id_column_index, value_column_index, answer_column_index;
     QString value, answer;
 
@@ -122,4 +117,3 @@ void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index)
     this->ui->te_answer->setText(answer);
     this->ui->te_value->setText(value);
 }
-

@@ -27,7 +27,7 @@ HEADERS += \
     Constants/strings.h \
     Constants/values.h \
     Controllers/controller.h \
-    Database/DbCRUD.h \
+    Database/crud.h \
     Database/dbmanager.h \
     Database/manytomany.h \
     Models/model.h \
