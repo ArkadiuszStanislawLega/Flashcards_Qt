@@ -103,7 +103,7 @@ void TagView::on_lv_created_tags_clicked(const QModelIndex &index)
    id = this->_table_model->index(index.row(), id_column_index).data(Qt::DisplayRole).toInt();
    tag = this->_table_model->index(index.row(), tag_column_index).data(Qt::DisplayRole).toString();
 
-   this->_selected_tag = new Tag(this, id, tag);
+   this->_selected_tag = new Tag(id, tag, this);
 
    this->ui->te_create_tag->setText(tag);
 }

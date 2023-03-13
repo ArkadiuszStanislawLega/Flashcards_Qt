@@ -20,7 +20,7 @@ class Tag : public QObject, public Db_crud<Tag>, public ManyToMany<Question>{
 
 	public:
         Tag(QObject *parent = nullptr);
-        Tag(QObject *parent = nullptr, int = 0, QString = "");
+        Tag(int, QString, QObject *parent = nullptr);
 
         int get_id();
         QString get_tag();

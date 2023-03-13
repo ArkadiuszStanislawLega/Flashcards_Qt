@@ -60,7 +60,7 @@ void RelationView::on_cb_tags_currentIndexChanged(int index)
     id = this->_tags_combo_box_model->index(index, id_column_index).data(Qt::DisplayRole).toInt();
     tag = this->_tags_combo_box_model->index(index, tag_column_index).data(Qt::DisplayRole).toString();
 
-    this->_selected_cb = new Tag(this, id, tag);
+    this->_selected_cb = new Tag(id, tag, this);
 }
 
 void RelationView::on_lv_questions_clicked(const QModelIndex &index)
