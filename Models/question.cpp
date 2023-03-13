@@ -6,13 +6,13 @@ Question::Question(QObject *parent) : QObject(parent){
 	this->_answer = "";
 }
 
-Question::Question(int id)
-    : Question(){
+Question::Question(int id, QObject *parent)
+    : Question(parent){
     this->_id = id;
 }
 
-Question::Question(int id, QString value, QString answer, QList<Tag*> tags)
-    : Question(id){
+Question::Question(int id, QString value, QString answer, QList<Tag*> tags, QObject *parent)
+    : Question(id, parent){
 	this->_value = value;
 	this->_answer = answer;
 	this->_tags = tags;

@@ -29,8 +29,8 @@ class Question : public QObject, public Db_crud<Question>, public ManyToMany<Tag
 
 	public:
         Question(QObject *parent = nullptr);
-        Question(int);
-        Question(int, QString, QString, QList<Tag*>);
+        Question(int, QObject *parent = nullptr);
+        Question(int, QString, QString, QList<Tag*>, QObject *parent = nullptr);
 
         int get_id();
         QString get_value();
