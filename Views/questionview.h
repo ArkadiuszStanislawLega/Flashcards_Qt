@@ -25,6 +25,8 @@ public:
 
 signals:
     void added_question_to_db();
+    void remove_question_from_db();
+    void update_question_from_db();
 
 private slots:
     void on_b_update_question_clicked();

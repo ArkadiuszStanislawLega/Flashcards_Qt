@@ -25,7 +25,11 @@ signals:
 
 public slots:
     void added_question_to_db();
+    void remove_question_from_db();
+    void update_question_from_db();
     void added_tag_to_db();
+    void remove_tag_from_db();
+    void update_tag_from_db();
 
 private slots:
     void on_cb_tags_currentIndexChanged(int index);

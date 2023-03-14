@@ -126,7 +126,27 @@ void RelationView::added_question_to_db()
     this->initialQuestionsListView();
 }
 
+void RelationView::remove_question_from_db()
+{
+    this->initialQuestionsListView();
+}
+
+void RelationView::update_question_from_db()
+{
+    this->initialQuestionsListView();
+}
+
 void RelationView::added_tag_to_db()
+{
+    this->initialTagsComboBox();
+}
+
+void RelationView::remove_tag_from_db()
+{
+    this->initialTagsComboBox();
+}
+
+void RelationView::update_tag_from_db()
 {
     this->initialTagsComboBox();
 }

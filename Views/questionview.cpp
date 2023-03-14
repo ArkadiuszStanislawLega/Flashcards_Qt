@@ -83,6 +83,8 @@ void QuestionView::on_b_update_question_clicked(){
         this->printInfo(DATABASE_ERROR, true);
     }
 
+    emit update_question_from_db();
+
 }
 
 void QuestionView::on_b_remove_question_clicked(){
@@ -99,6 +101,7 @@ void QuestionView::on_b_remove_question_clicked(){
     } else {
         this->printInfo(DATABASE_ERROR, true);
     }
+    emit remove_question_from_db();
 }
 
 void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index){

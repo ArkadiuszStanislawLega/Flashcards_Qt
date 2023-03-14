@@ -74,6 +74,7 @@ void TagView::on_b_update_tag_clicked()
     }
 
     this->cleanTextEditors();
+    emit updated_tag_from_db();
 }
 
 void TagView::on_b_remove_tag_clicked()
@@ -92,6 +93,8 @@ void TagView::on_b_remove_tag_clicked()
     }
 
     this->cleanTextEditors();
+
+    emit remove_tag_from_db();
 }
 
 void TagView::on_lv_created_tags_clicked(const QModelIndex &index)

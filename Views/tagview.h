@@ -22,6 +22,8 @@ public:
 
 signals:
     void added_tag_to_db();
+    void updated_tag_from_db();
+    void remove_tag_from_db();
 
 private slots:
     void on_b_create_tag_clicked();
