@@ -100,6 +100,8 @@ void RelationView::on_b_create_relation_clicked(){
     } else {
         this->printInfo(DATABASE_ERROR, true);
     }
+
+    emit create_relation();
 }
 
 void RelationView::on_b_remove_relation_clicked(){
@@ -119,6 +121,8 @@ void RelationView::on_b_remove_relation_clicked(){
     } else {
         printInfo(DATABASE_ERROR, true);
     }
+
+    emit remove_relation();
 }
 
 void RelationView::added_question_to_db()
