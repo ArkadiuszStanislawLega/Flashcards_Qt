@@ -21,8 +21,20 @@ LearnView::LearnView(QWidget *parent)
     this->initialTagListView();
 }
 
-void LearnView::testing(){
+void LearnView::added_question_to_db(){
+    this->initialTagListView();
+}
 
+void LearnView::removed_question_from_db(){
+    this->initialTagListView();
+}
+
+void LearnView::added_tag_to_db(){
+    this->initialTagListView();
+}
+
+void LearnView::removed_tag_from_db(){
+    this->initialTagListView();
 }
 
 void LearnView::on_b_start_clicked(){

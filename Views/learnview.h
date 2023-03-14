@@ -27,9 +27,14 @@ private:
 
 public:
     explicit LearnView(QWidget *parent = nullptr);
-    void testing();
 
 signals:
+
+public slots:
+    void added_question_to_db();
+    void removed_question_from_db();
+    void added_tag_to_db();
+    void removed_tag_from_db();
 
 private slots:
     void on_b_start_clicked();
