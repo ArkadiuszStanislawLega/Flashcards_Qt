@@ -34,6 +34,7 @@ public slots:
     void added_question_to_db();
     void removed_question_from_db();
     void added_tag_to_db();
+    void update_tag_in_db();
     void removed_tag_from_db();
 
 private slots:

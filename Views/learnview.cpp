@@ -33,6 +33,10 @@ void LearnView::added_tag_to_db(){
     this->initialTagListView();
 }
 
+void LearnView::update_tag_in_db(){
+    this->initialTagListView();
+}
+
 void LearnView::removed_tag_from_db(){
     this->initialTagListView();
 }
