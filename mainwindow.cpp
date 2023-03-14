@@ -8,7 +8,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     QObject::connect(ui->quesiton_view,&QuestionView::added_question_to_db,ui->relation_view,&RelationView::added_question_to_db);
+    QObject::connect(ui->quesiton_view,&QuestionView::update_question_from_db,ui->relation_view,&RelationView::update_question_from_db);
+    QObject::connect(ui->quesiton_view,&QuestionView::remove_question_from_db,ui->relation_view,&RelationView::remove_question_from_db);
+
     QObject::connect(ui->tag_view,&TagView::added_tag_to_db,ui->relation_view,&RelationView::added_tag_to_db);
+    QObject::connect(ui->tag_view,&TagView::updated_tag_from_db,ui->relation_view,&RelationView::update_tag_from_db);
+    QObject::connect(ui->tag_view,&TagView::remove_tag_from_db,ui->relation_view,&RelationView::remove_tag_from_db);
 
     setWindowTitle("Cards");
 }
