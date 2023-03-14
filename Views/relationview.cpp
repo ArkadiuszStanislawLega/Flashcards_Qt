@@ -95,62 +95,56 @@ void RelationView::on_b_create_relation_clicked(){
     //TODO: Validate is relation is not EXIST.
 
     if(this->_selected_cb->isRelationCreated(this->_selected_question)){
-        this->_questions_table_model->select();
-        this->printInfo(RELATION_QUESTION_WIT_TAG_CREATED);
+      this->_questions_table_model->select();
+      this->printInfo(RELATION_QUESTION_WIT_TAG_CREATED);
     } else {
-        this->printInfo(DATABASE_ERROR, true);
+      this->printInfo(DATABASE_ERROR, true);
     }
 
     emit create_relation();
 }
 
 void RelationView::on_b_remove_relation_clicked(){
-    if(this->_from_quest == nullptr){
-        this->printInfo(SELECT_TAG_FROM_QUESTION, true);
-        return;
-    }
+  if(this->_from_quest == nullptr){
+    this->printInfo(SELECT_TAG_FROM_QUESTION, true);
+    return;
+  }
 
-    if(this->_selected_question == nullptr){
-        this->printInfo(SELECT_QUESTION_FIRST, true);
-        return;
-    }
+  if(this->_selected_question == nullptr){
+    this->printInfo(SELECT_QUESTION_FIRST, true);
+    return;
+  }
 
-    if(this->_from_quest->isRemovedRelation(this->_selected_question)){
-        this->_questions_table_model->select();
-        this->printInfo(REMOVED_RELATION_QUESTION_AND_TAG_SUCCESFULLY);
-    } else {
-        printInfo(DATABASE_ERROR, true);
-    }
+  if(this->_from_quest->isRemovedRelation(this->_selected_question)){
+    this->_questions_table_model->select();
+    this->printInfo(REMOVED_RELATION_QUESTION_AND_TAG_SUCCESFULLY);
+  } else {
+    printInfo(DATABASE_ERROR, true);
+  }
 
-    emit remove_relation();
+  emit remove_relation();
 }
 
-void RelationView::added_question_to_db()
-{
-    this->initialQuestionsListView();
+void RelationView::added_question_to_db(){
+  this->initialQuestionsListView();
 }
 
-void RelationView::remove_question_from_db()
-{
-    this->initialQuestionsListView();
+void RelationView::remove_question_from_db(){
+  this->initialQuestionsListView();
 }
 
-void RelationView::update_question_from_db()
-{
-    this->initialQuestionsListView();
+void RelationView::update_question_from_db(){
+  this->initialQuestionsListView();
 }
 
-void RelationView::added_tag_to_db()
-{
-    this->initialTagsComboBox();
+void RelationView::added_tag_to_db(){
+  this->initialTagsComboBox();
 }
 
-void RelationView::remove_tag_from_db()
-{
-    this->initialTagsComboBox();
+void RelationView::remove_tag_from_db(){
+  this->initialTagsComboBox();
 }
 
-void RelationView::update_tag_from_db()
-{
-    this->initialTagsComboBox();
+void RelationView::update_tag_from_db(){
+  this->initialTagsComboBox();
 }

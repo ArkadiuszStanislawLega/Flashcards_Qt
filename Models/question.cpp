@@ -146,8 +146,9 @@ int Question::findId()
     if(query.next()){
         int idColumn;
         idColumn = query.record().indexOf(COLUMN_ID);
+        this->_id = query.value(idColumn).toInt();
 
-        return query.value(idColumn).toInt();
+        return this->_id;
     }
 
     return -1;

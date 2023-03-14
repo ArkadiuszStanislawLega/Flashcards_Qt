@@ -54,7 +54,6 @@ void LearnView::remove_relation(){
 }
 
 void LearnView::on_b_start_clicked(){
-
 }
 
 void LearnView::on_b_correct_clicked(){
