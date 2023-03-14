@@ -3,6 +3,10 @@
 void LearnView::initialTagListView(){
     QList<QString> cb_values;
 
+    if(this->_max_question_number_in_tag.size() > 0){
+        this->_max_question_number_in_tag.clear();
+    }
+
     for(Tag *t : Tag::getAll()){
         int question_number =  t->getAllRelated().size();
         QString value = t->get_tag() + " [" + std::to_string(question_number).c_str() + "]";
