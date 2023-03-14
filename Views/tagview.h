@@ -21,6 +21,7 @@ public:
     explicit TagView(QWidget *parent = nullptr);
 
 signals:
+    void added_tag_to_db();
 
 private slots:
     void on_b_create_tag_clicked();

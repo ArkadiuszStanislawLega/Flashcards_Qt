@@ -123,6 +123,10 @@ void RelationView::on_b_remove_relation_clicked(){
 
 void RelationView::added_question_to_db()
 {
-    qDebug() << "Jestem tutaj.";
     this->initialQuestionsListView();
+}
+
+void RelationView::added_tag_to_db()
+{
+    this->initialTagsComboBox();
 }

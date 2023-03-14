@@ -47,6 +47,8 @@ void TagView::on_b_create_tag_clicked()
 
     this->_table_model->select();
     this->cleanTextEditors();
+
+    emit added_tag_to_db();
     delete tag;
 }
 
