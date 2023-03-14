@@ -41,6 +41,14 @@ void LearnView::removed_tag_from_db(){
     this->initialTagListView();
 }
 
+void LearnView::create_relation(){
+    this->initialTagListView();
+}
+
+void LearnView::remove_relation(){
+   this->initialTagListView();
+}
+
 void LearnView::on_b_start_clicked(){
 
 }

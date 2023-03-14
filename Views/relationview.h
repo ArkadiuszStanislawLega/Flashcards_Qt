@@ -22,6 +22,8 @@ public:
     explicit RelationView(QWidget *parent = nullptr);
 
 signals:
+    void create_relation();
+    void remove_relation();
 
 public slots:
     void added_question_to_db();
@@ -37,7 +39,6 @@ private slots:
     void on_lv_question_tags_clicked(const QModelIndex &index);
     void on_b_create_relation_clicked();
     void on_b_remove_relation_clicked();
-
 
 private:
     Tag *_selected_cb, *_from_quest;

@@ -36,6 +36,8 @@ public slots:
     void added_tag_to_db();
     void update_tag_in_db();
     void removed_tag_from_db();
+    void create_relation();
+    void remove_relation();
 
 private slots:
     void on_b_start_clicked();
