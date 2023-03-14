@@ -1,13 +1,9 @@
 #include "learnview.h"
 
 void LearnView::initialTagListView(){
-    QList<Tag *> tags;
     QList<QString> cb_values;
-    Tag *tag = new Tag(this);
 
-    tags = tag->getAll();
-
-    for(Tag *t : tags){
+    for(Tag *t : Tag::getAll()){
         int question_number =  t->getAllRelated().size();
         QString value = t->get_tag() + " [" + std::to_string(question_number).c_str() + "]";
         cb_values.append(value);
