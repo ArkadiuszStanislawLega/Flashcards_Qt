@@ -120,3 +120,9 @@ void RelationView::on_b_remove_relation_clicked(){
         printInfo(DATABASE_ERROR, true);
     }
 }
+
+void RelationView::added_question_to_db()
+{
+    qDebug() << "Jestem tutaj.";
+    this->initialQuestionsListView();
+}

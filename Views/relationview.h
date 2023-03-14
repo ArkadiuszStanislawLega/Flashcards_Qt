@@ -23,12 +23,16 @@ public:
 
 signals:
 
+public slots:
+    void added_question_to_db();
+
 private slots:
     void on_cb_tags_currentIndexChanged(int index);
     void on_lv_questions_clicked(const QModelIndex &index);
     void on_lv_question_tags_clicked(const QModelIndex &index);
     void on_b_create_relation_clicked();
     void on_b_remove_relation_clicked();
+
 
 private:
     Tag *_selected_cb, *_from_quest;

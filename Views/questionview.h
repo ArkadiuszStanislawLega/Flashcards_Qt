@@ -22,7 +22,9 @@ class QuestionView : public QWidget
     Q_OBJECT
 public:
     explicit QuestionView(QWidget *parent = nullptr);
+
 signals:
+    void added_question_to_db();
 
 private slots:
     void on_b_update_question_clicked();

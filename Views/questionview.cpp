@@ -52,6 +52,7 @@ void QuestionView::on_b_create_question_clicked(){
         this->printInfo(DATABASE_ERROR, true);
     }
 
+    emit added_question_to_db();
     delete q;
 }
 
@@ -81,6 +82,7 @@ void QuestionView::on_b_update_question_clicked(){
     } else {
         this->printInfo(DATABASE_ERROR, true);
     }
+
 }
 
 void QuestionView::on_b_remove_question_clicked(){
