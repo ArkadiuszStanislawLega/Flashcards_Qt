@@ -10,7 +10,6 @@ public:
     virtual bool isUpdate() = 0;
     virtual bool isRemoved() = 0;
     virtual int findId() = 0;
-    virtual QList<T *> getAll() = 0;
 };
 
 #endif // CRUD_H

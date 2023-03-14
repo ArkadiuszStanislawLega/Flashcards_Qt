@@ -49,7 +49,7 @@ class Question : public QObject, public Crud<Question>, public ManyToMany<Tag>{
         bool isUpdate();
         bool isRemoved();
         int findId();
-        QList<Question *> getAll();
+        static QList<Question *> getAll();
 
         bool isRelationCreated(Tag *);
         bool isRemovedRelation(Tag *);

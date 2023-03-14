@@ -223,7 +223,7 @@ QList<Tag *> Tag::getAll(){
     }
 
     while(query.next()){
-        Tag *t = new Tag(this->parent());
+        Tag *t = new Tag();
         int idColumn, tagColumn;
 
         idColumn = query.record().indexOf(COLUMN_ID);

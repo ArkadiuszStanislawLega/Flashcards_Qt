@@ -41,6 +41,6 @@ class Tag : public QObject, public Crud<Tag>, public ManyToMany<Question>{
         bool isUpdate();
         bool isRemoved();
         int findId();
-        QList<Tag *> getAll();
+        static QList<Tag *> getAll();
 };
 #endif
