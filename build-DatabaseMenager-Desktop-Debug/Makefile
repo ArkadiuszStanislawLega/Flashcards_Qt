@@ -54,18 +54,12 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../DatabaseMenager/tst_databasemanager.cpp \
 		../Database/dbmanager.cpp \
-		../Database/dbquestion.cpp \
-		../Database/dbrelationquestiontag.cpp \
-		../Database/dbtag.cpp \
 		../Models/model.cpp \
 		../Models/question.cpp \
 		../Models/tag.cpp moc_question.cpp \
 		moc_tag.cpp
 OBJECTS       = tst_databasemanager.o \
 		dbmanager.o \
-		dbquestion.o \
-		dbrelationquestiontag.o \
-		dbtag.o \
 		model.o \
 		question.o \
 		tag.o \
@@ -353,16 +347,10 @@ DIST          = ../../../../Qt/6.4.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/6.4.2/gcc_64/mkspecs/features/yacc.prf \
 		../../../../Qt/6.4.2/gcc_64/mkspecs/features/lex.prf \
 		../DatabaseMenager/DatabaseMenager.pro ../Database/dbmanager.h \
-		../Database/dbquestion.h \
-		../Database/dbrelationquestiontag.h \
-		../Database/dbtag.h \
 		../Models/model.h \
 		../Models/question.h \
 		../Models/tag.h ../DatabaseMenager/tst_databasemanager.cpp \
 		../Database/dbmanager.cpp \
-		../Database/dbquestion.cpp \
-		../Database/dbrelationquestiontag.cpp \
-		../Database/dbtag.cpp \
 		../Models/model.cpp \
 		../Models/question.cpp \
 		../Models/tag.cpp
@@ -963,8 +951,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../../Qt/6.4.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Database/dbmanager.h ../Database/dbquestion.h ../Database/dbrelationquestiontag.h ../Database/dbtag.h ../Models/model.h ../Models/question.h ../Models/tag.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../DatabaseMenager/tst_databasemanager.cpp ../Database/dbmanager.cpp ../Database/dbquestion.cpp ../Database/dbrelationquestiontag.cpp ../Database/dbtag.cpp ../Models/model.cpp ../Models/question.cpp ../Models/tag.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Database/dbmanager.h ../Models/model.h ../Models/question.h ../Models/tag.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../DatabaseMenager/tst_databasemanager.cpp ../Database/dbmanager.cpp ../Models/model.cpp ../Models/question.cpp ../Models/tag.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -1565,21 +1553,6 @@ tst_databasemanager.moc: ../DatabaseMenager/tst_databasemanager.cpp \
 		../../../../Qt/6.4.2/gcc_64/include/QtWidgets/QSizePolicy \
 		../../../../Qt/6.4.2/gcc_64/include/QtCore/QMetaEnum \
 		../../../../Qt/6.4.2/gcc_64/include/QtTest/qttestversion.h \
-		../Models/question.h \
-		../../../../Qt/6.4.2/gcc_64/include/QtSql/QSqlQuery \
-		../../../../Qt/6.4.2/gcc_64/include/QtSql/qsqlquery.h \
-		../../../../Qt/6.4.2/gcc_64/include/QtSql/qtsqlglobal.h \
-		../../../../Qt/6.4.2/gcc_64/include/QtSql/qtsql-config.h \
-		../../../../Qt/6.4.2/gcc_64/include/QtSql/qtsqlexports.h \
-		../../../../Qt/6.4.2/gcc_64/include/QtSql/qsqldatabase.h \
-		../../../../Qt/6.4.2/gcc_64/include/QtSql/QSqlRecord \
-		../../../../Qt/6.4.2/gcc_64/include/QtSql/qsqlrecord.h \
-		../Database/crud.h \
-		../Database/manytomany.h \
-		../Constants/strings.h \
-		../Models/tag.h \
-		../Database/dbmanager.h \
-		../../../../Qt/6.4.2/gcc_64/include/QtSql/QSqlDatabase \
 		moc_predefs.h \
 		../../../../Qt/6.4.2/gcc_64/libexec/moc
 	/home/aro/Qt/6.4.2/gcc_64/libexec/moc $(DEFINES) --include /home/aro/Projects/Qt/Cards/build-DatabaseMenager-Desktop-Debug/moc_predefs.h -I/home/aro/Qt/6.4.2/gcc_64/mkspecs/linux-g++ -I/home/aro/Projects/Qt/Cards/DatabaseMenager -I/home/aro/Qt/6.4.2/gcc_64/include -I/home/aro/Qt/6.4.2/gcc_64/include/QtTest -I/home/aro/Qt/6.4.2/gcc_64/include/QtSql -I/home/aro/Qt/6.4.2/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../DatabaseMenager/tst_databasemanager.cpp -o tst_databasemanager.moc
@@ -1947,21 +1920,6 @@ tst_databasemanager.o: ../DatabaseMenager/tst_databasemanager.cpp ../../../../Qt
 		../../../../Qt/6.4.2/gcc_64/include/QtWidgets/QSizePolicy \
 		../../../../Qt/6.4.2/gcc_64/include/QtCore/QMetaEnum \
 		../../../../Qt/6.4.2/gcc_64/include/QtTest/qttestversion.h \
-		../Models/question.h \
-		../../../../Qt/6.4.2/gcc_64/include/QtSql/QSqlQuery \
-		../../../../Qt/6.4.2/gcc_64/include/QtSql/qsqlquery.h \
-		../../../../Qt/6.4.2/gcc_64/include/QtSql/qtsqlglobal.h \
-		../../../../Qt/6.4.2/gcc_64/include/QtSql/qtsql-config.h \
-		../../../../Qt/6.4.2/gcc_64/include/QtSql/qtsqlexports.h \
-		../../../../Qt/6.4.2/gcc_64/include/QtSql/qsqldatabase.h \
-		../../../../Qt/6.4.2/gcc_64/include/QtSql/QSqlRecord \
-		../../../../Qt/6.4.2/gcc_64/include/QtSql/qsqlrecord.h \
-		../Database/crud.h \
-		../Database/manytomany.h \
-		../Constants/strings.h \
-		../Models/tag.h \
-		../Database/dbmanager.h \
-		../../../../Qt/6.4.2/gcc_64/include/QtSql/QSqlDatabase \
 		tst_databasemanager.moc
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tst_databasemanager.o ../DatabaseMenager/tst_databasemanager.cpp
 
@@ -2061,15 +2019,6 @@ dbmanager.o: ../Database/dbmanager.cpp ../Database/dbmanager.h \
 		../../../../Qt/6.4.2/gcc_64/include/QtSql/QSqlRecord \
 		../../../../Qt/6.4.2/gcc_64/include/QtSql/qsqlrecord.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dbmanager.o ../Database/dbmanager.cpp
-
-dbquestion.o: ../Database/dbquestion.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dbquestion.o ../Database/dbquestion.cpp
-
-dbrelationquestiontag.o: ../Database/dbrelationquestiontag.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dbrelationquestiontag.o ../Database/dbrelationquestiontag.cpp
-
-dbtag.o: ../Database/dbtag.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dbtag.o ../Database/dbtag.cpp
 
 model.o: ../Models/model.cpp ../Models/model.h \
 		../Database/dbmanager.h \

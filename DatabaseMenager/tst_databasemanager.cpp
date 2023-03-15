@@ -90,7 +90,7 @@ void DatabaseManager::isUpdateQuestion(){
 
     QVERIFY(q->isUpdate());
 
-    q = DbQuestion::read(this->question_id);
+    q->isRead();
     QCOMPARE(test_value_2, q->get_answer());
     QCOMPARE(test_value_2, q->get_value());
 
@@ -98,7 +98,7 @@ void DatabaseManager::isUpdateQuestion(){
 }
 
 void DatabaseManager::getAllQuestions(){
-    QVERIFY(Question::getAllQuestions().size() > 0);
+    QVERIFY(Question::getAll().size() > 0);
 }
 
 void DatabaseManager::isRemovedQuestion(){
@@ -127,9 +127,10 @@ void DatabaseManager::isFindIdTag(){
 }
 
 void DatabaseManager::readTag(){
-    Tag *t = new Tag(this->tag_id);DbTag::read(this->tag_id);
-
+    Tag *t = new Tag();
+    t->set_id(this->tag_id);
     QVERIFY(t->isRead());
+
     QCOMPARE(this->tag_id, t->get_id());
     QCOMPARE(test_value, t->get_tag());
 
@@ -143,7 +144,7 @@ void DatabaseManager::isUpdateTag(){
 
     QVERIFY(t->isUpdate());
 
-    t->read();
+    t->isRead();
 
     QCOMPARE(test_value_2, t->get_tag());
 
@@ -151,14 +152,14 @@ void DatabaseManager::isUpdateTag(){
 }
 
 void DatabaseManager::getAllTags(){
-    QVERIFY(Tag::getAllTags().size() > 0);
+    QVERIFY(Tag::getAll().size() > 0);
 }
 
 void DatabaseManager::isRemovedTag(){
     Tag *t = new Tag();
     t->set_id(this->tag_id);
 
-    QVERIFY(DbTag::isRemoved(this->tag_id));
+    QVERIFY(t->isRemoved());
 
     delete t;
 }
@@ -195,7 +196,7 @@ void DatabaseManager::readAllRelatedQuestions(){
     q1->set_id(q1->findId());
     q2->set_id(q2->findId());
 
-    q1->isRelationcreated(t);
+    q1->isRelationCreated(t);
     q2->isRelationCreated(t);
 
     QVERIFY(t->getAllRelated().size() > 0);
@@ -238,7 +239,7 @@ void DatabaseManager::isRelationWithTagRemoved(){
     q1->isRelationCreated(t);
     q2->isRelationCreated(t);
 
-    QVERIFY(tag->isAllRelationRemoved());
+    QVERIFY(t->isAllRelationRemoved());
     QVERIFY(q1->getAllRelated().size() == 0);
     QVERIFY(q2->getAllRelated().size() == 0);
 

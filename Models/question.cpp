@@ -135,7 +135,7 @@ int Question::findId()
     QSqlQuery query;
     query.prepare(SELECT + "* " + FROM + TABLE_QUESTIONS + " " + WHERE +
                   COLUMN_VALUE + "=:" + COLUMN_VALUE + " " + AND +
-                  COLUMN_ANSWER + "=:" + COLUMN_ANSWER + "limit 1");
+                  COLUMN_ANSWER + "=:" + COLUMN_ANSWER + " limit 1");
     query.bindValue(":" + COLUMN_VALUE, this->_value);
     query.bindValue(":" + COLUMN_ANSWER, this->_answer);
 
@@ -150,7 +150,6 @@ int Question::findId()
 
         return this->_id;
     }
-
     return -1;
 }
 
