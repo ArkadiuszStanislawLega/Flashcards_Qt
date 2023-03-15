@@ -36,7 +36,7 @@ void TagView::on_b_create_tag_clicked()
         return;
     }
 
-    Tag *tag = new Tag(this);
+    Tag *tag = qobject_cast<Tag *>(this);
     tag->set_tag(ui->te_create_tag->toPlainText());
 
     if(tag->isCreate()){
@@ -49,7 +49,6 @@ void TagView::on_b_create_tag_clicked()
     this->cleanTextEditors();
 
     emit added_tag_to_db();
-    delete tag;
 }
 
 void TagView::on_b_update_tag_clicked()
