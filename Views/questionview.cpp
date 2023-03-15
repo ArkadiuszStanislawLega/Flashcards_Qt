@@ -25,7 +25,7 @@ void QuestionView::printInfo(const QString &value, bool isError=false){
 QuestionView::QuestionView(QWidget *parent)
     : QWidget{parent}, ui(new Ui::QuestionView){
     this->ui->setupUi(this);
-    this->_selected_question = new Question(this);
+    this->_selected_question = qobject_cast<Question *>(this);
     this->initialQuestionsListView();
 }
 
@@ -40,7 +40,7 @@ void QuestionView::on_b_create_question_clicked(){
         return;
     }
 
-    Question *q = new Question();
+    Question *q = qobject_cast<Question *>(this);
     q->set_answer(ui->te_answer->toPlainText());
     q->set_value(ui->te_value->toPlainText());
 
@@ -53,7 +53,6 @@ void QuestionView::on_b_create_question_clicked(){
     }
 
     emit added_question_to_db();
-    delete q;
 }
 
 void QuestionView::on_b_update_question_clicked(){
