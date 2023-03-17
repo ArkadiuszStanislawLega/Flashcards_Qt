@@ -60,14 +60,12 @@ void DatabaseTests::isCreateQuestion()
 }
 
 void DatabaseTests::findIdQuestion(){
-    Question *q = new Question();
+    Question *q = qobject_cast<Question *>(this);
     q->set_answer(test_value);
     q->set_value(test_value);
 
     this->question_id = q->findId();
     QVERIFY(this->question_id > 0);
-
-    delete q;
 }
 
 void DatabaseTests::readQuestion(){
