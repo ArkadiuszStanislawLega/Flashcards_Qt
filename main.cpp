@@ -1,16 +1,16 @@
-#include "Models/model.h"
-#include "Views/view.h"
-#include "Controllers/controller.h"
+#include "Constants/strings.h"
+#include "Database/dbmanager.h"
 
 #include <QApplication>
+#include <mainwindow.h>
 
 int main(int argc, char *argv[])
 {
     QApplication application (argc, argv);
-    Model *model = new Model();
-    View *view = new View(model , &application);
-    Controller *controller = new Controller(model , view);
+    DbManager(DATABASE_NAME);
 
-    controller->show_app();
+    MainWindow w;
+    w.show();
+
     return application.exec();
 }
