@@ -2,12 +2,24 @@
 #include "Database/dbmanager.h"
 
 #include <QApplication>
+#include <QSettings>
 #include <mainwindow.h>
 
 int main(int argc, char *argv[])
 {
     QApplication application (argc, argv);
-    DbManager(DATABASE_NAME);
+
+    QCoreApplication::setOrganizationName("Arkadiusz Lega");
+    QCoreApplication::setApplicationName("Fiszki");
+
+    DbManager();
+
+    QString settings_filename = application.applicationDirPath() + "/" + SETTINGS_FILENAME;
+    QSettings app_settings(settings_filename, QSettings::Format::IniFormat);
+    app_settings.beginGroup("Version");
+    app_settings.setValue("vs", 1);
+    app_settings.endGroup();
+    app_settings.sync();
 
     MainWindow w;
     w.show();
