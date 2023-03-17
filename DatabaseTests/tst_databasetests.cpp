@@ -4,7 +4,7 @@
 #include "../Database/dbmanager.h"
 #include "../Constants/strings.h"
 
-class DatabaseManager : public QObject
+class DatabaseTests : public QObject
 {
     Q_OBJECT
     const QString test_value = "TEST";
@@ -12,8 +12,8 @@ class DatabaseManager : public QObject
     int tag_id {0};
 
 public:
-    DatabaseManager();
-    ~DatabaseManager();
+    DatabaseTests();
+    ~DatabaseTests();
 
 private slots:
     void isCreateQuestion();
@@ -41,27 +41,25 @@ private slots:
     void isRemovedTag();
 };
 
-DatabaseManager::DatabaseManager()
+DatabaseTests::DatabaseTests()
 {
-    DbManager(DATABASE_NAME);
+    DbManager();
 }
 
-DatabaseManager::~DatabaseManager()
+DatabaseTests::~DatabaseTests()
 {
 
 }
 
-void DatabaseManager::isCreateQuestion()
+void DatabaseTests::isCreateQuestion()
 {
-    Question *q = new Question();
+    Question *q = qobject_cast<Question *>(this);
     q->set_answer(test_value);
     q->set_value(test_value);
     QVERIFY(q->isCreate());
-
-    delete q;
 }
 
-void DatabaseManager::findIdQuestion(){
+void DatabaseTests::findIdQuestion(){
     Question *q = new Question();
     q->set_answer(test_value);
     q->set_value(test_value);
@@ -72,7 +70,7 @@ void DatabaseManager::findIdQuestion(){
     delete q;
 }
 
-void DatabaseManager::readQuestion(){
+void DatabaseTests::readQuestion(){
     Question *q = new Question(this->question_id);
     QVERIFY(q->isRead());
     QCOMPARE(this->question_id, q->get_id());
@@ -82,7 +80,7 @@ void DatabaseManager::readQuestion(){
     delete q;
 }
 
-void DatabaseManager::isUpdateQuestion(){
+void DatabaseTests::isUpdateQuestion(){
     QString test_value_2 = "TEST2";
     Question *q = new Question(this->question_id, test_value, test_value, {});
     q->set_answer(test_value_2);
@@ -97,18 +95,18 @@ void DatabaseManager::isUpdateQuestion(){
     delete q;
 }
 
-void DatabaseManager::getAllQuestions(){
+void DatabaseTests::getAllQuestions(){
     QVERIFY(Question::getAll().size() > 0);
 }
 
-void DatabaseManager::isRemovedQuestion(){
+void DatabaseTests::isRemovedQuestion(){
     Question *q = new Question(this->question_id);
     QVERIFY(q->isRemoved());
 
     delete q;
 }
 
-void DatabaseManager::isCreateTag(){
+void DatabaseTests::isCreateTag(){
     Tag *t = new Tag();
     t->set_tag(test_value);
     QVERIFY(t->isCreate());
@@ -116,7 +114,7 @@ void DatabaseManager::isCreateTag(){
     delete t;
 }
 
-void DatabaseManager::isFindIdTag(){
+void DatabaseTests::isFindIdTag(){
     Tag *t = new Tag();
     t->set_tag(test_value);
     this->tag_id = t->findId();
@@ -126,7 +124,7 @@ void DatabaseManager::isFindIdTag(){
     delete t;
 }
 
-void DatabaseManager::readTag(){
+void DatabaseTests::readTag(){
     Tag *t = new Tag();
     t->set_id(this->tag_id);
     QVERIFY(t->isRead());
@@ -137,7 +135,7 @@ void DatabaseManager::readTag(){
     delete t;
 }
 
-void DatabaseManager::isUpdateTag(){
+void DatabaseTests::isUpdateTag(){
     QString test_value_2 = "TEST2";
     Tag *t = new Tag(this->tag_id, test_value);
     t->set_tag(test_value_2);
@@ -151,11 +149,11 @@ void DatabaseManager::isUpdateTag(){
     delete t;
 }
 
-void DatabaseManager::getAllTags(){
+void DatabaseTests::getAllTags(){
     QVERIFY(Tag::getAll().size() > 0);
 }
 
-void DatabaseManager::isRemovedTag(){
+void DatabaseTests::isRemovedTag(){
     Tag *t = new Tag();
     t->set_id(this->tag_id);
 
@@ -164,7 +162,7 @@ void DatabaseManager::isRemovedTag(){
     delete t;
 }
 
-void DatabaseManager::isRelationCreated(){
+void DatabaseTests::isRelationCreated(){
     Tag *t = new Tag(this->tag_id, test_value);
     Question *q = new Question(this->question_id, test_value, test_value, {});
     QVERIFY(t->isRelationCreated(q));
@@ -173,7 +171,7 @@ void DatabaseManager::isRelationCreated(){
     delete t;
 }
 
-void DatabaseManager::readAllRelatedQuestions(){
+void DatabaseTests::readAllRelatedQuestions(){
     Tag *t = new Tag(this->tag_id, test_value);
     Question *q1, *q2;
     QString q1_value, q2_value;
@@ -211,7 +209,7 @@ void DatabaseManager::readAllRelatedQuestions(){
     delete q2;
 }
 
-void DatabaseManager::isRelationWithTagRemoved(){
+void DatabaseTests::isRelationWithTagRemoved(){
     Tag *t;
     Question *q1, *q2;
     QString value1, value2;
@@ -251,14 +249,14 @@ void DatabaseManager::isRelationWithTagRemoved(){
     delete q2;
 }
 
-void DatabaseManager::readAllRelatedTags(){
+void DatabaseTests::readAllRelatedTags(){
     Question *q = new Question(this->question_id, test_value, test_value, {});
     QVERIFY(q->getAllRelated().size() > 0);
 
     delete q;
 }
 
-void DatabaseManager::isRelationRemoved(){
+void DatabaseTests::isRelationRemoved(){
     Tag *t = new Tag(this->tag_id, test_value);
     Question *q = new Question(this->question_id, test_value, test_value, {});
     QVERIFY(q->isRemovedRelation(t));
@@ -267,7 +265,7 @@ void DatabaseManager::isRelationRemoved(){
     delete q;
 }
 
-void DatabaseManager::isAllRealtionWithQuestionRemoved(){
+void DatabaseTests::isAllRealtionWithQuestionRemoved(){
     Question *q;
     Tag *t1, *t2;
     QString tag1, tag2;
@@ -292,5 +290,5 @@ void DatabaseManager::isAllRealtionWithQuestionRemoved(){
     delete t2;
 }
 
-QTEST_APPLESS_MAIN(DatabaseManager)
-#include "tst_databasemanager.moc"
+QTEST_APPLESS_MAIN(DatabaseTests)
+#include "tst_databasetests.moc"

@@ -1,5 +1,9 @@
 #include "question.h"
 
+Question::~Question(){
+   qInfo() << "Destruction: " << this;
+}
+
 Question::Question(QObject *parent) : QObject(parent){
 	this->_id = 0;
 	this->_value = "";

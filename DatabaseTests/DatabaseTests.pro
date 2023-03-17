@@ -7,14 +7,13 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
-SOURCES +=  tst_databasemanager.cpp \
+SOURCES +=  \
     ../Database/dbmanager.cpp \
-    ../Models/model.cpp \
     ../Models/question.cpp \
-    ../Models/tag.cpp
+    ../Models/tag.cpp \
+    tst_databasetests.cpp
 
 HEADERS += \
     ../Database/dbmanager.h \
-    ../Models/model.h \
     ../Models/question.h \
     ../Models/tag.h
