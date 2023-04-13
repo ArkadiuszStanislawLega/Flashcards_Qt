@@ -20,6 +20,9 @@ private:
     Q_OBJECT
     Ui::LearnView *ui;
     QStringListModel *_tags_model;
+    QList<Tag *>_tags_list;
+    QList<Question *> _randomised_questions;
+    int _selected_index;
 
     QList<unsigned int> _max_question_number_in_tag;
 

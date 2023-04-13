@@ -36,7 +36,7 @@ void TagView::on_b_create_tag_clicked()
         return;
     }
 
-    Tag *tag = qobject_cast<Tag *>(this);
+    Tag *tag = new Tag(this);
     tag->set_tag(ui->te_create_tag->toPlainText());
 
     if(tag->isCreate()){

@@ -3,7 +3,6 @@
 #define QUESTION
 #include <iostream>
 #include <set>
-#include <sqlite3.h>
 #include <QSqlQuery>
 #include <algorithm>
 #include <QString>
