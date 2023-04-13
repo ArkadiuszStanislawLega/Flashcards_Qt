@@ -22,14 +22,21 @@ private:
     QStringListModel *_tags_model;
     QList<Tag *>_tags_list;
     QList<Question *> _randomised_questions;
-    int _selected_index;
+    Question *_current;
+    int _selected_index, _correct_answer, _uncorrect_answer, _max_questions_number;
 
     QList<unsigned int> _max_question_number_in_tag;
 
     void initialTagListView();
+    void select_questions();
+    void set_value();
+    void set_answer();
+    void action_after_set_points();
+    void make_randomised_questions_list_new();
 
 public:
     explicit LearnView(QWidget *parent = nullptr);
+    ~LearnView();
 
 signals:
 

@@ -22,8 +22,20 @@ void LearnView::initialTagListView(){
 LearnView::LearnView(QWidget *parent)
     : QWidget{parent}, ui(new Ui::LearnView){
     this->ui->setupUi(this);
+    this->ui->l_answer->setText("");
+    this->ui->l_value->setText("");
     this->_tags_model = new QStringListModel;
     this->initialTagListView();
+    this->_current = nullptr;
+    this->_correct_answer = 0;
+    this->_uncorrect_answer = 0;
+}
+
+LearnView::~LearnView(){
+    qDeleteAll(this->_tags_list);
+    qDeleteAll(this->_randomised_questions);
+    delete this->_current;
+    qDeleteAll(this->_tags_list);
 }
 
 void LearnView::added_question_to_db(){
@@ -55,45 +67,91 @@ void LearnView::remove_relation(){
 }
 
 void LearnView::on_b_start_clicked(){
-   qDebug() << this->ui->sb_questions_number->value();
-   qDebug() << this->_tags_list.at(this->_selected_index);
-   int i;
-
    if(this->_selected_index >= this->_tags_list.size()){
         return;
    }
 
+   if(this->ui->sb_questions_number->value() == 0){
+        return;
+   }
+
+   this->ui->l_answer->setText("");
+   this->ui->l_value->setText("");
+
    this->_randomised_questions.clear();
+   this->_max_questions_number = this->ui->sb_questions_number->value();
+   this->make_randomised_questions_list_new();
 
-   QList<Question *> questions = this->_tags_list.at(this->_selected_index)->getAllRelated();
+   this->_max_questions_number--;
+   this->_current = this->_randomised_questions.at(this->_max_questions_number);
+   this->set_value();
+}
 
-   for(i = this->ui->sb_questions_number->value(); i > 0; i--){
+void LearnView::make_randomised_questions_list_new(){
+   int i;
+   QList<Question *> questions;
+   questions = this->_tags_list.at(this->_selected_index)->getAllRelated();
+
+   for(i = this->_max_questions_number; i > 0; i--){
         std::srand(time(NULL));
         long index = std::rand() % questions.size();
-        qDebug() << "index: " << index << "size: " << questions.size();
 
         this->_randomised_questions.push_back(questions.at(index));
-        qDebug() << questions.at(index)->to_string() << "create";
         questions.removeAt(index);
    }
-
-   for(i = 0; this->_randomised_questions.size() > i; i++){
-        qDebug() << this->_randomised_questions.at(i)->to_string();
-   }
-
    qDeleteAll(questions);
 }
 
-void LearnView::on_b_correct_clicked(){
+void LearnView::select_questions(){
+   if(this->_max_questions_number < 0 ||
+       this->_max_questions_number >= this->_randomised_questions.size()){
+        return;
+   }
 
+   this->_current = this->_randomised_questions.at(this->_max_questions_number);
+   this->set_value();
+}
+
+
+void LearnView::set_value(){
+   if(this->_current){
+        this->ui->l_value->setText(this->_current->get_value());
+   }
+}
+
+void LearnView::set_answer(){
+   if(this->_current){
+        this->ui->l_answer->setText(this->_current->get_answer());
+   }
+}
+
+void LearnView::on_b_correct_clicked(){
+   if(this->_max_questions_number < 0){
+        return;
+   }
+
+   this->_correct_answer++;
+   this->action_after_set_points();
 }
 
 void LearnView::on_b_uncorrect_clicked(){
+   if(this->_max_questions_number < 0){
+        return;
+   }
 
+   this->_uncorrect_answer++;
+   this->action_after_set_points();
+}
+
+void LearnView::action_after_set_points(){
+   this->select_questions();
+   this->_max_questions_number--;
+   this->select_questions();
+   this->ui->l_answer->setText("");
 }
 
 void LearnView::on_b_show_answer_clicked(){
-
+   this->set_answer();
 }
 
 
