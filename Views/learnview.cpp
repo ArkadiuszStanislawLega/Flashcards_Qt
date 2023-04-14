@@ -100,12 +100,14 @@ void LearnView::make_randomised_questions_list_new(){
     qDeleteAll(questions);
 }
 
+// Updates the view, the "value" property of the currently selected question.
 void LearnView::set_value(){
     if(this->_randomised_questions.size()){
         this->ui->l_value->setText(this->_randomised_questions.first()->get_value());
     }
 }
 
+// Updates the view, the "answer" property of the currently selected question.
 void LearnView::set_answer(){
     if(this->_randomised_questions.size()){
         this->ui->l_answer->setText(this->_randomised_questions.first()->get_answer());
@@ -171,8 +173,6 @@ void LearnView::set_questions_number(){
 
     this->ui->l_questions_counter->setText(value);
 }
-
-
 
 void LearnView::on_b_show_answer_clicked(){
     this->set_answer();
