@@ -24,9 +24,9 @@ LearnView::LearnView(QWidget *parent)
     this->ui->setupUi(this);
     this->ui->l_answer->setText("");
     this->ui->l_value->setText("");
+    this->ui->pb_answers->setValue(0);
     this->_tags_model = new QStringListModel;
     this->initialTagListView();
-    this->_current = nullptr;
     this->_correct_answer = 0;
     this->_uncorrect_answer = 0;
 }
@@ -34,7 +34,6 @@ LearnView::LearnView(QWidget *parent)
 LearnView::~LearnView(){
     qDeleteAll(this->_tags_list);
     qDeleteAll(this->_randomised_questions);
-    delete this->_current;
     qDeleteAll(this->_tags_list);
 }
 
@@ -63,100 +62,123 @@ void LearnView::create_relation(){
 }
 
 void LearnView::remove_relation(){
-   this->initialTagListView();
+    this->initialTagListView();
 }
 
 void LearnView::on_b_start_clicked(){
-   if(this->_selected_index >= this->_tags_list.size()){
+    if(this->_selected_index >= this->_tags_list.size()){
         return;
-   }
+    }
 
-   if(this->ui->sb_questions_number->value() == 0){
+    if(this->ui->sb_questions_number->value() == 0){
         return;
-   }
+    }
 
-   this->ui->l_answer->setText("");
-   this->ui->l_value->setText("");
+    this->ui->l_answer->setText("");
+    this->ui->l_value->setText("");
+    this->ui->pb_answers->setValue(0);
 
-   this->_randomised_questions.clear();
-   this->_max_questions_number = this->ui->sb_questions_number->value();
-   this->make_randomised_questions_list_new();
+    this->_randomised_questions.clear();
+    this->_max_questions_number = this->ui->sb_questions_number->value();
+    this->make_randomised_questions_list_new();
 
-   this->_max_questions_number--;
-   this->_current = this->_randomised_questions.at(this->_max_questions_number);
-   this->set_value();
+    this->set_value();
 }
 
 void LearnView::make_randomised_questions_list_new(){
-   int i;
-   QList<Question *> questions;
-   questions = this->_tags_list.at(this->_selected_index)->getAllRelated();
+    int i;
+    QList<Question *> questions;
+    questions = this->_tags_list.at(this->_selected_index)->getAllRelated();
 
-   for(i = this->_max_questions_number; i > 0; i--){
+    for(i = this->_max_questions_number; i > 0; i--){
         std::srand(time(NULL));
         long index = std::rand() % questions.size();
 
         this->_randomised_questions.push_back(questions.at(index));
         questions.removeAt(index);
-   }
-   qDeleteAll(questions);
+    }
+    qDeleteAll(questions);
 }
-
-void LearnView::select_questions(){
-   if(this->_max_questions_number < 0 ||
-       this->_max_questions_number >= this->_randomised_questions.size()){
-        return;
-   }
-
-   this->_current = this->_randomised_questions.at(this->_max_questions_number);
-   this->set_value();
-}
-
 
 void LearnView::set_value(){
-   if(this->_current){
-        this->ui->l_value->setText(this->_current->get_value());
-   }
+    if(this->_randomised_questions.size()){
+        this->ui->l_value->setText(this->_randomised_questions.first()->get_value());
+    }
 }
 
 void LearnView::set_answer(){
-   if(this->_current){
-        this->ui->l_answer->setText(this->_current->get_answer());
-   }
+    if(this->_randomised_questions.size()){
+        this->ui->l_answer->setText(this->_randomised_questions.first()->get_answer());
+    }
 }
 
 void LearnView::on_b_correct_clicked(){
-   if(this->_max_questions_number < 0){
+    if(!this->_randomised_questions.size()){
         return;
-   }
+    }
 
-   this->_correct_answer++;
-   this->action_after_set_points();
+    this->_correct_answer++;
+    this->ui->lcd_correct->display(this->_correct_answer);
+    this->action_after_set_points();
 }
 
 void LearnView::on_b_uncorrect_clicked(){
-   if(this->_max_questions_number < 0){
+    if(!this->_randomised_questions.size()){
         return;
-   }
+    }
 
-   this->_uncorrect_answer++;
-   this->action_after_set_points();
+    this->_uncorrect_answer++;
+    this->ui->lcd_uncorrect->display(this->_uncorrect_answer);
+    this->action_after_set_points();
 }
 
 void LearnView::action_after_set_points(){
-   this->select_questions();
-   this->_max_questions_number--;
-   this->select_questions();
-   this->ui->l_answer->setText("");
+    if(!this->_randomised_questions.size()){
+        return;
+    }
+
+    this->_randomised_questions.removeFirst();
+    this->set_progress();
+    this->set_value();
+    this->ui->l_answer->setText("");
 }
+
+void LearnView::set_progress(){
+    this->set_progress_bar();
+    this->set_questions_number();
+}
+
+void LearnView::set_progress_bar(){
+    if(this->_randomised_questions.size() == 0){
+        this->ui->pb_answers->setValue(100);
+        return;
+    }
+
+    float a, b, c;
+
+    a = static_cast<float>(this->_max_questions_number-this->_randomised_questions.size());
+    b = static_cast<float>(this->_max_questions_number);
+    c = a/b*100;
+
+    this->ui->pb_answers->setValue(c);
+}
+
+void LearnView::set_questions_number(){
+    QString value = "";
+    value += std::to_string(this->_max_questions_number).c_str();
+    value += "/";
+    value += std::to_string(this->_max_questions_number-this->_randomised_questions.size()).c_str();
+
+    this->ui->l_questions_counter->setText(value);
+}
+
+
 
 void LearnView::on_b_show_answer_clicked(){
-   this->set_answer();
+    this->set_answer();
 }
-
 
 void LearnView::on_cb_tags_currentIndexChanged(int index){
     this->ui->sb_questions_number->setMaximum(this->_max_question_number_in_tag[index]);
-   this->_selected_index = index;
-
+    this->_selected_index = index;
 }
