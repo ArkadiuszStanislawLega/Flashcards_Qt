@@ -37,7 +37,7 @@ private:
     void set_progress();
     void set_progress_bar();
     void set_questions_number();
-    void set_which_show_first();
+    void set_which_value_or_answer_show_first();
     void show_answer_or_value();
 
 public:
