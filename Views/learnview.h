@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QStringListModel>
+#include <QRandomGenerator>
 #include <vector>
 #include "../Models/question.h"
 #include "../Models/tag.h"
@@ -23,10 +24,12 @@ private:
     QList<Tag *>_tags_list;
     QList<Question *> _randomised_questions;
     int _selected_index, _correct_answer, _uncorrect_answer, _max_questions_number;
+    bool _is_show_answer_first;
 
     QList<unsigned int> _max_question_number_in_tag;
 
     void initialTagListView();
+    void prepare_tags_list(QList<QString> &);
     void set_value();
     void set_answer();
     void action_after_set_points();
@@ -34,6 +37,7 @@ private:
     void set_progress();
     void set_progress_bar();
     void set_questions_number();
+    bool set_which_show_first();
 
 public:
     explicit LearnView(QWidget *parent = nullptr);

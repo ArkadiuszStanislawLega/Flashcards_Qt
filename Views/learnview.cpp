@@ -7,16 +7,20 @@ void LearnView::initialTagListView(){
         this->_max_question_number_in_tag.clear();
     }
 
+    this->prepare_tags_list(cb_values);
+    this->_tags_model->setStringList(cb_values);
+    this->ui->cb_tags->setModel(this->_tags_model);
+}
+
+void LearnView::prepare_tags_list(QList<QString> &list)
+{
     for(Tag *t : Tag::getAll()){
         int question_number =  t->getAllRelated().size();
         QString value = t->get_tag() + " [" + std::to_string(question_number).c_str() + "]";
         this->_tags_list.append(t);
-        cb_values.append(value);
+        list.append(value);
         this->_max_question_number_in_tag.append(question_number);
     }
-
-    this->_tags_model->setStringList(cb_values);
-    this->ui->cb_tags->setModel(this->_tags_model);
 }
 
 LearnView::LearnView(QWidget *parent)
