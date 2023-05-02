@@ -41,113 +41,6 @@ LearnView::~LearnView(){
     qDeleteAll(this->_tags_list);
 }
 
-void LearnView::added_question_to_db(){
-    this->initialTagListView();
-}
-
-void LearnView::removed_question_from_db(){
-    this->initialTagListView();
-}
-
-void LearnView::added_tag_to_db(){
-    this->initialTagListView();
-}
-
-void LearnView::update_tag_in_db(){
-    this->initialTagListView();
-}
-
-void LearnView::removed_tag_from_db(){
-    this->initialTagListView();
-}
-
-void LearnView::create_relation(){
-    this->initialTagListView();
-}
-
-void LearnView::remove_relation(){
-    this->initialTagListView();
-}
-
-void LearnView::on_b_start_clicked(){
-    if(this->_selected_index >= this->_tags_list.size()){
-        return;
-    }
-
-    if(this->ui->sb_questions_number->value() == 0){
-        return;
-    }
-
-    this->ui->l_answer->setText("");
-    this->ui->l_value->setText("");
-    this->ui->pb_answers->setValue(0);
-
-    this->_randomised_questions.clear();
-    this->_max_questions_number = this->ui->sb_questions_number->value();
-    this->make_randomised_questions_list_new();
-
-    this->show_first_card_attribute();
-}
-
-void LearnView::show_first_card_attribute(){
-    if(this->ui->rb_answer->isChecked()){
-        this->set_answer();
-    }
-
-    if(this->ui->rb_question->isChecked()){
-        this->set_value();
-    }
-
-    if(this->ui->rb_random->isChecked()){
-        this->set_which_value_or_answer_show_first();
-        this->show_answer_or_value();
-    }
-}
-
-// Updates the view, the "value" property of the currently selected question.
-void LearnView::set_value(){
-    if(this->_randomised_questions.size()){
-        this->ui->l_value->setText(this->_randomised_questions.first()->get_value());
-    }
-}
-
-// Updates the view, the "answer" property of the currently selected question.
-void LearnView::set_answer(){
-    if(this->_randomised_questions.size()){
-        this->ui->l_answer->setText(this->_randomised_questions.first()->get_answer());
-    }
-}
-
-void LearnView::show_second_card_attribute(){
-    if(this->ui->rb_answer->isChecked()){
-        this->set_value();
-    }
-
-    if(this->ui->rb_question->isChecked()){
-        this->set_answer();
-    }
-
-    if(this->ui->rb_random->isChecked()){
-        this->show_answer_or_value();
-    }
-}
-
-
-
-void LearnView::set_which_value_or_answer_show_first(){
-    this->_is_show_answer_first = QRandomGenerator::global()->bounded(0, 1000000) % 2 == 0;
-}
-
-void LearnView::show_answer_or_value(){
-    if(this->_is_show_answer_first){
-        this->set_answer();
-        this->_is_show_answer_first = false;
-    } else {
-        this->set_value();
-        this->_is_show_answer_first = true;
-    }
-}
-
 void LearnView::make_randomised_questions_list_new(){
     int i;
     QList<Question *> questions;
@@ -163,24 +56,61 @@ void LearnView::make_randomised_questions_list_new(){
     qDeleteAll(questions);
 }
 
-void LearnView::on_b_correct_clicked(){
-    if(!this->_randomised_questions.size()){
-        return;
+void LearnView::show_first_card_attribute(){
+    if(this->ui->rb_answer->isChecked()){
+        this->set_answer();
     }
 
-    this->_correct_answer++;
-    this->ui->lcd_correct->display(this->_correct_answer);
-    this->action_after_set_points();
+    if(this->ui->rb_question->isChecked()){
+        this->set_question();
+    }
+
+    if(this->ui->rb_random->isChecked()){
+        this->set_which_question_or_answer_show_first();
+        this->show_answer_or_question();
+    }
 }
 
-void LearnView::on_b_uncorrect_clicked(){
-    if(!this->_randomised_questions.size()){
-        return;
+// Updates the view, the "value" property of the currently selected question.
+void LearnView::set_question(){
+    if(this->_randomised_questions.size()){
+        this->ui->l_value->setText(this->_randomised_questions.first()->get_value());
+    }
+}
+
+// Updates the view, the "answer" property of the currently selected question.
+void LearnView::set_answer(){
+    if(this->_randomised_questions.size()){
+        this->ui->l_answer->setText(this->_randomised_questions.first()->get_answer());
+    }
+}
+
+void LearnView::set_which_question_or_answer_show_first(){
+    this->_is_show_answer_first = QRandomGenerator::global()->bounded(0, 1000000) % 2 == 0;
+}
+
+void LearnView::show_answer_or_question(){
+    if(this->_is_show_answer_first){
+        this->set_answer();
+        this->_is_show_answer_first = false;
+    } else {
+        this->set_question();
+        this->_is_show_answer_first = true;
+    }
+}
+
+void LearnView::show_second_card_attribute(){
+    if(this->ui->rb_answer->isChecked()){
+        this->set_question();
     }
 
-    this->_uncorrect_answer++;
-    this->ui->lcd_uncorrect->display(this->_uncorrect_answer);
-    this->action_after_set_points();
+    if(this->ui->rb_question->isChecked()){
+        this->set_answer();
+    }
+
+    if(this->ui->rb_random->isChecked()){
+        this->show_answer_or_question();
+    }
 }
 
 void LearnView::action_after_set_points(){
@@ -190,23 +120,7 @@ void LearnView::action_after_set_points(){
 
     this->_randomised_questions.removeFirst();
     this->set_progress();
-
-
-    if(this->ui->rb_answer->isChecked()){
-        this->set_answer();
-        this->ui->l_value->setText("");
-    }
-
-    if(this->ui->rb_question->isChecked()){
-        this->set_value();
-        this->ui->l_answer->setText("");
-    }
-
-    if(this->ui->rb_random->isChecked()){
-        this->set_which_value_or_answer_show_first();
-        this->_is_show_answer_first ? this->ui->l_value->setText("") : this->ui->l_answer->setText("");
-        this->show_answer_or_value();
-    }
+    this->clean_view();
 }
 
 void LearnView::set_progress(){
@@ -239,12 +153,98 @@ void LearnView::set_questions_number(){
 }
 
 
-void LearnView::on_b_show_answer_clicked(){
-    //this->show_answer_or_value();
-    this->show_second_card_attribute();
+void LearnView::clean_view(){
+    if(this->ui->rb_answer->isChecked()){
+        this->set_answer();
+        this->ui->l_value->setText("");
+    }
+
+    if(this->ui->rb_question->isChecked()){
+        this->set_question();
+        this->ui->l_answer->setText("");
+    }
+
+    if(this->ui->rb_random->isChecked()){
+        this->set_which_question_or_answer_show_first();
+        this->_is_show_answer_first ? this->ui->l_value->setText("") : this->ui->l_answer->setText("");
+        this->show_answer_or_question();
+    }
 }
 
 void LearnView::on_cb_tags_currentIndexChanged(int index){
     this->ui->sb_questions_number->setMaximum(this->_max_question_number_in_tag[index]);
+    this->ui->sb_questions_number->setValue(this->_max_question_number_in_tag[index]);
     this->_selected_index = index;
+}
+
+void LearnView::on_b_start_clicked(){
+    if(this->_selected_index >= this->_tags_list.size()){
+        return;
+    }
+
+    if(this->ui->sb_questions_number->value() == 0){
+        return;
+    }
+
+    this->ui->l_answer->setText("");
+    this->ui->l_value->setText("");
+    this->ui->pb_answers->setValue(0);
+
+    this->_randomised_questions.clear();
+    this->_max_questions_number = this->ui->sb_questions_number->value();
+    this->make_randomised_questions_list_new();
+
+    this->show_first_card_attribute();
+}
+
+void LearnView::on_b_show_answer_clicked(){
+    this->show_second_card_attribute();
+}
+
+void LearnView::on_b_correct_clicked(){
+    if(!this->_randomised_questions.size()){
+        return;
+    }
+
+    this->_correct_answer++;
+    this->ui->lcd_correct->display(this->_correct_answer);
+    this->action_after_set_points();
+}
+
+void LearnView::on_b_uncorrect_clicked(){
+    if(!this->_randomised_questions.size()){
+        return;
+    }
+
+    this->_uncorrect_answer++;
+    this->ui->lcd_uncorrect->display(this->_uncorrect_answer);
+    this->action_after_set_points();
+}
+
+void LearnView::added_question_to_db(){
+    this->initialTagListView();
+}
+
+void LearnView::removed_question_from_db(){
+    this->initialTagListView();
+}
+
+void LearnView::added_tag_to_db(){
+    this->initialTagListView();
+}
+
+void LearnView::update_tag_in_db(){
+    this->initialTagListView();
+}
+
+void LearnView::removed_tag_from_db(){
+    this->initialTagListView();
+}
+
+void LearnView::create_relation(){
+    this->initialTagListView();
+}
+
+void LearnView::remove_relation(){
+    this->initialTagListView();
 }

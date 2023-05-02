@@ -30,15 +30,16 @@ private:
 
     void initialTagListView();
     void prepare_tags_list(QList<QString> &);
-    void set_value();
+    void set_question();
     void set_answer();
+    void clean_view();
     void action_after_set_points();
     void make_randomised_questions_list_new();
     void set_progress();
     void set_progress_bar();
     void set_questions_number();
-    void set_which_value_or_answer_show_first();
-    void show_answer_or_value();
+    void set_which_question_or_answer_show_first();
+    void show_answer_or_question();
     void show_first_card_attribute();
     void show_second_card_attribute();
 
