@@ -48,8 +48,9 @@ void LearnView::make_randomised_questions_list_new(){
     questions = this->_tags_list.at(this->_selected_index)->getAllRelated();
 
     for(i = this->_max_questions_number; i > 0; i--){
-        std::srand(time(NULL));
-        long index = std::rand() % questions.size();
+        long index = QRandomGenerator::global()->bounded(questions.size());
+        //std::srand(time(NULL));
+        //long index = std::rand() % questions.size();
 
         this->_randomised_questions.push_back(questions.at(index));
         questions.removeAt(index);
