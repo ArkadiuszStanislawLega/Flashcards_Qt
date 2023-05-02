@@ -39,6 +39,8 @@ private:
     void set_questions_number();
     void set_which_value_or_answer_show_first();
     void show_answer_or_value();
+    void show_first_card_attribute();
+    void show_second_card_attribute();
 
 public:
     explicit LearnView(QWidget *parent = nullptr);

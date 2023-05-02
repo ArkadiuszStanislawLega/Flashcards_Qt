@@ -86,9 +86,53 @@ void LearnView::on_b_start_clicked(){
     this->_max_questions_number = this->ui->sb_questions_number->value();
     this->make_randomised_questions_list_new();
 
-    this->set_which_value_or_answer_show_first();
-    this->show_answer_or_value();
+    this->show_first_card_attribute();
 }
+
+void LearnView::show_first_card_attribute(){
+    if(this->ui->rb_answer->isChecked()){
+        this->set_answer();
+    }
+
+    if(this->ui->rb_question->isChecked()){
+        this->set_value();
+    }
+
+    if(this->ui->rb_random->isChecked()){
+        this->set_which_value_or_answer_show_first();
+        this->show_answer_or_value();
+    }
+}
+
+// Updates the view, the "value" property of the currently selected question.
+void LearnView::set_value(){
+    if(this->_randomised_questions.size()){
+        this->ui->l_value->setText(this->_randomised_questions.first()->get_value());
+    }
+}
+
+// Updates the view, the "answer" property of the currently selected question.
+void LearnView::set_answer(){
+    if(this->_randomised_questions.size()){
+        this->ui->l_answer->setText(this->_randomised_questions.first()->get_answer());
+    }
+}
+
+void LearnView::show_second_card_attribute(){
+    if(this->ui->rb_answer->isChecked()){
+        this->set_value();
+    }
+
+    if(this->ui->rb_question->isChecked()){
+        this->set_answer();
+    }
+
+    if(this->ui->rb_random->isChecked()){
+        this->show_answer_or_value();
+    }
+}
+
+
 
 void LearnView::set_which_value_or_answer_show_first(){
     this->_is_show_answer_first = QRandomGenerator::global()->bounded(0, 1000000) % 2 == 0;
@@ -119,20 +163,6 @@ void LearnView::make_randomised_questions_list_new(){
     qDeleteAll(questions);
 }
 
-// Updates the view, the "value" property of the currently selected question.
-void LearnView::set_value(){
-    if(this->_randomised_questions.size()){
-        this->ui->l_value->setText(this->_randomised_questions.first()->get_value());
-    }
-}
-
-// Updates the view, the "answer" property of the currently selected question.
-void LearnView::set_answer(){
-    if(this->_randomised_questions.size()){
-        this->ui->l_answer->setText(this->_randomised_questions.first()->get_answer());
-    }
-}
-
 void LearnView::on_b_correct_clicked(){
     if(!this->_randomised_questions.size()){
         return;
@@ -160,9 +190,23 @@ void LearnView::action_after_set_points(){
 
     this->_randomised_questions.removeFirst();
     this->set_progress();
-    this->set_which_value_or_answer_show_first();
-    this->_is_show_answer_first ? this->ui->l_value->setText("") : this->ui->l_answer->setText("");
-    this->show_answer_or_value();
+
+
+    if(this->ui->rb_answer->isChecked()){
+        this->set_answer();
+        this->ui->l_value->setText("");
+    }
+
+    if(this->ui->rb_question->isChecked()){
+        this->set_value();
+        this->ui->l_answer->setText("");
+    }
+
+    if(this->ui->rb_random->isChecked()){
+        this->set_which_value_or_answer_show_first();
+        this->_is_show_answer_first ? this->ui->l_value->setText("") : this->ui->l_answer->setText("");
+        this->show_answer_or_value();
+    }
 }
 
 void LearnView::set_progress(){
@@ -196,7 +240,8 @@ void LearnView::set_questions_number(){
 
 
 void LearnView::on_b_show_answer_clicked(){
-    this->show_answer_or_value();
+    //this->show_answer_or_value();
+    this->show_second_card_attribute();
 }
 
 void LearnView::on_cb_tags_currentIndexChanged(int index){
