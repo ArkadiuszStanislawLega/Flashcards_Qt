@@ -1,5 +1,24 @@
 #include "learnview.h"
 
+LearnView::LearnView(QWidget *parent)
+    : QWidget{parent}, ui(new Ui::LearnView){
+    this->ui->setupUi(this);
+    this->ui->l_answer->setText("");
+    this->ui->l_value->setText("");
+    this->ui->pb_answers->setValue(0);
+    this->_tags_model = new QStringListModel;
+    this->initialTagListView();
+    this->_correct_answer = 0;
+    this->_uncorrect_answer = 0;
+}
+
+LearnView::~LearnView(){
+    qDeleteAll(this->_tags_list);
+    qDeleteAll(this->_randomised_questions);
+    qDeleteAll(this->_tags_list);
+}
+
+
 void LearnView::initialTagListView(){
     QList<QString> cb_values;
 
@@ -21,24 +40,6 @@ void LearnView::prepare_tags_list(QList<QString> &list)
         list.append(value);
         this->_max_question_number_in_tag.append(question_number);
     }
-}
-
-LearnView::LearnView(QWidget *parent)
-    : QWidget{parent}, ui(new Ui::LearnView){
-    this->ui->setupUi(this);
-    this->ui->l_answer->setText("");
-    this->ui->l_value->setText("");
-    this->ui->pb_answers->setValue(0);
-    this->_tags_model = new QStringListModel;
-    this->initialTagListView();
-    this->_correct_answer = 0;
-    this->_uncorrect_answer = 0;
-}
-
-LearnView::~LearnView(){
-    qDeleteAll(this->_tags_list);
-    qDeleteAll(this->_randomised_questions);
-    qDeleteAll(this->_tags_list);
 }
 
 void LearnView::make_randomised_questions_list_new(){

@@ -30,18 +30,18 @@ private:
 
     void initialTagListView();
     void prepare_tags_list(QList<QString> &);
+    void make_randomised_questions_list_new();
+    void show_first_card_attribute();
     void set_question();
     void set_answer();
-    void clean_view();
+    void set_which_question_or_answer_show_first();
+    void show_answer_or_question();
+    void show_second_card_attribute();
     void action_after_set_points();
-    void make_randomised_questions_list_new();
     void set_progress();
     void set_progress_bar();
     void set_questions_number();
-    void set_which_question_or_answer_show_first();
-    void show_answer_or_question();
-    void show_first_card_attribute();
-    void show_second_card_attribute();
+    void clean_view();
 
 public:
     explicit LearnView(QWidget *parent = nullptr);
@@ -59,11 +59,11 @@ public slots:
     void remove_relation();
 
 private slots:
+    void on_cb_tags_currentIndexChanged(int index);
     void on_b_start_clicked();
     void on_b_correct_clicked();
     void on_b_uncorrect_clicked();
     void on_b_show_answer_clicked();
-    void on_cb_tags_currentIndexChanged(int index);
 };
 
 #endif // LEARNVIEW_H
