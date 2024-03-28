@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QStringListModel>
 #include <QRandomGenerator>
+#include <QThread>
 #include <vector>
 #include "../Models/question.h"
 #include "../Models/tag.h"
@@ -24,7 +25,8 @@ private:
     QList<Tag *>_tags_list;
     QList<Question *> _randomised_questions;
     int _selected_index, _correct_answer, _uncorrect_answer, _max_questions_number;
-    bool _is_show_answer_first;
+    bool _is_show_answer_first,
+	 _is_answer_was_visible; 
 
     QList<unsigned int> _max_question_number_in_tag;
 
@@ -37,6 +39,7 @@ private:
     void set_which_question_or_answer_show_first();
     void show_answer_or_question();
     void show_second_card_attribute();
+    void penalty_for_answer_does_not_seen();
     void action_after_set_points();
     void set_progress();
     void set_progress_bar();
