@@ -187,7 +187,7 @@ bool Question::isRemovedRelation(Tag *t)
     }
 
     QSqlQuery query;
-    query.prepare(	DELETE + TABLE_QUESTIONS_TAGS + " " +
+    query.prepare(DELETE + TABLE_QUESTIONS_TAGS + " " +
                     WHERE + TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID + "=:" + COLUMN_QUESTION_ID + " " +
                     AND + TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + "=:" + COLUMN_TAG_ID);
     query.bindValue(":" + COLUMN_QUESTION_ID, this->_id);
@@ -234,7 +234,7 @@ QList<Question *> Question::getAll()
 {
     QList<Question *> questions;
     QSqlQuery query;
-    query.prepare(SELECT + "* " + FROM + TABLE_QUESTIONS);
+    query.prepare(SELECT + "* " + FROM + TABLE_QUESTIONS + " " + ORDER_BY + TABLE_QUESTIONS + "." + VALUES);
 
     if(query.exec()){
         while(query.next()){

@@ -3,6 +3,7 @@
 void QuestionView::initialQuestionsListView(){
     this->_table_model = new QSqlRelationalTableModel;
     this->_table_model->setTable(TABLE_QUESTIONS);
+    this->_table_model->setSort(this->_table_model->record().indexOf(COLUMN_VALUE), Qt::AscendingOrder);
     this->_table_model->select();
 
     this->ui->lv_created_quesions->setModel(this->_table_model);
