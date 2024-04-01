@@ -18,6 +18,9 @@ void RelationView::printInfo(const QString &value, bool isError){
 void RelationView::initialQuestionsListView(){
     this->_questions_table_model = new QSqlRelationalTableModel;
     this->_questions_table_model->setTable(TABLE_QUESTIONS);
+    this->_questions_table_model->setSort(
+        this->_questions_table_model->record().indexOf(COLUMN_VALUE),
+        Qt::AscendingOrder);
     this->_questions_table_model->select();
 
     this->ui->lv_questions->setModel(this->_questions_table_model);
