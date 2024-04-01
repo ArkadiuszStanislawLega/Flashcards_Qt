@@ -33,6 +33,8 @@ static const QString INNER_JOIN = "INNER JOIN ";
 static const QString ON = "ON ";
 static const QString AND = "AND ";
 static const QString LIMIT  = "LIMIT ";
+static const QString ORDER_BY  = "ORDER BY ";
+
 
 static const char ANSWER_YES_LARGE = 'Y';
 static const char ANSWER_YES_SMALL = 'y';

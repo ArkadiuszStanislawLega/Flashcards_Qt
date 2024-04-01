@@ -32,207 +32,209 @@ bool Tag::is_question_already_related(Question *q){
 			return true;
 		}
 	}
-    return false;
+	return false;
 }
 
 bool Tag::isRelationCreated(Question *q){
-    if (q == nullptr){
-        return false;
-    }
+	if (q == nullptr){
+		return false;
+	}
 
-    if(this->_id <= 0){
-        return false;
-    }
+	if(this->_id <= 0){
+		return false;
+	}
 
-    QSqlQuery query;
-    query.prepare(INSERT + TABLE_QUESTIONS_TAGS + "(" + COLUMN_QUESTION_ID + ", " + COLUMN_TAG_ID  + ")" +
-                  VALUES + "(:" + COLUMN_QUESTION_ID + ", :" + COLUMN_TAG_ID + ")");
-    query.bindValue(":" + COLUMN_QUESTION_ID, q->get_id());
-    query.bindValue(":" + COLUMN_TAG_ID, this->_id);
-    return query.exec();
+	QSqlQuery query;
+	query.prepare(INSERT + TABLE_QUESTIONS_TAGS + "(" + COLUMN_QUESTION_ID + ", " + COLUMN_TAG_ID  + ")" +
+	       VALUES + "(:" + COLUMN_QUESTION_ID + ", :" + COLUMN_TAG_ID + ")");
+	query.bindValue(":" + COLUMN_QUESTION_ID, q->get_id());
+	query.bindValue(":" + COLUMN_TAG_ID, this->_id);
+	return query.exec();
 }
 
 bool Tag::isRemovedRelation(Question *q){
-    if (q == nullptr){
-        return false;
-    }
+	if (q == nullptr){
+		return false;
+	}
 
-    if(this->_id <= 0){
-        return false;
-    }
+	if(this->_id <= 0){
+		return false;
+	}
 
-    QSqlQuery query;
-    query.prepare(	DELETE + TABLE_QUESTIONS_TAGS + " " +
-                    WHERE + TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID + "=:" + COLUMN_QUESTION_ID + " " +
-                    AND + TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + "=:" + COLUMN_TAG_ID);
-    query.bindValue(":" + COLUMN_QUESTION_ID, q->get_id());
-    query.bindValue(":" + COLUMN_TAG_ID, this->_id);
-    return query.exec();
+	QSqlQuery query;
+	query.prepare(	DELETE + TABLE_QUESTIONS_TAGS + " " +
+	       WHERE + TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID + "=:" + COLUMN_QUESTION_ID + " " +
+	       AND + TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + "=:" + COLUMN_TAG_ID);
+	query.bindValue(":" + COLUMN_QUESTION_ID, q->get_id());
+	query.bindValue(":" + COLUMN_TAG_ID, this->_id);
+	return query.exec();
 }
-
 QList<Question *> Tag::getAllRelated(){
-    QList<Question *> questions;
-    if(this->_id <= 0){
-        return questions;
-    }
-        QSqlQuery query;
-        query.prepare(SELECT + TABLE_QUESTIONS + "." + COLUMN_ID + ", " + COLUMN_VALUE + ", " + COLUMN_ANSWER + " " + FROM + TABLE_QUESTIONS + " " +
-                        INNER_JOIN + TABLE_QUESTIONS_TAGS + " " + ON + TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID + "=" + TABLE_QUESTIONS + "." + COLUMN_ID + " " +
-                        INNER_JOIN + TABLE_TAGS + " " + ON + TABLE_TAGS + "." + COLUMN_ID + "=" + TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + " " +
-                        WHERE + TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + "=:" + COLUMN_ID);
-        query.bindValue(":" + COLUMN_ID, this->_id);
-    if(!query.exec()){
-        return questions;
-    }
+	QList<Question *> questions;
+	if(this->_id <= 0){
+		return questions;
+	}
+	QSqlQuery query;
+	query.prepare(SELECT + TABLE_QUESTIONS + "." + COLUMN_ID + ", " + COLUMN_VALUE + ", " + COLUMN_ANSWER + " " + FROM + TABLE_QUESTIONS + " " +
+	       INNER_JOIN + TABLE_QUESTIONS_TAGS + " " + ON + TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID + "=" + TABLE_QUESTIONS + "." + COLUMN_ID + " " +
+	       INNER_JOIN + TABLE_TAGS + " " + ON + TABLE_TAGS + "." + COLUMN_ID + "=" + TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + " " +
+	       WHERE + TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + "=:" + COLUMN_ID + " " +
+	       ORDER_BY + TABLE_QUESTIONS + "." + COLUMN_VALUE);
+	
 
-    while(query.next()){
-        Question *q = new Question();
-        int idColumn, valueColumn, answerColumn;
+	query.bindValue(":" + COLUMN_ID, this->_id);
+	if(!query.exec()){
+		return questions;
+	}
 
-        idColumn = query.record().indexOf(COLUMN_ID);
-        valueColumn = query.record().indexOf(COLUMN_VALUE);
-        answerColumn = query.record().indexOf(COLUMN_ANSWER);
+	while(query.next()){
+		Question *q = new Question();
+		int idColumn, valueColumn, answerColumn;
 
-        q->set_id(query.value(idColumn).toInt());
-        q->set_value(query.value(valueColumn).toString());
-        q->set_answer(query.value(answerColumn).toString());
+		idColumn = query.record().indexOf(COLUMN_ID);
+		valueColumn = query.record().indexOf(COLUMN_VALUE);
+		answerColumn = query.record().indexOf(COLUMN_ANSWER);
 
-        questions.push_back(q);
-    }
-    return questions;
+		q->set_id(query.value(idColumn).toInt());
+		q->set_value(query.value(valueColumn).toString());
+		q->set_answer(query.value(answerColumn).toString());
+
+		questions.push_back(q);
+	}
+	return questions;
 }
 
 bool Tag::isAllRelationRemoved(){
 
-    if(this->_id <= 0){
-        return false;
-    }
-    QSqlQuery query;
-    query.prepare(DELETE + TABLE_QUESTIONS_TAGS + " " +
-                  WHERE + COLUMN_TAG_ID + "=:" + COLUMN_TAG_ID);
-    query.bindValue(":" + COLUMN_TAG_ID, this->_id);
-    return query.exec();
+	if(this->_id <= 0){
+		return false;
+	}
+	QSqlQuery query;
+	query.prepare(DELETE + TABLE_QUESTIONS_TAGS + " " +
+	       WHERE + COLUMN_TAG_ID + "=:" + COLUMN_TAG_ID);
+	query.bindValue(":" + COLUMN_TAG_ID, this->_id);
+	return query.exec();
 }
 
 bool Tag::isCreate(){
-    if(this->_tag == ""){
-        return false;
-    }
+	if(this->_tag == ""){
+		return false;
+	}
 
-    QSqlQuery query;
+	QSqlQuery query;
 
-    query.prepare(INSERT + TABLE_TAGS +
-                     "(" + COLUMN_TAG + ")" +
-                     VALUES + "(:" + COLUMN_TAG + ")");
+	query.prepare(INSERT + TABLE_TAGS +
+	       "(" + COLUMN_TAG + ")" +
+	       VALUES + "(:" + COLUMN_TAG + ")");
 
-    query.bindValue(":" + COLUMN_TAG, this->_tag);
+	query.bindValue(":" + COLUMN_TAG, this->_tag);
 
-    return query.exec();
+	return query.exec();
 }
 
 Tag *Tag::isRead(){
-    if(this->_id <= 0){
-        return this;
-    }
+	if(this->_id <= 0){
+		return this;
+	}
 
-    QSqlQuery query;
-    query.prepare(SELECT + "* " + FROM + TABLE_TAGS + " " +
-                  WHERE + COLUMN_ID + "=(:" + COLUMN_ID + ") limit 1");
-    query.bindValue(":" + COLUMN_ID, this->_id);
+	QSqlQuery query;
+	query.prepare(SELECT + "* " + FROM + TABLE_TAGS + " " +
+	       WHERE + COLUMN_ID + "=(:" + COLUMN_ID + ") limit 1");
+	query.bindValue(":" + COLUMN_ID, this->_id);
 
-    if(!query.exec()){
-        return this;
-    }
+	if(!query.exec()){
+		return this;
+	}
 
-    if(!query.next()){
-        return this;
-    }
+	if(!query.next()){
+		return this;
+	}
 
-    int idColumn, tagColumn;
+	int idColumn, tagColumn;
 
-    idColumn = query.record().indexOf(COLUMN_ID);
-    tagColumn = query.record().indexOf(COLUMN_TAG);
+	idColumn = query.record().indexOf(COLUMN_ID);
+	tagColumn = query.record().indexOf(COLUMN_TAG);
 
-    this->_id = query.value(idColumn).toInt();
-    this->_tag = query.value(tagColumn).toString();
+	this->_id = query.value(idColumn).toInt();
+	this->_tag = query.value(tagColumn).toString();
 
-    return this;
+	return this;
 }
 
 bool Tag::isUpdate()
 {
-    if(this->_id <= 0){
-        return false;
-    }
+	if(this->_id <= 0){
+		return false;
+	}
 
-    QSqlQuery query;
-    query.prepare(UPDATE + TABLE_TAGS + " " + SET +
-                      COLUMN_TAG + "=:" + COLUMN_TAG + " " +
-                      WHERE + COLUMN_ID + "=:" + COLUMN_ID);
+	QSqlQuery query;
+	query.prepare(UPDATE + TABLE_TAGS + " " + SET +
+	       COLUMN_TAG + "=:" + COLUMN_TAG + " " +
+	       WHERE + COLUMN_ID + "=:" + COLUMN_ID);
 
-    query.bindValue(":" + COLUMN_TAG, this->_tag);
-    query.bindValue(":" + COLUMN_ID, this->_id);
-    return query.exec();
+	query.bindValue(":" + COLUMN_TAG, this->_tag);
+	query.bindValue(":" + COLUMN_ID, this->_id);
+	return query.exec();
 }
 
 bool Tag::isRemoved(){
-    if(this->_id <= 0){
-        return false;
-    }
+	if(this->_id <= 0){
+		return false;
+	}
 
-    QSqlQuery query;
-    query.prepare(DELETE + TABLE_TAGS + " " + WHERE +
-                  COLUMN_ID + "=:" + COLUMN_ID);
+	QSqlQuery query;
+	query.prepare(DELETE + TABLE_TAGS + " " + WHERE +
+	       COLUMN_ID + "=:" + COLUMN_ID);
 
-    query.bindValue(":" + COLUMN_ID, this->_id);
-    return query.exec();
+	query.bindValue(":" + COLUMN_ID, this->_id);
+	return query.exec();
 }
 
 int Tag::findId(){
-    if(this->_tag == ""){
-        return -1;
-    }
+	if(this->_tag == ""){
+		return -1;
+	}
 
-    QSqlQuery query;
-    query.prepare(SELECT + "* " + FROM + TABLE_TAGS + " " + WHERE +
-                  COLUMN_TAG + "=:" + COLUMN_TAG);
-    query.bindValue(":" + COLUMN_TAG, this->_tag);
+	QSqlQuery query;
+	query.prepare(SELECT + "* " + FROM + TABLE_TAGS + " " + WHERE +
+	       COLUMN_TAG + "=:" + COLUMN_TAG);
+	query.bindValue(":" + COLUMN_TAG, this->_tag);
 
-    if(!query.exec()){
-        return -1;
-    }
+	if(!query.exec()){
+		return -1;
+	}
 
-    if(!query.next()){
-        return -1;
-    }
+	if(!query.next()){
+		return -1;
+	}
 
-    int idColumn;
-    idColumn = query.record().indexOf(COLUMN_ID);
+	int idColumn;
+	idColumn = query.record().indexOf(COLUMN_ID);
 
-    return query.value(idColumn).toInt();
+	return query.value(idColumn).toInt();
 }
 
 QList<Tag *> Tag::getAll(){
-    QList<Tag *> tags;
-    QSqlQuery query;
-    query.prepare(SELECT + "* " + FROM + TABLE_TAGS);
+	QList<Tag *> tags;
+	QSqlQuery query;
+	query.prepare(SELECT + "* " + FROM + TABLE_TAGS);
 
 
-    if(!query.exec()){
-        return tags;
-    }
+	if(!query.exec()){
+		return tags;
+	}
 
-    while(query.next()){
-        Tag *t = new Tag();
-        int idColumn, tagColumn;
+	while(query.next()){
+		Tag *t = new Tag();
+		int idColumn, tagColumn;
 
-        idColumn = query.record().indexOf(COLUMN_ID);
-        tagColumn = query.record().indexOf(COLUMN_TAG);
+		idColumn = query.record().indexOf(COLUMN_ID);
+		tagColumn = query.record().indexOf(COLUMN_TAG);
 
-        t->set_id(query.value(idColumn).toInt());
-        t->set_tag(query.value(tagColumn).toString());
+		t->set_id(query.value(idColumn).toInt());
+		t->set_tag(query.value(tagColumn).toString());
 
-        tags.push_back(t);
-    }
-    return tags;
+		tags.push_back(t);
+	}
+	return tags;
 }
