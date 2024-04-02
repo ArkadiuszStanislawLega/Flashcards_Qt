@@ -97,7 +97,6 @@ QList<Question *> Tag::getAllRelated(){
 
 		q->set_id(query.value(idColumn).toInt());
 		q->set_value(query.value(valueColumn).toString());
-		std::cout << q->get_value().toStdString() << '\n';
 		q->set_answer(query.value(answerColumn).toString());
 
 		questions.push_back(q);
