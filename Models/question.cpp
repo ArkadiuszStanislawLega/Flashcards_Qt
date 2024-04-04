@@ -1,7 +1,7 @@
 #include "question.h"
 
 Question::~Question(){
-   qInfo() << "Destruction: " << this;
+   qDebug() << "Destruction: " << this;
 }
 
 Question::Question(QObject *parent) : QObject(parent){
