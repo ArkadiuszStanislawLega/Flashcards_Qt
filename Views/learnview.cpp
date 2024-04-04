@@ -196,6 +196,7 @@ void LearnView::on_b_start_clicked(){
 	this->_randomised_questions.clear();
 	this->_max_questions_number = this->ui->sb_questions_number->value();
 	this->make_randomised_questions_list_new();
+	this->set_questions_number();
 
 	this->show_first_card_attribute();
 }
