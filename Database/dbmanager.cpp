@@ -34,7 +34,7 @@ void DbManager::CreateTableQuestions() {
   QSqlQuery query;
   query.prepare(CREATE_TABLE_IF_NOT_EXISTS + TABLE_QUESTIONS + "(" + COLUMN_ID +
                 " " + PRIMARY_KEY + ", " + COLUMN_IS_ACTIVE + " " +
-                " INTEGER NOT NULL DEFAULT 1" + ", " + COLUMN_VALUE + " " +
+                INTEGER_NOT_NULL + " DEFAULT 1" + ", " + COLUMN_VALUE + " " +
                 TEXT + ", " + COLUMN_ANSWER + " " + TEXT + ")");
   query.exec();
 }
