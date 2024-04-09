@@ -55,11 +55,13 @@ bool Question::isCreate() {
   QSqlQuery query;
 
   query.prepare(INSERT + TABLE_QUESTIONS + "(" + COLUMN_VALUE + ", " +
-                COLUMN_ANSWER + ")" + VALUES + "(:" + COLUMN_VALUE +
-                ", :" + COLUMN_ANSWER + ")");
+                COLUMN_ANSWER + ", " + COLUMN_IS_ACTIVE + ")" + VALUES +
+                "(:" + COLUMN_VALUE + ", :" + COLUMN_ANSWER +
+                ", :" + COLUMN_IS_ACTIVE + ")");
 
   query.bindValue(":" + COLUMN_VALUE, this->_value);
   query.bindValue(":" + COLUMN_ANSWER, this->_answer);
+  query.bindValue(":" + COLUMN_IS_ACTIVE, this->_isActive);
 
   return query.exec();
 }
@@ -82,15 +84,17 @@ Question *Question::isRead() {
     return nullptr;
   }
 
-  int id, idValue, idAnswer;
+  int id, idValue, idAnswer, idIsActive;
 
   id = query.record().indexOf(COLUMN_ID);
+  idIsActive = query.record().indexOf(COLUMN_IS_ACTIVE);
   idValue = query.record().indexOf(COLUMN_VALUE);
   idAnswer = query.record().indexOf(COLUMN_ANSWER);
 
   this->set_id(query.value(id).toInt());
   this->set_answer(query.value(idAnswer).toString());
   this->set_value(query.value(idValue).toString());
+  this->set_isActive(query.value(idIsActive).toBool());
 
   return this;
 }
@@ -99,9 +103,11 @@ bool Question::isUpdate() {
   QSqlQuery query;
   query.prepare(UPDATE + TABLE_QUESTIONS + " " + SET + COLUMN_VALUE + "=:" +
                 COLUMN_VALUE + ", " + COLUMN_ANSWER + "=:" + COLUMN_ANSWER +
-                " " + WHERE + COLUMN_ID + "=:" + COLUMN_ID);
+                ", " + COLUMN_IS_ACTIVE + "=:" + COLUMN_IS_ACTIVE + " " +
+                WHERE + COLUMN_ID + "=:" + COLUMN_ID);
   query.bindValue(":" + COLUMN_VALUE, this->_value);
   query.bindValue(":" + COLUMN_ANSWER, this->_answer);
+  query.bindValue(":" + COLUMN_IS_ACTIVE, this->_isActive);
   query.bindValue(":" + COLUMN_ID, this->_id);
   return query.exec();
 }
@@ -225,13 +231,15 @@ QList<Question *> Question::getAll() {
   if (query.exec()) {
     while (query.next()) {
       Question *q = new Question();
-      int columnId, columnValue, columnAnswer;
+      int columnId, columnValue, columnAnswer, columnIsActive;
 
       columnId = query.record().indexOf(COLUMN_ID);
+      columnIsActive = query.record().indexOf(COLUMN_IS_ACTIVE);
       columnValue = query.record().indexOf(COLUMN_VALUE);
       columnAnswer = query.record().indexOf(COLUMN_ANSWER);
 
       q->set_id(query.value(columnId).toInt());
+      q->set_isActive(query.value(columnIsActive).toBool());
       q->set_answer(query.value(columnAnswer).toString());
       q->set_value(query.value(columnValue).toString());
 
