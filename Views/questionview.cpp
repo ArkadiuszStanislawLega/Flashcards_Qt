@@ -107,12 +107,17 @@ void QuestionView::on_b_remove_question_clicked() {
 }
 
 void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index) {
-  int id, id_column_index, value_column_index, answer_column_index;
+  int id, id_column_index, value_column_index, answer_column_index,
+      is_active_column_index;
+
   QString value, answer;
+  bool isActive;
 
   id_column_index = this->_table_model->record().indexOf(COLUMN_ID);
   value_column_index = this->_table_model->record().indexOf(COLUMN_VALUE);
   answer_column_index = this->_table_model->record().indexOf(COLUMN_ANSWER);
+  is_active_column_index =
+      this->_table_model->record().indexOf(COLUMN_IS_ACTIVE);
 
   id = this->_table_model->index(index.row(), id_column_index)
            .data(Qt::DisplayRole)
@@ -124,10 +129,14 @@ void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index) {
                .data(Qt::DisplayRole)
                .toString();
 
-  // TODO: make isActive from database;
-  this->_selected_question = new Question(id, value, answer, true, {});
+  isActive = this->_table_model->index(index.row(), is_active_column_index)
+                 .data(Qt::DisplayRole)
+                 .toBool();
+
+  this->_selected_question = new Question(id, value, answer, isActive, {});
   this->_selected_question->getAllRelated();
 
   this->ui->te_answer->setText(answer);
   this->ui->te_value->setText(value);
+  this->ui->rb_isActive->setChecked(isActive);
 }

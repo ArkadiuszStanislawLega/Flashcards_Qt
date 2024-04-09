@@ -41,7 +41,7 @@
           <widget class="QTextEdit" name="te_answer"/>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioButton">
+          <widget class="QRadioButton" name="rb_isActive">
            <property name="text">
             <string>Is question active</string>
            </property>
