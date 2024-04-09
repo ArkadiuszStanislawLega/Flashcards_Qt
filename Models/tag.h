@@ -33,6 +33,7 @@ public:
   bool isRelationCreated(Question *);
   bool isRemovedRelation(Question *);
   QList<Question *> getAllRelated();
+  QList<Question *> getAllActiveRelated();
   bool isAllRelationRemoved();
 
   // Db_crud interface

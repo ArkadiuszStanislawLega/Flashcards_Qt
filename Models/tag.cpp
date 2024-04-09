@@ -86,13 +86,56 @@ QList<Question *> Tag::getAllRelated() {
 
   while (query.next()) {
     Question *q = new Question();
-    int idColumn, valueColumn, answerColumn;
+    int idColumn, valueColumn, answerColumn, isActiveColumn;
 
     idColumn = query.record().indexOf(COLUMN_ID);
+    isActiveColumn = query.record().indexOf(COLUMN_IS_ACTIVE);
     valueColumn = query.record().indexOf(COLUMN_VALUE);
     answerColumn = query.record().indexOf(COLUMN_ANSWER);
 
     q->set_id(query.value(idColumn).toInt());
+    q->set_isActive(query.value(isActiveColumn).toBool());
+    q->set_value(query.value(valueColumn).toString());
+    q->set_answer(query.value(answerColumn).toString());
+
+    questions.push_back(q);
+  }
+  return questions;
+}
+QList<Question *> Tag::getAllActiveRelated() {
+  QList<Question *> questions;
+  if (this->_id <= 0) {
+    return questions;
+  }
+  QSqlQuery query;
+  query.prepare(SELECT + TABLE_QUESTIONS + "." + COLUMN_ID + ", " +
+                COLUMN_VALUE + ", " + COLUMN_ANSWER + " " + FROM +
+                TABLE_QUESTIONS + " " + INNER_JOIN + TABLE_QUESTIONS_TAGS +
+                " " + ON + TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID +
+                "=" + TABLE_QUESTIONS + "." + COLUMN_ID + " " + INNER_JOIN +
+                TABLE_TAGS + " " + ON + TABLE_TAGS + "." + COLUMN_ID + "=" +
+                TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + " " + WHERE +
+                TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + "=:" + COLUMN_ID +
+                " AND " + TABLE_QUESTIONS + "." + COLUMN_IS_ACTIVE + "=1 " +
+                ORDER_BY + TABLE_QUESTIONS + "." + COLUMN_VALUE);
+
+  query.bindValue(":" + COLUMN_ID, this->_id);
+
+  if (!query.exec()) {
+    return questions;
+  }
+
+  while (query.next()) {
+    Question *q = new Question();
+    int idColumn, valueColumn, answerColumn, isActiveColumn;
+
+    idColumn = query.record().indexOf(COLUMN_ID);
+    valueColumn = query.record().indexOf(COLUMN_VALUE);
+    answerColumn = query.record().indexOf(COLUMN_ANSWER);
+    isActiveColumn = query.record().indexOf(COLUMN_IS_ACTIVE);
+
+    q->set_id(query.value(idColumn).toInt());
+    q->set_isActive(query.value(isActiveColumn).toBool());
     q->set_value(query.value(valueColumn).toString());
     q->set_answer(query.value(answerColumn).toString());
 

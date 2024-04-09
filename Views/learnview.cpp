@@ -32,7 +32,7 @@ void LearnView::initialTagListView() {
 
 void LearnView::prepare_tags_list(QList<QString> &list) {
   for (Tag *t : Tag::getAll()) {
-    int question_number = t->getAllRelated().size();
+    int question_number = t->getAllActiveRelated().size();
     QString value =
         t->get_tag() + " [" + std::to_string(question_number).c_str() + "]";
     this->_tags_list.append(t);
@@ -44,7 +44,7 @@ void LearnView::prepare_tags_list(QList<QString> &list) {
 void LearnView::make_randomised_questions_list_new() {
   int i;
   QList<Question *> questions;
-  questions = this->_tags_list.at(this->_selected_index)->getAllRelated();
+  questions = this->_tags_list.at(this->_selected_index)->getAllActiveRelated();
 
   for (i = this->_max_questions_number; i > 0; i--) {
     long index = QRandomGenerator::global()->bounded(questions.size());
@@ -259,3 +259,4 @@ void LearnView::removed_tag_from_db() { this->initialTagListView(); }
 void LearnView::create_relation() { this->initialTagListView(); }
 
 void LearnView::remove_relation() { this->initialTagListView(); }
+void LearnView::update_question() { this->initialTagListView(); }

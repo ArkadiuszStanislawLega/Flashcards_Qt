@@ -200,6 +200,7 @@ QList<Tag *> Question::getAllRelated() {
                 "." + COLUMN_ID + "=" + TABLE_QUESTIONS_TAGS + "." +
                 COLUMN_QUESTION_ID + " " + WHERE + TABLE_QUESTIONS_TAGS + "." +
                 COLUMN_QUESTION_ID + "=:" + COLUMN_QUESTION_ID);
+
   query.bindValue(":" + COLUMN_QUESTION_ID, this->_id);
 
   if (!query.exec()) {
