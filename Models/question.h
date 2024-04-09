@@ -20,24 +20,28 @@ private:
   int _id;
   QString _value, _answer;
   QList<Tag *> _tags;
+  bool _isActive;
   bool is_relation_valid(Tag *t);
 
 public:
   Question(QObject *parent = nullptr);
   Question(int, QObject *parent = nullptr);
-  Question(int, QString, QString, QList<Tag *>, QObject *parent = nullptr);
+  Question(int, QString, QString, bool, QList<Tag *>,
+           QObject *parent = nullptr);
   ~Question();
 
   int get_id();
-  QString get_value();
-  QString get_answer();
-  QList<Tag *> get_tags();
+  QString get_value() const;
+  QString get_answer() const;
+  QList<Tag *> get_tags() const;
   bool is_tag_already_related(Tag *);
+  bool get_isActive() const;
 
   void set_id(int);
   void set_value(QString);
   void set_answer(QString);
   void set_tags(QList<Tag *>);
+  void set_isActive(bool);
 
   QString to_string();
   bool isCreate();

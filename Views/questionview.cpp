@@ -124,7 +124,8 @@ void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index) {
                .data(Qt::DisplayRole)
                .toString();
 
-  this->_selected_question = new Question(id, value, answer, {});
+  // TODO: make isActive from database;
+  this->_selected_question = new Question(id, value, answer, true, {});
   this->_selected_question->getAllRelated();
 
   this->ui->te_answer->setText(answer);

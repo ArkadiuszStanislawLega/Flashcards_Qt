@@ -90,7 +90,9 @@ void RelationView::on_lv_questions_clicked(const QModelIndex &index) {
                .data(Qt::DisplayRole)
                .toString();
 
-  this->_selected_question = new Question(id, value, answer, {});
+  // TODO: set isActive from db;
+
+  this->_selected_question = new Question(id, value, answer, true, {});
   this->_selected_question->getAllRelated();
   initialQuestionTagsListView();
 }
