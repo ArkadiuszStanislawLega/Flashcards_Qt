@@ -46,6 +46,7 @@ void QuestionView::on_b_create_question_clicked() {
   Question *q = new Question(this);
   q->set_answer(ui->te_answer->toPlainText());
   q->set_value(ui->te_value->toPlainText());
+  q->set_isActive(ui->rb_isActive->isChecked());
 
   if (q->isCreate()) {
     this->_table_model->select();
@@ -77,6 +78,7 @@ void QuestionView::on_b_update_question_clicked() {
 
   this->_selected_question->set_answer(this->ui->te_answer->toPlainText());
   this->_selected_question->set_value(this->ui->te_value->toPlainText());
+  this->_selected_question->set_isActive(this->ui->rb_isActive->isChecked());
 
   if (this->_selected_question->isUpdate()) {
     this->_table_model->select();
