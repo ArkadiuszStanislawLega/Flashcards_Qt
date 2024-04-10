@@ -208,16 +208,7 @@ QList<Tag *> Question::getAllRelated() {
   }
 
   while (query.next()) {
-    Tag *t = new Tag(this->parent());
-    int idColumn, tagColumn;
-
-    idColumn = query.record().indexOf(COLUMN_ID);
-    tagColumn = query.record().indexOf(COLUMN_TAG);
-
-    t->set_id(query.value(idColumn).toInt());
-    t->set_tag(query.value(tagColumn).toString());
-
-    this->_tags.append(t);
+    this->_tags.append(Tag::convertFromQSqlQuery(&query));
   }
 
   return this->_tags;
@@ -231,23 +222,34 @@ QList<Question *> Question::getAll() {
 
   if (query.exec()) {
     while (query.next()) {
-      Question *q = new Question();
-      int columnId, columnValue, columnAnswer, columnIsActive;
-
-      columnId = query.record().indexOf(COLUMN_ID);
-      columnIsActive = query.record().indexOf(COLUMN_IS_ACTIVE);
-      columnValue = query.record().indexOf(COLUMN_VALUE);
-      columnAnswer = query.record().indexOf(COLUMN_ANSWER);
-
-      q->set_id(query.value(columnId).toInt());
-      q->set_isActive(query.value(columnIsActive).toBool());
-      q->set_answer(query.value(columnAnswer).toString());
-      q->set_value(query.value(columnValue).toString());
-
-      questions.append(q);
+      questions.append(Question::convertFromQSqlQuery(&query));
     }
   }
   return questions;
+}
+///
+/// \brief Question::convertFromQSqlQuery convert QsqlQuery to Instance of
+/// Question class. \param query QsqlQuery select from database. \return
+/// Instance of class Queostion with arg selecteg from database.
+///
+Question *Question::convertFromQSqlQuery(QSqlQuery *query) {
+  if (!query) {
+    return nullptr;
+  }
+
+  Question *q = new Question();
+  int columnId, columnValue, columnAnswer, columnIsActive;
+
+  columnId = query->record().indexOf(COLUMN_ID);
+  columnIsActive = query->record().indexOf(COLUMN_IS_ACTIVE);
+  columnValue = query->record().indexOf(COLUMN_VALUE);
+  columnAnswer = query->record().indexOf(COLUMN_ANSWER);
+
+  q->set_id(query->value(columnId).toInt());
+  q->set_isActive(query->value(columnIsActive).toBool());
+  q->set_answer(query->value(columnAnswer).toString());
+  q->set_value(query->value(columnValue).toString());
+  return q;
 }
 
 bool Question::isAllRelationRemoved() {

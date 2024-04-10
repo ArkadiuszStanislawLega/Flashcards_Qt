@@ -49,6 +49,7 @@ public:
   bool isUpdate();
   bool isRemoved();
   int findId();
+  static Question *convertFromQSqlQuery(QSqlQuery *);
   static QList<Question *> getAll();
 
   bool isRelationCreated(Tag *);

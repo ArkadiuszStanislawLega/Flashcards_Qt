@@ -27,6 +27,23 @@ bool Tag::is_question_already_related(Question *q) {
   return false;
 }
 
+Tag *Tag::convertFromQSqlQuery(QSqlQuery *query) {
+  if (!query) {
+    return nullptr;
+  }
+
+  Tag *t = new Tag();
+  int idColumn, tagColumn;
+
+  idColumn = query->record().indexOf(COLUMN_ID);
+  tagColumn = query->record().indexOf(COLUMN_TAG);
+
+  t->set_id(query->value(idColumn).toInt());
+  t->set_tag(query->value(tagColumn).toString());
+
+  return t;
+}
+
 bool Tag::isRelationCreated(Question *q) {
   if (q == nullptr) {
     return false;
@@ -85,20 +102,7 @@ QList<Question *> Tag::getAllRelated() {
   }
 
   while (query.next()) {
-    Question *q = new Question();
-    int idColumn, valueColumn, answerColumn, isActiveColumn;
-
-    idColumn = query.record().indexOf(COLUMN_ID);
-    isActiveColumn = query.record().indexOf(COLUMN_IS_ACTIVE);
-    valueColumn = query.record().indexOf(COLUMN_VALUE);
-    answerColumn = query.record().indexOf(COLUMN_ANSWER);
-
-    q->set_id(query.value(idColumn).toInt());
-    q->set_isActive(query.value(isActiveColumn).toBool());
-    q->set_value(query.value(valueColumn).toString());
-    q->set_answer(query.value(answerColumn).toString());
-
-    questions.push_back(q);
+    questions.push_back(Question::convertFromQSqlQuery(&query));
   }
   return questions;
 }
@@ -127,20 +131,7 @@ QList<Question *> Tag::getAllActiveRelated() {
   }
 
   while (query.next()) {
-    Question *q = new Question();
-    int idColumn, valueColumn, answerColumn, isActiveColumn;
-
-    idColumn = query.record().indexOf(COLUMN_ID);
-    valueColumn = query.record().indexOf(COLUMN_VALUE);
-    answerColumn = query.record().indexOf(COLUMN_ANSWER);
-    isActiveColumn = query.record().indexOf(COLUMN_IS_ACTIVE);
-
-    q->set_id(query.value(idColumn).toInt());
-    q->set_isActive(query.value(isActiveColumn).toBool());
-    q->set_value(query.value(valueColumn).toString());
-    q->set_answer(query.value(answerColumn).toString());
-
-    questions.push_back(q);
+    questions.push_back(Question::convertFromQSqlQuery(&query));
   }
   return questions;
 }
@@ -263,16 +254,7 @@ QList<Tag *> Tag::getAll() {
   }
 
   while (query.next()) {
-    Tag *t = new Tag();
-    int idColumn, tagColumn;
-
-    idColumn = query.record().indexOf(COLUMN_ID);
-    tagColumn = query.record().indexOf(COLUMN_TAG);
-
-    t->set_id(query.value(idColumn).toInt());
-    t->set_tag(query.value(tagColumn).toString());
-
-    tags.push_back(t);
+    tags.push_back(Tag::convertFromQSqlQuery(&query));
   }
   return tags;
 }

@@ -28,6 +28,7 @@ public:
   void set_id(int);
   void set_tag(QString);
   bool is_question_already_related(Question *);
+  static Tag *convertFromQSqlQuery(QSqlQuery *);
 
   // ManyToMany interface
   bool isRelationCreated(Question *);
