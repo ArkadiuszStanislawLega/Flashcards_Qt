@@ -11,13 +11,9 @@ Tag::Tag(int id, QString tag, QObject *parent) : QObject(parent) {
 }
 
 int Tag::get_id() { return this->_id; }
-
 QString Tag::get_tag() { return this->_tag; }
-
 void Tag::set_id(int id) { this->_id = id; }
-
 void Tag::set_tag(QString tag) { this->_tag = tag; }
-
 bool Tag::is_question_already_related(Question *q) {
   for (Tag *t : q->get_tags()) {
     if (t->get_id() == this->_id) {
@@ -80,6 +76,7 @@ bool Tag::isRemovedRelation(Question *q) {
   query.bindValue(":" + COLUMN_TAG_ID, this->_id);
   return query.exec();
 }
+
 QList<Question *> Tag::getAllRelated() {
   QList<Question *> questions;
   if (this->_id <= 0) {
