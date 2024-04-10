@@ -108,16 +108,17 @@ QList<Question *> Tag::getAllActiveRelated() {
     return questions;
   }
   QSqlQuery query;
-  query.prepare(SELECT + TABLE_QUESTIONS + "." + COLUMN_ID + ", " +
-                COLUMN_VALUE + ", " + COLUMN_ANSWER + " " + FROM +
-                TABLE_QUESTIONS + " " + INNER_JOIN + TABLE_QUESTIONS_TAGS +
-                " " + ON + TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID +
-                "=" + TABLE_QUESTIONS + "." + COLUMN_ID + " " + INNER_JOIN +
-                TABLE_TAGS + " " + ON + TABLE_TAGS + "." + COLUMN_ID + "=" +
-                TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + " " + WHERE +
-                TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + "=:" + COLUMN_ID +
-                " AND " + TABLE_QUESTIONS + "." + COLUMN_IS_ACTIVE + "=1 " +
-                ORDER_BY + TABLE_QUESTIONS + "." + COLUMN_VALUE);
+  query.prepare(
+      SELECT + TABLE_QUESTIONS + "." + COLUMN_ID + ", " + TABLE_QUESTIONS +
+      "." + COLUMN_VALUE + ", " + TABLE_QUESTIONS + "." + COLUMN_ANSWER + ", " +
+      TABLE_QUESTIONS + "." + COLUMN_IS_ACTIVE + " " + FROM + TABLE_QUESTIONS +
+      " " + INNER_JOIN + TABLE_QUESTIONS_TAGS + " " + ON +
+      TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID + "=" + TABLE_QUESTIONS +
+      "." + COLUMN_ID + " " + INNER_JOIN + TABLE_TAGS + " " + ON + TABLE_TAGS +
+      "." + COLUMN_ID + "=" + TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + " " +
+      WHERE + TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + "=:" + COLUMN_ID +
+      " AND " + TABLE_QUESTIONS + "." + COLUMN_IS_ACTIVE + "=1 " + ORDER_BY +
+      TABLE_QUESTIONS + "." + COLUMN_VALUE);
 
   query.bindValue(":" + COLUMN_ID, this->_id);
 
