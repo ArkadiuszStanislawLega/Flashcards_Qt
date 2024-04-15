@@ -216,7 +216,7 @@ void LearnView::penalty_for_answer_does_not_seen() {
     this->show_second_card_attribute();
 
     QApplication::processEvents();
-    QThread::sleep(1);
+    QThread::sleep(this->PENALTY_TIME);
   }
   this->_is_answer_was_visible = false;
 }

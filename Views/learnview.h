@@ -19,6 +19,7 @@ class LearnView : public QWidget {
 
 private:
   Q_OBJECT
+  const int PENALTY_TIME = 1;
   Ui::LearnView *ui;
   QStringListModel *_tags_model;
   QList<Tag *> _tags_list;
