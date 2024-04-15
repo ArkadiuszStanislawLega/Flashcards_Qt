@@ -33,11 +33,14 @@ private slots:
 
   void on_lv_created_quesions_pressed(const QModelIndex &index);
 
+  void on_cb_tags_currentIndexChanged(int index);
+
 private:
   Q_OBJECT
   Question *_selected_question;
   Ui::QuestionView *ui;
-  QSqlRelationalTableModel *_table_model, *_cb_tags_models;
+  QSqlRelationalTableModel *_table_model, *_cb_tags_model;
+  Tag *_selected_tag;
   void initialQuestionsListView();
   void initialTagsComboBoxData();
   void cleanTextEditors();

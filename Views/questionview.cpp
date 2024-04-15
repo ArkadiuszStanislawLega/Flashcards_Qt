@@ -13,12 +13,12 @@ void QuestionView::initialQuestionsListView() {
 }
 
 void QuestionView::initialTagsComboBoxData() {
-  this->_cb_tags_models = new QSqlRelationalTableModel;
-  this->_cb_tags_models->setTable(TABLE_TAGS);
-  this->_cb_tags_models->select();
-  this->ui->cb_tags->setModel(this->_cb_tags_models);
+  this->_cb_tags_model = new QSqlRelationalTableModel;
+  this->_cb_tags_model->setTable(TABLE_TAGS);
+  this->_cb_tags_model->select();
+  this->ui->cb_tags->setModel(this->_cb_tags_model);
   this->ui->cb_tags->setModelColumn(
-      this->_cb_tags_models->record().indexOf(COLUMN_TAG));
+      this->_cb_tags_model->record().indexOf(COLUMN_TAG));
 }
 
 void QuestionView::cleanTextEditors() {
@@ -151,4 +151,21 @@ void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index) {
   this->ui->te_answer->setText(answer);
   this->ui->te_value->setText(value);
   this->ui->rb_isActive->setChecked(isActive);
+}
+
+void QuestionView::on_cb_tags_currentIndexChanged(int index) {
+  int id, id_column, tag_column_index;
+  QString tag;
+
+  id_column = this->_cb_tags_model->record().indexOf(COLUMN_ID);
+  tag_column_index = this->_cb_tags_model->record().indexOf(COLUMN_TAG);
+
+  id = this->_cb_tags_model->index(index, id_column)
+           .data(Qt::DisplayRole)
+           .toInt();
+  tag = this->_cb_tags_model->index(index, tag_column_index)
+            .data(Qt::DisplayRole)
+            .toString();
+
+  this->_selected_tag = new Tag(id, tag, this);
 }
