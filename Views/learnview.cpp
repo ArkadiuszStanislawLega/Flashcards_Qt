@@ -150,12 +150,11 @@ void LearnView::set_progress_bar() {
 
 void LearnView::set_questions_number() {
   QString value = "";
-  value += std::to_string(this->_max_questions_number).c_str();
-  value += "/";
   value += std::to_string(this->_max_questions_number -
                           this->_randomised_questions.size())
                .c_str();
-
+  value += "/";
+  value += std::to_string(this->_max_questions_number).c_str();
   this->ui->l_questions_counter->setText(value);
 }
 
