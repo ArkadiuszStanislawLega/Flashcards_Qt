@@ -13,12 +13,12 @@ void QuestionView::initialQuestionsListView() {
 }
 
 void QuestionView::initialTagsComboBoxData() {
-  QList<QString> tags_list{};
-  for (Tag *t : Tag::getAll()) {
-    tags_list.push_back(t->get_tag());
-  }
-  this->_tags_model->setStringList(tags_list);
-  this->ui->cb_tags->setModel(this->_tags_model);
+  this->_cb_tags_models = new QSqlRelationalTableModel;
+  this->_cb_tags_models->setTable(TABLE_TAGS);
+  this->_cb_tags_models->select();
+  this->ui->cb_tags->setModel(this->_cb_tags_models);
+  this->ui->cb_tags->setModelColumn(
+      this->_cb_tags_models->record().indexOf(COLUMN_TAG));
 }
 
 void QuestionView::cleanTextEditors() {
@@ -37,7 +37,6 @@ void QuestionView::printInfo(const QString &value, bool isError = false) {
 QuestionView::QuestionView(QWidget *parent)
     : QWidget{parent}, ui(new Ui::QuestionView) {
   this->ui->setupUi(this);
-  this->_tags_model = new QStringListModel;
   this->_selected_question = new Question(this);
   this->initialQuestionsListView();
   this->initialTagsComboBoxData();

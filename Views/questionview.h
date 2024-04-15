@@ -35,10 +35,9 @@ private slots:
 
 private:
   Q_OBJECT
-  QStringListModel *_tags_model;
   Question *_selected_question;
   Ui::QuestionView *ui;
-  QSqlRelationalTableModel *_table_model;
+  QSqlRelationalTableModel *_table_model, *_cb_tags_models;
   void initialQuestionsListView();
   void initialTagsComboBoxData();
   void cleanTextEditors();
