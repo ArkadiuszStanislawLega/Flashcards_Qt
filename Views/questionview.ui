@@ -21,6 +21,16 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
+          <widget class="QLabel" name="l_chose_tag">
+           <property name="text">
+            <string>Chose Tag</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="cb_tags"/>
+         </item>
+         <item>
           <widget class="QLabel" name="l_value">
            <property name="text">
             <string>Value:</string>
