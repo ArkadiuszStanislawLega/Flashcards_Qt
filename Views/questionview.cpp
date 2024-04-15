@@ -12,6 +12,15 @@ void QuestionView::initialQuestionsListView() {
       this->_table_model->record().indexOf(COLUMN_VALUE));
 }
 
+void QuestionView::initialTagsComboBoxData() {
+  QList<QString> tags_list{};
+  for (Tag *t : Tag::getAll()) {
+    tags_list.push_back(t->get_tag());
+  }
+  this->_tags_model->setStringList(tags_list);
+  this->ui->cb_tags->setModel(this->_tags_model);
+}
+
 void QuestionView::cleanTextEditors() {
   this->ui->te_value->clear();
   this->ui->te_answer->clear();
@@ -28,8 +37,10 @@ void QuestionView::printInfo(const QString &value, bool isError = false) {
 QuestionView::QuestionView(QWidget *parent)
     : QWidget{parent}, ui(new Ui::QuestionView) {
   this->ui->setupUi(this);
+  this->_tags_model = new QStringListModel;
   this->_selected_question = new Question(this);
   this->initialQuestionsListView();
+  this->initialTagsComboBoxData();
 }
 
 void QuestionView::on_b_create_question_clicked() {

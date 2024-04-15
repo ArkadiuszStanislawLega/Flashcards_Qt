@@ -1,47 +1,48 @@
 #ifndef QUESTIONVIEW_H
 #define QUESTIONVIEW_H
 
-#include <QWidget>
-#include <QTextEdit>
+#include "../Constants/strings.h"
+#include "../Models/question.h"
+#include "ui_questionview.h"
+#include <QDebug>
+#include <QSqlRelationalTableModel>
 #include <QSqlTableModel>
 #include <QStringListModel>
-#include <QSqlRelationalTableModel>
-#include <QDebug>
-#include "../Models/question.h"
-#include "../Constants/strings.h"
-#include "ui_questionview.h"
+#include <QTextEdit>
+#include <QWidget>
 
 using namespace std;
 
-namespace Ui{
-        class QuestionView;
+namespace Ui {
+class QuestionView;
 }
 
-class QuestionView : public QWidget
-{
-    Q_OBJECT
+class QuestionView : public QWidget {
 public:
-    explicit QuestionView(QWidget *parent = nullptr);
+  explicit QuestionView(QWidget *parent = nullptr);
 
 signals:
-    void added_question_to_db();
-    void remove_question_from_db();
-    void update_question_from_db();
+  void added_question_to_db();
+  void remove_question_from_db();
+  void update_question_from_db();
 
 private slots:
-    void on_b_update_question_clicked();
-    void on_b_remove_question_clicked();
-    void on_b_create_question_clicked();
+  void on_b_update_question_clicked();
+  void on_b_remove_question_clicked();
+  void on_b_create_question_clicked();
 
-    void on_lv_created_quesions_pressed(const QModelIndex &index);
+  void on_lv_created_quesions_pressed(const QModelIndex &index);
 
 private:
-    Question *_selected_question;
-    Ui::QuestionView *ui;
-    QSqlRelationalTableModel *_table_model;
-    void initialQuestionsListView();
-    void cleanTextEditors();
-    void printInfo(const QString &, bool);
+  Q_OBJECT
+  QStringListModel *_tags_model;
+  Question *_selected_question;
+  Ui::QuestionView *ui;
+  QSqlRelationalTableModel *_table_model;
+  void initialQuestionsListView();
+  void initialTagsComboBoxData();
+  void cleanTextEditors();
+  void printInfo(const QString &, bool);
 };
 
 #endif // QUESTIONVIEW_H
