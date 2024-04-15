@@ -66,6 +66,11 @@ void QuestionView::on_b_create_question_clicked() {
     this->printInfo(DATABASE_ERROR, true);
   }
 
+  if (this->_selected_tag) {
+    q->set_id(q->findId());
+    this->_selected_tag->isRelationCreated(q);
+  }
+
   emit added_question_to_db();
   delete q;
 }
@@ -119,6 +124,7 @@ void QuestionView::on_b_remove_question_clicked() {
 }
 
 void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index) {
+
   int id, id_column_index, value_column_index, answer_column_index,
       is_active_column_index;
 
