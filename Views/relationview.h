@@ -41,7 +41,7 @@ private slots:
     void on_b_remove_relation_clicked();
 
 private:
-    Tag *_selected_cb, *_from_quest;
+    Tag *_selected_tag_to_question_add, *_tag_from_selected_question;
     Question *_selected_question;
 
     Ui::RelationView *ui;

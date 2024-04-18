@@ -67,18 +67,22 @@ void RelationView::on_cb_tags_currentIndexChanged(int index) {
             .data(Qt::DisplayRole)
             .toString();
 
-  this->_selected_cb = new Tag(id, tag, this);
+  this->_selected_tag_to_question_add = new Tag(id, tag, this);
 }
 
 void RelationView::on_lv_questions_clicked(const QModelIndex &index) {
-  int id, id_column_index, value_column_index, answer_column_index;
+  int id, id_column_index, value_column_index, answer_column_index,
+      is_active_column_index;
   QString value, answer;
+  bool is_active;
 
   id_column_index = this->_questions_table_model->record().indexOf(COLUMN_ID);
   value_column_index =
       this->_questions_table_model->record().indexOf(COLUMN_VALUE);
   answer_column_index =
       this->_questions_table_model->record().indexOf(COLUMN_ANSWER);
+  is_active_column_index =
+      this->_questions_table_model->record().indexOf(COLUMN_IS_ACTIVE);
 
   id = this->_questions_table_model->index(index.row(), id_column_index)
            .data(Qt::DisplayRole)
@@ -89,20 +93,24 @@ void RelationView::on_lv_questions_clicked(const QModelIndex &index) {
   answer = this->_questions_table_model->index(index.row(), answer_column_index)
                .data(Qt::DisplayRole)
                .toString();
+  is_active =
+      this->_questions_table_model->index(index.row(), is_active_column_index)
+          .data(Qt::DisplayRole)
+          .toBool();
 
-  // TODO: set isActive from db;
-
-  this->_selected_question = new Question(id, value, answer, true, {});
+  this->_selected_question = new Question(id, value, answer, is_active, {});
   this->_selected_question->getAllRelated();
+  this->_tag_from_selected_question = nullptr;
   initialQuestionTagsListView();
 }
 
 void RelationView::on_lv_question_tags_clicked(const QModelIndex &index) {
-  this->_from_quest = this->_selected_question->get_tags().at(index.row());
+  this->_tag_from_selected_question =
+      this->_selected_question->get_tags().at(index.row());
 }
 
 void RelationView::on_b_create_relation_clicked() {
-  if (this->_selected_cb == nullptr) {
+  if (this->_selected_tag_to_question_add == nullptr) {
     this->printInfo(TAG_FROM_COMBO_BOX_SHOULD_BE_SELECTED, true);
     return;
   }
@@ -113,7 +121,8 @@ void RelationView::on_b_create_relation_clicked() {
   }
   // TODO: Validate is relation is not EXIST.
 
-  if (this->_selected_cb->isRelationCreated(this->_selected_question)) {
+  if (this->_selected_tag_to_question_add->isRelationCreated(
+          this->_selected_question)) {
     this->_questions_table_model->select();
     this->printInfo(RELATION_QUESTION_WIT_TAG_CREATED);
   } else {
@@ -124,7 +133,7 @@ void RelationView::on_b_create_relation_clicked() {
 }
 
 void RelationView::on_b_remove_relation_clicked() {
-  if (this->_from_quest == nullptr) {
+  if (this->_tag_from_selected_question == nullptr) {
     this->printInfo(SELECT_TAG_FROM_QUESTION, true);
     return;
   }
@@ -134,7 +143,8 @@ void RelationView::on_b_remove_relation_clicked() {
     return;
   }
 
-  if (this->_from_quest->isRemovedRelation(this->_selected_question)) {
+  if (this->_tag_from_selected_question->isRemovedRelation(
+          this->_selected_question)) {
     this->_questions_table_model->select();
     this->printInfo(REMOVED_RELATION_QUESTION_AND_TAG_SUCCESFULLY);
   } else {
