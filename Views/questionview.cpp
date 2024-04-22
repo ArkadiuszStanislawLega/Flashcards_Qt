@@ -71,6 +71,9 @@ void QuestionView::on_b_create_question_clicked() {
     this->_selected_tag->isRelationCreated(q);
   }
 
+  this->ui->te_answer->clear();
+  this->ui->te_value->clear();
+
   emit added_question_to_db();
   delete q;
 }
