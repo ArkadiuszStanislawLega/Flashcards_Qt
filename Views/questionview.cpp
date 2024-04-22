@@ -41,7 +41,6 @@ QuestionView::QuestionView(QWidget *parent)
   this->initialQuestionsListView();
   this->initialTagsComboBoxData();
 }
-
 void QuestionView::on_b_create_question_clicked() {
   if (ui->te_answer->toPlainText() == "") {
     this->printInfo(FIELD_ANSWER_CANT_EMPTY, true);
@@ -53,29 +52,40 @@ void QuestionView::on_b_create_question_clicked() {
     return;
   }
 
+  this->createRelationQuestionAndTag(addQuestionToDb());
+  this->cleanTextEditors();
+
+  emit added_question_to_db();
+}
+
+///
+/// \brief QuestionView::addQuestionToDb Create question in database.
+/// \return Created question with Id from database.
+///
+Question *QuestionView::addQuestionToDb() {
   Question *q = new Question(this);
   q->set_answer(ui->te_answer->toPlainText());
   q->set_value(ui->te_value->toPlainText());
   q->set_isActive(ui->rb_isActive->isChecked());
 
   if (q->isCreate()) {
+    q->set_id(q->findId());
     this->_table_model->select();
     this->cleanTextEditors();
     this->printInfo(QUESTION_CREATED_CORRECTLY);
+    return q;
+
   } else {
     this->printInfo(DATABASE_ERROR, true);
   }
+  return nullptr;
+}
 
-  if (this->_selected_tag) {
-    q->set_id(q->findId());
+void QuestionView::createRelationQuestionAndTag(Question *q) {
+  if (q && this->_selected_tag) {
     this->_selected_tag->isRelationCreated(q);
+    delete q;
   }
-
-  this->ui->te_answer->clear();
-  this->ui->te_value->clear();
-
-  emit added_question_to_db();
-  delete q;
 }
 
 void QuestionView::on_b_update_question_clicked() {

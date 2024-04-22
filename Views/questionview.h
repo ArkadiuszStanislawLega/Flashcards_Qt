@@ -45,6 +45,8 @@ private:
   void initialTagsComboBoxData();
   void cleanTextEditors();
   void printInfo(const QString &, bool);
+  Question *addQuestionToDb();
+  void createRelationQuestionAndTag(Question *q);
 };
 
 #endif // QUESTIONVIEW_H
