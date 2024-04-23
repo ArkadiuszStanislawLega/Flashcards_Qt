@@ -190,6 +190,8 @@ void QuestionView::on_cb_tags_currentIndexChanged(int index) {
 }
 
 void QuestionView::on_le_searching_bar_textChanged(const QString &arg1) {
-
+  qDebug() << arg1;
+  this->_table_model->setFilter(TABLE_QUESTIONS + "." + COLUMN_VALUE +
+                                " LIKE \"%" + arg1 + "%\"");
+  this->_table_model->select();
 }
-

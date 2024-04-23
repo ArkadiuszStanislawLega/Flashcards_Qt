@@ -35,6 +35,8 @@ private slots:
 
   void on_cb_tags_currentIndexChanged(int index);
 
+  void on_le_searching_bar_textChanged(const QString &arg1);
+
 private:
   Q_OBJECT
   Question *_selected_question;
