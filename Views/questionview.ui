@@ -90,11 +90,21 @@
       </layout>
      </item>
      <item>
-      <widget class="QListView" name="lv_created_quesions">
-       <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
+      <layout class="QVBoxLayout" name="hl_questions_searching">
+       <property name="leftMargin">
+        <number>0</number>
        </property>
-      </widget>
+       <item>
+        <widget class="QLineEdit" name="le_searching_bar"/>
+       </item>
+       <item>
+        <widget class="QListView" name="lv_created_quesions">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>

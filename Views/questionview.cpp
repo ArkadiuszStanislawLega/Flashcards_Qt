@@ -188,3 +188,8 @@ void QuestionView::on_cb_tags_currentIndexChanged(int index) {
 
   this->_selected_tag = new Tag(id, tag, this);
 }
+
+void QuestionView::on_le_searching_bar_textChanged(const QString &arg1) {
+
+}
+
