@@ -14,56 +14,72 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QLabel" name="l_output">
-      <property name="text">
-       <string>Wartosc</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2"/>
-    </item>
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
     <item>
      <widget class="QTabWidget" name="tabs">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_questions">
        <attribute name="title">
         <string>Questions</string>
        </attribute>
-       <widget class="QuestionView" name="quesiton_view" native="true"/>
+       <widget class="QuestionView" name="quesiton_view" native="true">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>750</width>
+          <height>600</height>
+         </rect>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab_tags">
        <attribute name="title">
         <string>Tags</string>
        </attribute>
-       <widget class="TagView" name="tag_view" native="true"/>
+       <widget class="TagView" name="tag_view" native="true">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>750</width>
+          <height>600</height>
+         </rect>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab_relations">
        <attribute name="title">
         <string>Relations</string>
        </attribute>
-       <widget class="RelationView" name="relation_view" native="true"/>
+       <widget class="RelationView" name="relation_view" native="true">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>750</width>
+          <height>600</height>
+         </rect>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab_learn">
        <attribute name="title">
         <string>Learn</string>
        </attribute>
-       <widget class="LearnView" name="learn_view" native="true"/>
+       <widget class="LearnView" name="learn_view" native="true">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>750</width>
+          <height>600</height>
+         </rect>
+        </property>
+       </widget>
       </widget>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="l_info">
-      <property name="autoFillBackground">
-       <bool>true</bool>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
      </widget>
     </item>
    </layout>

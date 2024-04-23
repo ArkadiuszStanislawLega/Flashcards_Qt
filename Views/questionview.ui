@@ -109,7 +109,7 @@
          <item>
           <widget class="QLineEdit" name="le_searching_bar">
            <property name="maxLength">
-            <number>20</number>
+            <number>40</number>
            </property>
           </widget>
          </item>
