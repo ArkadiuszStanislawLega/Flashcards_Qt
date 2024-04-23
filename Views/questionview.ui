@@ -95,7 +95,25 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QLineEdit" name="le_searching_bar"/>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="l_filter">
+           <property name="text">
+            <string>Filter questions</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="le_searching_bar">
+           <property name="maxLength">
+            <number>20</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
         <widget class="QListView" name="lv_created_quesions">
