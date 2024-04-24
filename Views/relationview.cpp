@@ -171,6 +171,7 @@ void RelationView::remove_tag_from_db() { this->initialTagsComboBox(); }
 void RelationView::update_tag_from_db() { this->initialTagsComboBox(); }
 
 void RelationView::on_le_filter_textChanged(const QString &arg1) {
-
+  this->_questions_table_model->setFilter(TABLE_QUESTIONS + "." + COLUMN_VALUE +
+                                          " LIKE \"%" + arg1 + "%\"");
+  this->_questions_table_model->select();
 }
-
