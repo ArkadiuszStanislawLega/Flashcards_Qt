@@ -169,3 +169,8 @@ void RelationView::added_tag_to_db() { this->initialTagsComboBox(); }
 void RelationView::remove_tag_from_db() { this->initialTagsComboBox(); }
 
 void RelationView::update_tag_from_db() { this->initialTagsComboBox(); }
+
+void RelationView::on_le_filter_textChanged(const QString &arg1) {
+
+}
+
