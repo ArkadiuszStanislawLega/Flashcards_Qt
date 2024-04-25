@@ -99,7 +99,13 @@ void RelationView::on_lv_questions_clicked(const QModelIndex &index) {
           .toBool();
 
   this->_selected_question = new Question(id, value, answer, is_active, {});
-  this->_selected_question->getAllRelated();
+
+  try {
+    this->_selected_question->getAllRelated();
+  } catch (std::invalid_argument &e) {
+    qWarning() << "RelationView::on_lv_questions_clicked " << e.what();
+  }
+
   this->_tag_from_selected_question = nullptr;
   initialQuestionTagsListView();
 }

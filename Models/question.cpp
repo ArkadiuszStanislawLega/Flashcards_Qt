@@ -163,6 +163,7 @@ bool Question::isRelationCreated(Tag *t) {
 
 bool Question::isRemovedRelation(Tag *t) {
   if (!this->is_relation_valid(t)) {
+    throw std::invalid_argument("Question::isRemovedRelation - tag is empy.");
     return false;
   }
 
@@ -178,7 +179,8 @@ bool Question::isRemovedRelation(Tag *t) {
 
 QList<Tag *> Question::getAllRelated() {
   if (this->_id <= 0) {
-    return this->_tags;
+    throw std::invalid_argument("Question::getAllRelated - _id <= 0");
+    return {};
   }
 
   QSqlQuery query;
@@ -196,11 +198,16 @@ QList<Tag *> Question::getAllRelated() {
   query.bindValue(":" + COLUMN_QUESTION_ID, this->_id);
 
   if (!query.exec()) {
-    return this->_tags;
+    qWarning() << "Fail to execute query";
+    return {};
   }
 
   while (query.next()) {
-    this->_tags.append(Tag::convertFromQSqlQuery(&query));
+    try {
+      this->_tags.append(Tag::convertFromQSqlQuery(&query));
+    } catch (std::invalid_argument &e) {
+      qWarning() << "Question:: getAllRelated" << e.what();
+    }
   }
 
   return this->_tags;
@@ -212,9 +219,17 @@ QList<Question *> Question::getAll() {
   query.prepare(SELECT + "* " + FROM + TABLE_QUESTIONS + " " + ORDER_BY +
                 TABLE_QUESTIONS + "." + VALUES);
 
-  if (query.exec()) {
-    while (query.next()) {
+  if (!query.exec()) {
+    qWarning() << "Fail to execute query";
+    return {};
+  }
+
+  while (query.next()) {
+    try {
       questions.append(Question::convertFromQSqlQuery(&query));
+    } catch (std::invalid_argument &e) {
+      qWarning() << "Question::getAll()" << e.what();
+      return {};
     }
   }
   return questions;
@@ -226,7 +241,8 @@ QList<Question *> Question::getAll() {
 ///
 Question *Question::convertFromQSqlQuery(QSqlQuery *query) {
   if (!query) {
-    return nullptr;
+    throw std::invalid_argument("Nullptr query");
+    return new Question();
   }
 
   Question *q = new Question();
@@ -243,9 +259,14 @@ Question *Question::convertFromQSqlQuery(QSqlQuery *query) {
   q->set_value(query->value(columnValue).toString());
   return q;
 }
-
+///
+/// \brief Question::isAllRelationRemoved Remove all related tags with question.
+/// Throwing invalid_argument if id = 0 \return true if all relations from
+/// database are removed.
+///
 bool Question::isAllRelationRemoved() {
   if (this->_id <= 0) {
+    throw std::invalid_argument("Question::isAllRelationRemoved - _id = 0");
     return false;
   }
 
