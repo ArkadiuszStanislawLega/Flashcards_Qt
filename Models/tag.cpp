@@ -80,8 +80,9 @@ bool Tag::isRemovedRelation(Question *q) {
 QList<Question *> Tag::getAllRelated() {
   QList<Question *> questions;
   if (this->_id <= 0) {
-    return questions;
+    return {};
   }
+
   QSqlQuery query;
   query.prepare(SELECT + TABLE_QUESTIONS + "." + COLUMN_ID + ", " +
                 COLUMN_VALUE + ", " + COLUMN_ANSWER + " " + FROM +
@@ -94,15 +95,25 @@ QList<Question *> Tag::getAllRelated() {
                 " " + ORDER_BY + TABLE_QUESTIONS + "." + COLUMN_VALUE);
 
   query.bindValue(":" + COLUMN_ID, this->_id);
+
   if (!query.exec()) {
-    return questions;
+    throw std::invalid_argument("Question::getAllRlated - the query failed.");
   }
 
-  while (query.next()) {
-    questions.push_back(Question::convertFromQSqlQuery(&query));
+  try {
+
+    while (query.next()) {
+      questions.push_back(Question::convertFromQSqlQuery(&query));
+    }
+
+  } catch (std::invalid_argument &e) {
+    qWarning() << "Question::getAllRelated " << e.what();
+    return {};
   }
+
   return questions;
 }
+
 QList<Question *> Tag::getAllActiveRelated() {
   QList<Question *> questions;
   if (this->_id <= 0) {
@@ -127,8 +138,15 @@ QList<Question *> Tag::getAllActiveRelated() {
     return questions;
   }
 
-  while (query.next()) {
-    questions.push_back(Question::convertFromQSqlQuery(&query));
+  try {
+
+    while (query.next()) {
+      questions.push_back(Question::convertFromQSqlQuery(&query));
+    }
+
+  } catch (std::invalid_argument &e) {
+    qWarning() << "Question::getAllRelated " << e.what();
+    return {};
   }
   return questions;
 }

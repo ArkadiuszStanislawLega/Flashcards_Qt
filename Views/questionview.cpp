@@ -68,6 +68,12 @@ Question *QuestionView::addQuestionToDb() {
   q->set_value(ui->te_value->toPlainText());
   q->set_isActive(ui->rb_isActive->isChecked());
 
+  try {
+
+  } catch (std::invalid_argument &e) {
+    qWarning() << e.what();
+  }
+
   if (q->isCreate()) {
     q->set_id(q->findId());
     this->_table_model->select();

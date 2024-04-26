@@ -21,6 +21,12 @@ private:
   QString _value, _answer;
   QList<Tag *> _tags;
   bool _isActive;
+  ///
+  /// Check is question and tag can be
+  /// related. Id should be setted before called this function. \param t Tag
+  /// what we want to make relation with question. \return True if rolation can
+  /// be created. Throwing invalid_argument if pointer to tag is empty.
+  ///
   bool is_relation_valid(Tag *t);
 
 public:
