@@ -38,7 +38,7 @@ bool Question::is_tag_already_related(Tag *t) {
   }
 
   for (Tag *tag : this->_tags) {
-    if (tag->get_id() == t->get_id()) {
+    if (tag->getId() == t->getId()) {
       return true;
     }
   }
@@ -189,7 +189,7 @@ bool Question::is_relation_valid(Tag *t) {
     throw std::invalid_argument("Question::is_relation_valid - tag is empty");
   }
 
-  if (t->get_id() <= 0)
+  if (t->getId() <= 0)
     return false;
   if (this->_id <= 0)
     return false;
@@ -223,7 +223,7 @@ bool Question::isRelationCreated(Tag *t) {
                 ", " + COLUMN_TAG_ID + ")" + VALUES +
                 "(:" + COLUMN_QUESTION_ID + ", :" + COLUMN_TAG_ID + ")");
   query.bindValue(":" + COLUMN_QUESTION_ID, this->_id);
-  query.bindValue(":" + COLUMN_TAG_ID, t->get_id());
+  query.bindValue(":" + COLUMN_TAG_ID, t->getId());
   if (!query.exec()) {
     throw std::invalid_argument(
         "Question::isRelationCreated - the query failed.");
@@ -258,7 +258,7 @@ bool Question::isRemovedRelation(Tag *t) {
                 "=:" + COLUMN_QUESTION_ID + " " + AND + TABLE_QUESTIONS_TAGS +
                 "." + COLUMN_TAG_ID + "=:" + COLUMN_TAG_ID);
   query.bindValue(":" + COLUMN_QUESTION_ID, this->_id);
-  query.bindValue(":" + COLUMN_TAG_ID, t->get_id());
+  query.bindValue(":" + COLUMN_TAG_ID, t->getId());
 
   if (!query.exec()) {
     throw std::invalid_argument(

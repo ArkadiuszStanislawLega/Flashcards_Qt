@@ -48,7 +48,7 @@ void RelationView::initialQuestionTagsListView() {
 
   this->ui->lv_question_tags->setModel(gm_model);
   for (Tag *tag : this->_selected_question->get_tags()) {
-    tags.append(tag->get_tag());
+    tags.append(tag->getTag());
   }
   gm_model->setStringList(tags);
 }

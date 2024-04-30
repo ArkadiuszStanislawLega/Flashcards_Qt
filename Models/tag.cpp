@@ -10,25 +10,36 @@ Tag::Tag(int id, QString tag, QObject *parent) : QObject(parent) {
   this->_tag = tag;
 }
 
-int Tag::get_id() { return this->_id; }
-QString Tag::get_tag() { return this->_tag; }
-void Tag::set_id(int id) { this->_id = id; }
-void Tag::set_tag(QString tag) { this->_tag = tag; }
+int Tag::getId() { return this->_id; }
+QString Tag::getTag() { return this->_tag; }
+void Tag::setId(int id) { this->_id = id; }
+void Tag::setTag(QString tag) { this->_tag = tag; }
 
-bool Tag::is_question_already_related(Question *q) {
+///
+/// \brief Tag::isQuestionAlreadyRelated Check in database that tag is related
+/// with quesiton. \param q Question with whom can be related. \return true if
+/// question is relatied with tag. Can throw invalid argument.
+///
+bool Tag::isQuestionAlreadyRelated(Question *q) {
   if (!q) {
     throw std::invalid_argument(
-        "Tag::is_question_already_related -- Questin is empy");
+        "Tag::isQuestionAlreadyRelated -- Question is empy");
   }
 
   for (Tag *t : q->get_tags()) {
-    if (t->get_id() == this->_id) {
+    if (t->getId() == this->_id) {
       return true;
     }
   }
   return false;
 }
 
+///
+/// \brief Tag::convertFromQSqlQuery Convert QSqlQuery to instance of tag.
+/// \param query Query to database with selected tag.
+/// \return Instance of tag with properties from databese. Can throw invalid
+/// argument.
+///
 Tag *Tag::convertFromQSqlQuery(QSqlQuery *query) {
   if (!query) {
     throw std::invalid_argument(
@@ -44,13 +55,27 @@ Tag *Tag::convertFromQSqlQuery(QSqlQuery *query) {
                  query->value(tagColumn).toString());
 }
 
+///
+/// \brief Tag::isRelationCreated Create relation between tag and question in
+/// database. Id should be settled before called. \param q Question with whom
+/// relation can be created. \return True if relation successfuly created in
+/// databese. Can throw invalid argument if:
+/// - question is nullptr,
+/// - question id is zero or subzero;
+/// - tag is zero or subzero.
+///
 bool Tag::isRelationCreated(Question *q) {
   if (!q) {
-    throw std::invalid_argument("Tag::isRlationCreated -- Questin is empy");
+    throw std::invalid_argument("Tag::isRlationCreated -- Question is empy");
+  }
+
+  if (q->get_id() <= 0) {
+    throw std::invalid_argument(
+        "Tag::isRelationCreated -- Question->getId is 0");
   }
 
   if (this->_id <= 0) {
-    return false;
+    throw std::invalid_argument("Tag::isRelationCreated -- property id is 0.");
   }
 
   QSqlQuery query;
@@ -60,12 +85,30 @@ bool Tag::isRelationCreated(Question *q) {
   query.bindValue(":" + COLUMN_QUESTION_ID, q->get_id());
   query.bindValue(":" + COLUMN_TAG_ID, this->_id);
 
-  return isQueryExecuted(&query);
+  try {
+    return isQueryExecuted(&query);
+  } catch (std::invalid_argument &e) {
+    qWarning() << "Tag::isRelationCreated" << e.what();
+    return false;
+  }
 }
 
+///
+/// \brief Tag::isRemovedRelation Removind relation between question and tag in
+/// database. Id should be settled before called. \param q Quesiton with whom
+/// relation should be removed. \return True if relation removing from databose
+/// was successfuly finished. Can throw invalid arguments if:
+/// - question is nullptr,
+/// - queistoin->id is zero or subzero,
+/// - tag->id is zero or subzero.
+///
 bool Tag::isRemovedRelation(Question *q) {
   if (!q) {
     throw std::invalid_argument("Tag::isRemovedRelation -- Questin is empy");
+  }
+  if (q->get_id() <= 0) {
+    throw std::invalid_argument(
+        "Tag::isRemovedRelation -- Question->getId is 0.");
   }
 
   if (this->_id <= 0) {
@@ -81,9 +124,19 @@ bool Tag::isRemovedRelation(Question *q) {
   query.bindValue(":" + COLUMN_QUESTION_ID, q->get_id());
   query.bindValue(":" + COLUMN_TAG_ID, this->_id);
 
-  return isQueryExecuted(&query);
+  try {
+    return isQueryExecuted(&query);
+  } catch (std::invalid_argument &e) {
+    qWarning() << "Tag::isRemovedRelation " << e.what();
+    return false;
+  }
 }
 
+///
+/// \brief Tag::isQueryExecuted Executing query, if can't execute throw
+/// invalid_argument. \param query Query to execute. \return True if query was
+/// successfuly executed.
+///
 bool Tag::isQueryExecuted(QSqlQuery *query) {
   if (!query) {
     throw std::invalid_argument("Tag::isQueryExecuted -- Query is empy.");
@@ -114,13 +167,21 @@ QList<Question *> Tag::getAllRelated() {
 
   query.bindValue(":" + COLUMN_ID, this->_id);
 
-  if (!isQueryExecuted(&query)) {
+  try {
+    isQueryExecuted(&query);
+  } catch (std::invalid_argument &e) {
+    qWarning() << "Tag::getAllRelated " << e.what();
     return {};
   }
 
   return createQuestionListFromQuery(&query);
 }
 
+///
+/// \brief Tag::getAllActiveRelated Creatind list of active questions related
+/// with tag. \return List of active question relatied with tag. Can throw
+/// invalid argument if property id is zer or below zero.
+///
 QList<Question *> Tag::getAllActiveRelated() {
   if (this->_id <= 0) {
     throw std::invalid_argument("Tag::getAllActiveRelated - id <= 0");
@@ -141,15 +202,29 @@ QList<Question *> Tag::getAllActiveRelated() {
 
   query.bindValue(":" + COLUMN_ID, this->_id);
 
-  if (!isQueryExecuted(&query)) {
+  try {
+    isQueryExecuted(&query);
+  } catch (std::invalid_argument &e) {
+    qWarning() << "Tag::getAllActiveRelated" << e.what();
     return {};
   }
 
   return createQuestionListFromQuery(&query);
 }
 
+///
+/// \brief Tag::createQuestionListFromQuery Create list with questions from
+/// selected query. \param query Query with data from database. \return List
+/// with instances of Questions classes filled with data from database. Can
+/// throw invalid argument if query is nullptr.
+///
 QList<Question *> Tag::createQuestionListFromQuery(QSqlQuery *query) {
   QList<Question *> questions{};
+
+  if (!query) {
+    throw std::invalid_argument(
+        "Tag::createQuestionListFromQuery -- query is nullptr.");
+  }
 
   try {
     while (query->next()) {
@@ -163,6 +238,12 @@ QList<Question *> Tag::createQuestionListFromQuery(QSqlQuery *query) {
   return questions;
 }
 
+///
+/// \brief Tag::isAllRelationRemoved Removind all relation between tag and
+/// queistions. Id should be settled before called. \return True if all relation
+/// was successfuly removed from database. Can throw invalid argumnet if id is
+/// zero or subzero.
+///
 bool Tag::isAllRelationRemoved() {
   if (this->_id <= 0) {
     throw std::invalid_argument("Tag::getAllRelationRemoved - id <= 0");
@@ -173,9 +254,19 @@ bool Tag::isAllRelationRemoved() {
                 "=:" + COLUMN_TAG_ID);
   query.bindValue(":" + COLUMN_TAG_ID, this->_id);
 
-  return isQueryExecuted(&query);
+  try {
+    return isQueryExecuted(&query);
+  } catch (std::invalid_argument &e) {
+    qWarning() << "Tag::isAllRelationRemoved" << e.what();
+    return false;
+  }
 }
 
+///
+/// \brief Tag::isCreate Creating new tag in databse. Tag property should be
+/// settled before called. \return True if tag was successfuly created. Can
+/// throw invalid argument if property tag is empty.
+///
 bool Tag::isCreate() {
   if (this->_tag == "") {
     throw std::invalid_argument("Tag::isCreate -- tag property is empty");
@@ -188,9 +279,19 @@ bool Tag::isCreate() {
 
   query.bindValue(":" + COLUMN_TAG, this->_tag);
 
-  return isQueryExecuted(&query);
+  try {
+    return isQueryExecuted(&query);
+  } catch (std::invalid_argument &e) {
+    qWarning() << "Tag::isCreate" << e.what();
+    return false;
+  }
 }
 
+///
+/// \brief Tag::isRead Reading tag from databes and returning instance of Tag
+/// class. Id should be settled before called. \return Instance of class filled
+/// with data from database, if does not find it, throwing invalid argument.
+///
 Tag *Tag::isRead() {
   if (this->_id <= 0) {
     throw std::invalid_argument("Tag::isRead -- tag property id is 0");
@@ -202,25 +303,33 @@ Tag *Tag::isRead() {
                 "=(:" + COLUMN_ID + ") limit 1");
   query.bindValue(":" + COLUMN_ID, this->_id);
 
-  if (!isQueryExecuted(&query)) {
-    return this;
+  try {
+    if (isQueryExecuted(&query)) {
+      if (!query.next()) {
+        throw std::invalid_argument(
+            "Tag::isRead -- can't find tag in database.");
+      }
+
+      int idColumn, tagColumn;
+
+      idColumn = query.record().indexOf(COLUMN_ID);
+      tagColumn = query.record().indexOf(COLUMN_TAG);
+
+      this->_id = query.value(idColumn).toInt();
+      this->_tag = query.value(tagColumn).toString();
+    }
+  } catch (std::invalid_argument &e) {
+    qWarning() << "Tag::isRead " << e.what();
   }
-
-  if (!query.next()) {
-    return this;
-  }
-
-  int idColumn, tagColumn;
-
-  idColumn = query.record().indexOf(COLUMN_ID);
-  tagColumn = query.record().indexOf(COLUMN_TAG);
-
-  this->_id = query.value(idColumn).toInt();
-  this->_tag = query.value(tagColumn).toString();
 
   return this;
 }
 
+///
+/// \brief Tag::isUpdate Updating tag proporty. Id shuld be settled before
+/// called. \return True if update in databese was successfuly completed.Can
+/// throw invalid argumnt if id is zero of subzero.
+///
 bool Tag::isUpdate() {
   if (this->_id <= 0) {
     throw std::invalid_argument("Tag::isRead -- tag property id is 0");
@@ -233,9 +342,19 @@ bool Tag::isUpdate() {
   query.bindValue(":" + COLUMN_TAG, this->_tag);
   query.bindValue(":" + COLUMN_ID, this->_id);
 
-  return isQueryExecuted(&query);
+  try {
+    return isQueryExecuted(&query);
+  } catch (std::invalid_argument &e) {
+    qWarning() << "Tag::isUpdate" << e.what();
+    return false;
+  }
 }
 
+///
+/// \brief Tag::isRemoved Removind tag from database. Id should be settled
+/// before called. \return True if removind from databse was succesfuly removed.
+/// Can throw invalid argument if id is 0 or subzero.
+///
 bool Tag::isRemoved() {
   if (this->_id <= 0) {
     throw std::invalid_argument("Tag::isRemoved -- tag property id is 0");
@@ -247,9 +366,20 @@ bool Tag::isRemoved() {
 
   query.bindValue(":" + COLUMN_ID, this->_id);
 
-  return isQueryExecuted(&query);
+  try {
+    return isQueryExecuted(&query);
+  } catch (std::invalid_argument &e) {
+    qWarning() << "Tag::isRemoved" << e.what();
+    return false;
+  }
 }
 
+///
+/// \brief Tag::findId Searchng in database for id of tag. Tag property should
+/// be settled before called. \return Id of tag if successfuly find tag. Can
+/// throw invalid argument if tag proprty is empty, and runtime_error if
+/// searching fail.
+///
 int Tag::findId() {
   if (this->_tag == "") {
     throw std::invalid_argument("Tag::findId -- tag property is empty.");
@@ -260,21 +390,28 @@ int Tag::findId() {
                 "=:" + COLUMN_TAG);
   query.bindValue(":" + COLUMN_TAG, this->_tag);
 
-  if (!isQueryExecuted(&query)) {
-    throw std::runtime_error("Tag::findId -- query not executed.");
+  try {
+    if (isQueryExecuted(&query)) {
+      if (!query.next()) {
+        throw std::runtime_error(
+            "Tag::findId -- query does not find any tag in database.");
+      }
+
+      int idColumn;
+      idColumn = query.record().indexOf(COLUMN_ID);
+
+      return query.value(idColumn).toInt();
+    }
+  } catch (std::invalid_argument &e) {
+    qWarning() << "Tag::findId" << e.what();
   }
-
-  if (!query.next()) {
-    throw std::runtime_error(
-        "Tag::findId -- query does not find any tag in database.");
-  }
-
-  int idColumn;
-  idColumn = query.record().indexOf(COLUMN_ID);
-
-  return query.value(idColumn).toInt();
+  return -1;
 }
 
+///
+/// \brief Tag::getAll get all tags from database and throw as list of instances
+/// Tag class. \return List of Tags from database.
+///
 QList<Tag *> Tag::getAll() {
   QList<Tag *> tags;
   QSqlQuery query;

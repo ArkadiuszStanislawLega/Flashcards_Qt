@@ -18,18 +18,20 @@ private:
   int _id;
   QString _tag;
 
-  isQueryExecute(QSqlQuery *query);
+  bool isQueryExecuted(QSqlQuery *query);
+
+  QList<Question *> createQuestionListFromQuery(QSqlQuery *query);
 
 public:
   Tag(QObject *parent = nullptr);
   Tag(int, QString, QObject *parent = nullptr);
 
-  int get_id();
-  QString get_tag();
+  int getId();
+  QString getTag();
 
-  void set_id(int);
-  void set_tag(QString);
-  bool is_question_already_related(Question *);
+  void setId(int);
+  void setTag(QString);
+  bool isQuestionAlreadyRelated(Question *);
   static Tag *convertFromQSqlQuery(QSqlQuery *);
 
   // ManyToMany interface

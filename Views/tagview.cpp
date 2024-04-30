@@ -33,7 +33,7 @@ void TagView::on_b_create_tag_clicked() {
   }
 
   Tag *tag = new Tag(this);
-  tag->set_tag(ui->te_create_tag->toPlainText());
+  tag->setTag(ui->te_create_tag->toPlainText());
 
   if (tag->isCreate()) {
     this->printInfo(TAG_CREATED_CORRECTLY);
@@ -58,7 +58,7 @@ void TagView::on_b_update_tag_clicked() {
     return;
   }
 
-  this->_selected_tag->set_tag(ui->te_create_tag->toPlainText());
+  this->_selected_tag->setTag(ui->te_create_tag->toPlainText());
 
   if (this->_selected_tag->isUpdate()) {
     this->_table_model->select();
