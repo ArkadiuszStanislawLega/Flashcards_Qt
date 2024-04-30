@@ -14,7 +14,13 @@ int Tag::get_id() { return this->_id; }
 QString Tag::get_tag() { return this->_tag; }
 void Tag::set_id(int id) { this->_id = id; }
 void Tag::set_tag(QString tag) { this->_tag = tag; }
+
 bool Tag::is_question_already_related(Question *q) {
+  if (!q) {
+    throw std::invalid_argument(
+        "Tag::is_question_already_related -- Questin is empy");
+  }
+
   for (Tag *t : q->get_tags()) {
     if (t->get_id() == this->_id) {
       return true;
@@ -25,24 +31,22 @@ bool Tag::is_question_already_related(Question *q) {
 
 Tag *Tag::convertFromQSqlQuery(QSqlQuery *query) {
   if (!query) {
-    return nullptr;
+    throw std::invalid_argument(
+        "Tag::is_question_already_related -- Questin is empy");
   }
 
-  Tag *t = new Tag();
   int idColumn, tagColumn;
 
   idColumn = query->record().indexOf(COLUMN_ID);
   tagColumn = query->record().indexOf(COLUMN_TAG);
 
-  t->set_id(query->value(idColumn).toInt());
-  t->set_tag(query->value(tagColumn).toString());
-
-  return t;
+  return new Tag(query->value(idColumn).toInt(),
+                 query->value(tagColumn).toString());
 }
 
 bool Tag::isRelationCreated(Question *q) {
-  if (q == nullptr) {
-    return false;
+  if (!q) {
+    throw std::invalid_argument("Tag::isRlationCreated -- Questin is empy");
   }
 
   if (this->_id <= 0) {
@@ -55,32 +59,46 @@ bool Tag::isRelationCreated(Question *q) {
                 "(:" + COLUMN_QUESTION_ID + ", :" + COLUMN_TAG_ID + ")");
   query.bindValue(":" + COLUMN_QUESTION_ID, q->get_id());
   query.bindValue(":" + COLUMN_TAG_ID, this->_id);
-  return query.exec();
+
+  return isQueryExecuted(&query);
 }
 
 bool Tag::isRemovedRelation(Question *q) {
-  if (q == nullptr) {
-    return false;
+  if (!q) {
+    throw std::invalid_argument("Tag::isRemovedRelation -- Questin is empy");
   }
 
   if (this->_id <= 0) {
-    return false;
+    throw std::invalid_argument("Tag::isRemovedRealation -- property id is 0");
   }
 
   QSqlQuery query;
+
   query.prepare(DELETE + TABLE_QUESTIONS_TAGS + " " + WHERE +
                 TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID +
                 "=:" + COLUMN_QUESTION_ID + " " + AND + TABLE_QUESTIONS_TAGS +
                 "." + COLUMN_TAG_ID + "=:" + COLUMN_TAG_ID);
   query.bindValue(":" + COLUMN_QUESTION_ID, q->get_id());
   query.bindValue(":" + COLUMN_TAG_ID, this->_id);
-  return query.exec();
+
+  return isQueryExecuted(&query);
+}
+
+bool Tag::isQueryExecuted(QSqlQuery *query) {
+  if (!query) {
+    throw std::invalid_argument("Tag::isQueryExecuted -- Query is empy.");
+  }
+
+  if (!query->exec()) {
+    throw std::invalid_argument("Tag::isQueryExecuted -- the query failed.");
+  }
+
+  return true;
 }
 
 QList<Question *> Tag::getAllRelated() {
-  QList<Question *> questions;
   if (this->_id <= 0) {
-    return {};
+    throw std::invalid_argument("Tag::getAllRelated - id <= 0");
   }
 
   QSqlQuery query;
@@ -96,29 +114,18 @@ QList<Question *> Tag::getAllRelated() {
 
   query.bindValue(":" + COLUMN_ID, this->_id);
 
-  if (!query.exec()) {
-    throw std::invalid_argument("Question::getAllRlated - the query failed.");
-  }
-
-  try {
-
-    while (query.next()) {
-      questions.push_back(Question::convertFromQSqlQuery(&query));
-    }
-
-  } catch (std::invalid_argument &e) {
-    qWarning() << "Question::getAllRelated " << e.what();
+  if (!isQueryExecuted(&query)) {
     return {};
   }
 
-  return questions;
+  return createQuestionListFromQuery(&query);
 }
 
 QList<Question *> Tag::getAllActiveRelated() {
-  QList<Question *> questions;
   if (this->_id <= 0) {
-    return questions;
+    throw std::invalid_argument("Tag::getAllActiveRelated - id <= 0");
   }
+
   QSqlQuery query;
   query.prepare(
       SELECT + TABLE_QUESTIONS + "." + COLUMN_ID + ", " + TABLE_QUESTIONS +
@@ -134,38 +141,44 @@ QList<Question *> Tag::getAllActiveRelated() {
 
   query.bindValue(":" + COLUMN_ID, this->_id);
 
-  if (!query.exec()) {
-    return questions;
-  }
-
-  try {
-
-    while (query.next()) {
-      questions.push_back(Question::convertFromQSqlQuery(&query));
-    }
-
-  } catch (std::invalid_argument &e) {
-    qWarning() << "Question::getAllRelated " << e.what();
+  if (!isQueryExecuted(&query)) {
     return {};
   }
+
+  return createQuestionListFromQuery(&query);
+}
+
+QList<Question *> Tag::createQuestionListFromQuery(QSqlQuery *query) {
+  QList<Question *> questions{};
+
+  try {
+    while (query->next()) {
+      questions.push_back(Question::convertFromQSqlQuery(query));
+    }
+  } catch (std::invalid_argument &e) {
+    qWarning() << "Question::createQuestionListFromQuery " << e.what();
+    return {};
+  }
+
   return questions;
 }
 
 bool Tag::isAllRelationRemoved() {
-
   if (this->_id <= 0) {
-    return false;
+    throw std::invalid_argument("Tag::getAllRelationRemoved - id <= 0");
   }
+
   QSqlQuery query;
   query.prepare(DELETE + TABLE_QUESTIONS_TAGS + " " + WHERE + COLUMN_TAG_ID +
                 "=:" + COLUMN_TAG_ID);
   query.bindValue(":" + COLUMN_TAG_ID, this->_id);
-  return query.exec();
+
+  return isQueryExecuted(&query);
 }
 
 bool Tag::isCreate() {
   if (this->_tag == "") {
-    return false;
+    throw std::invalid_argument("Tag::isCreate -- tag property is empty");
   }
 
   QSqlQuery query;
@@ -175,20 +188,21 @@ bool Tag::isCreate() {
 
   query.bindValue(":" + COLUMN_TAG, this->_tag);
 
-  return query.exec();
+  return isQueryExecuted(&query);
 }
 
 Tag *Tag::isRead() {
   if (this->_id <= 0) {
-    return this;
+    throw std::invalid_argument("Tag::isRead -- tag property id is 0");
   }
 
   QSqlQuery query;
+
   query.prepare(SELECT + "* " + FROM + TABLE_TAGS + " " + WHERE + COLUMN_ID +
                 "=(:" + COLUMN_ID + ") limit 1");
   query.bindValue(":" + COLUMN_ID, this->_id);
 
-  if (!query.exec()) {
+  if (!isQueryExecuted(&query)) {
     return this;
   }
 
@@ -209,7 +223,7 @@ Tag *Tag::isRead() {
 
 bool Tag::isUpdate() {
   if (this->_id <= 0) {
-    return false;
+    throw std::invalid_argument("Tag::isRead -- tag property id is 0");
   }
 
   QSqlQuery query;
@@ -218,12 +232,13 @@ bool Tag::isUpdate() {
 
   query.bindValue(":" + COLUMN_TAG, this->_tag);
   query.bindValue(":" + COLUMN_ID, this->_id);
-  return query.exec();
+
+  return isQueryExecuted(&query);
 }
 
 bool Tag::isRemoved() {
   if (this->_id <= 0) {
-    return false;
+    throw std::invalid_argument("Tag::isRemoved -- tag property id is 0");
   }
 
   QSqlQuery query;
@@ -231,12 +246,13 @@ bool Tag::isRemoved() {
                 "=:" + COLUMN_ID);
 
   query.bindValue(":" + COLUMN_ID, this->_id);
-  return query.exec();
+
+  return isQueryExecuted(&query);
 }
 
 int Tag::findId() {
   if (this->_tag == "") {
-    return -1;
+    throw std::invalid_argument("Tag::findId -- tag property is empty.");
   }
 
   QSqlQuery query;
@@ -244,12 +260,13 @@ int Tag::findId() {
                 "=:" + COLUMN_TAG);
   query.bindValue(":" + COLUMN_TAG, this->_tag);
 
-  if (!query.exec()) {
-    return -1;
+  if (!isQueryExecuted(&query)) {
+    throw std::runtime_error("Tag::findId -- query not executed.");
   }
 
   if (!query.next()) {
-    return -1;
+    throw std::runtime_error(
+        "Tag::findId -- query does not find any tag in database.");
   }
 
   int idColumn;
@@ -261,11 +278,12 @@ int Tag::findId() {
 QList<Tag *> Tag::getAll() {
   QList<Tag *> tags;
   QSqlQuery query;
+
   query.prepare(SELECT + "* " + FROM + TABLE_TAGS + " " + ORDER_BY +
                 TABLE_TAGS + "." + COLUMN_TAG);
 
   if (!query.exec()) {
-    return tags;
+    throw std::runtime_error("Tag::getAll -- query not executed.");
   }
 
   while (query.next()) {

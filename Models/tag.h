@@ -18,6 +18,8 @@ private:
   int _id;
   QString _tag;
 
+  isQueryExecute(QSqlQuery *query);
+
 public:
   Tag(QObject *parent = nullptr);
   Tag(int, QString, QObject *parent = nullptr);
