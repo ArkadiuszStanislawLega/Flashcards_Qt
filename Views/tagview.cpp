@@ -27,7 +27,7 @@ void TagView::initialTagsListView() {
 }
 
 void TagView::on_b_create_tag_clicked() {
-  if (ui->te_create_tag->toPlainText() == "") {
+  if (ui->te_create_tag->toPlainText().isEmpty()) {
     this->printInfo(FIELD_TAG_CANT_EMPTY, true);
     return;
   }
@@ -35,59 +35,69 @@ void TagView::on_b_create_tag_clicked() {
   Tag *tag = new Tag(this);
   tag->setTag(ui->te_create_tag->toPlainText());
 
-  if (tag->isCreate()) {
-    this->printInfo(TAG_CREATED_CORRECTLY);
-  } else {
+  try {
+    if (tag->isCreate()) {
+      this->printInfo(TAG_CREATED_CORRECTLY);
+    }
+
+    this->_table_model->select();
+    this->cleanTextEditors();
+    emit added_tag_to_db();
+
+  } catch (std::invalid_argument &e) {
+    qWarning() << "TagView::no_b_create_tag_clicked" << e.what();
     this->printInfo(DATABASE_ERROR, true);
   }
-
-  this->_table_model->select();
-  this->cleanTextEditors();
-
-  emit added_tag_to_db();
 }
 
 void TagView::on_b_update_tag_clicked() {
-  if (this->ui->te_create_tag->toPlainText() == "") {
+  if (this->ui->te_create_tag->toPlainText().isEmpty()) {
     this->printInfo(FIELD_TAG_CANT_EMPTY, true);
     return;
   }
 
-  if (this->_selected_tag == nullptr) {
+  if (!this->_selected_tag) {
     this->printInfo(SELECT_TAG_FIRST, true);
     return;
   }
 
   this->_selected_tag->setTag(ui->te_create_tag->toPlainText());
 
-  if (this->_selected_tag->isUpdate()) {
-    this->_table_model->select();
-    this->printInfo(TAG_UPDATE_SUCCESFULLY);
-  } else {
+  try {
+    if (this->_selected_tag->isUpdate()) {
+      this->_table_model->select();
+      this->printInfo(TAG_UPDATE_SUCCESFULLY);
+    }
+
+    this->cleanTextEditors();
+    emit updated_tag_from_db();
+
+  } catch (std::invalid_argument &e) {
+    qWarning() << "TagView::on_b_update_tag_clicked" << e.what();
     this->printInfo(DATABASE_ERROR, true);
   }
-
-  this->cleanTextEditors();
-  emit updated_tag_from_db();
 }
 
 void TagView::on_b_remove_tag_clicked() {
-  if (this->_selected_tag == nullptr) {
+  if (!this->_selected_tag) {
     this->printInfo(SELECT_TAG_FIRST, true);
     return;
   }
 
-  if (this->_selected_tag->isRemoved()) {
-    this->_table_model->select();
-    this->_selected_tag = nullptr;
-    this->printInfo(TAG_SUCCESFULLY_REMOVED);
-  } else {
+  try {
+    if (this->_selected_tag->isRemoved()) {
+      this->_table_model->select();
+      this->_selected_tag = nullptr;
+      this->printInfo(TAG_SUCCESFULLY_REMOVED);
+    }
+
+    this->cleanTextEditors();
+    emit remove_tag_from_db();
+
+  } catch (std::invalid_argument &e) {
+    qWarning() << "TagView::on_b_remove_tag_clicked" << e.what();
     this->printInfo(DATABASE_ERROR, true);
   }
-
-  this->cleanTextEditors();
-
-  emit remove_tag_from_db();
 }
 
 void TagView::on_lv_created_tags_clicked(const QModelIndex &index) {
