@@ -41,13 +41,14 @@ QuestionView::QuestionView(QWidget *parent)
   this->initialQuestionsListView();
   this->initialTagsComboBoxData();
 }
+
 void QuestionView::on_b_create_question_clicked() {
-  if (ui->te_answer->toPlainText() == "") {
+  if (ui->te_answer->toPlainText().isEmpty()) {
     this->printInfo(FIELD_ANSWER_CANT_EMPTY, true);
     return;
   }
 
-  if (ui->te_value->toPlainText() == "") {
+  if (ui->te_value->toPlainText().isEmpty()) {
     this->printInfo(FIELD_VALUE_CANT_EMPTY, true);
     return;
   }
@@ -69,22 +70,17 @@ Question *QuestionView::addQuestionToDb() {
   q->set_isActive(ui->rb_isActive->isChecked());
 
   try {
-
+    if (q->isCreate()) {
+      q->set_id(q->findId());
+      this->_table_model->select();
+      this->cleanTextEditors();
+      this->printInfo(QUESTION_CREATED_CORRECTLY);
+    }
   } catch (std::invalid_argument &e) {
-    qWarning() << e.what();
-  }
-
-  if (q->isCreate()) {
-    q->set_id(q->findId());
-    this->_table_model->select();
-    this->cleanTextEditors();
-    this->printInfo(QUESTION_CREATED_CORRECTLY);
-    return q;
-
-  } else {
+    qWarning() << "QuestionView::addQuestionToDb" << e.what();
     this->printInfo(DATABASE_ERROR, true);
   }
-  return nullptr;
+  return q;
 }
 
 void QuestionView::createRelationQuestionAndTag(Question *q) {
@@ -95,17 +91,17 @@ void QuestionView::createRelationQuestionAndTag(Question *q) {
 }
 
 void QuestionView::on_b_update_question_clicked() {
-  if (this->_selected_question == nullptr) {
+  if (!this->_selected_question) {
     this->printInfo(INFO_FIRST_SELECT_QUESTION, true);
     return;
   }
 
-  if (ui->te_answer->toPlainText() == "") {
+  if (ui->te_answer->toPlainText().isEmpty()) {
     this->printInfo(FIELD_ANSWER_CANT_EMPTY, true);
     return;
   }
 
-  if (ui->te_value->toPlainText() == "") {
+  if (ui->te_value->toPlainText().isEmpty()) {
     this->printInfo(FIELD_VALUE_CANT_EMPTY, true);
     return;
   }
