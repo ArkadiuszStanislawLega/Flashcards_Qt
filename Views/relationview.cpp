@@ -39,7 +39,7 @@ void RelationView::initialTagsComboBox() {
 }
 
 void RelationView::initialQuestionTagsListView() {
-  if (this->_selected_question == nullptr) {
+  if (!this->_selected_question) {
     return;
   }
 
@@ -117,48 +117,55 @@ void RelationView::on_lv_question_tags_clicked(const QModelIndex &index) {
 }
 
 void RelationView::on_b_create_relation_clicked() {
-  if (this->_selected_tag_to_question_add == nullptr) {
+  if (!this->_selected_tag_to_question_add) {
     this->printInfo(TAG_FROM_COMBO_BOX_SHOULD_BE_SELECTED, true);
     return;
   }
 
-  if (this->_selected_question == nullptr) {
+  if (!this->_selected_question) {
     this->printInfo(SELECT_QUESTION_FIRST);
     return;
   }
-  // TODO: Validate is relation is not EXIST.
 
-  if (this->_selected_tag_to_question_add->isRelationCreated(
-          this->_selected_question)) {
-    this->_questions_table_model->select();
-    this->printInfo(RELATION_QUESTION_WIT_TAG_CREATED);
-  } else {
+  try {
+    if (this->_selected_tag_to_question_add->isRelationCreated(
+            this->_selected_question)) {
+      this->_questions_table_model->select();
+      this->printInfo(RELATION_QUESTION_WIT_TAG_CREATED);
+    }
+
+    emit create_relation();
+
+  } catch (std::invalid_argument &e) {
+    qWarning() << "RelationView::on_b_create_relation_clicked" << e.what();
     this->printInfo(DATABASE_ERROR, true);
   }
-
-  emit create_relation();
 }
 
 void RelationView::on_b_remove_relation_clicked() {
-  if (this->_tag_from_selected_question == nullptr) {
+  if (!this->_tag_from_selected_question) {
     this->printInfo(SELECT_TAG_FROM_QUESTION, true);
     return;
   }
 
-  if (this->_selected_question == nullptr) {
+  if (!this->_selected_question) {
     this->printInfo(SELECT_QUESTION_FIRST, true);
     return;
   }
 
-  if (this->_tag_from_selected_question->isRemovedRelation(
-          this->_selected_question)) {
-    this->_questions_table_model->select();
-    this->printInfo(REMOVED_RELATION_QUESTION_AND_TAG_SUCCESFULLY);
-  } else {
+  try {
+    if (this->_tag_from_selected_question->isRemovedRelation(
+            this->_selected_question)) {
+      this->_questions_table_model->select();
+      this->printInfo(REMOVED_RELATION_QUESTION_AND_TAG_SUCCESFULLY);
+    }
+
+    emit remove_relation();
+
+  } catch (std::invalid_argument &e) {
+    qWarning() << "RelationView::on_b_remove_relation_clicked" << e.what();
     printInfo(DATABASE_ERROR, true);
   }
-
-  emit remove_relation();
 }
 
 void RelationView::added_question_to_db() { this->initialQuestionsListView(); }
