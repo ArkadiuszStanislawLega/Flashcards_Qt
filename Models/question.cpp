@@ -24,15 +24,15 @@ Question::Question(int id, QString value, QString answer, bool isActive,
   this->_isActive = isActive;
 }
 
-void Question::set_id(int value) { this->_id = value; }
+void Question::setId(int value) { this->_id = value; }
 QList<Tag *> Question::get_tags() const { return this->_tags; }
 QString Question::get_value() const { return this->_value; }
 QString Question::get_answer() const { return this->_answer; }
 int Question::get_id() { return this->_id; }
-void Question::set_answer(QString value) { this->_answer = value; }
-void Question::set_value(QString value) { this->_value = value; }
+void Question::setAnswer(QString value) { this->_answer = value; }
+void Question::setValue(QString value) { this->_value = value; }
 bool Question::get_isActive() const { return this->_isActive; }
-void Question::set_isActive(bool value) { _isActive = value; }
+void Question::setIsActive(bool value) { _isActive = value; }
 
 bool Question::is_tag_already_related(Tag *t) {
   if (!t) {
@@ -107,10 +107,10 @@ Question *Question::isRead() {
   idValue = query.record().indexOf(COLUMN_VALUE);
   idAnswer = query.record().indexOf(COLUMN_ANSWER);
 
-  this->set_id(query.value(id).toInt());
-  this->set_answer(query.value(idAnswer).toString());
-  this->set_value(query.value(idValue).toString());
-  this->set_isActive(query.value(idIsActive).toBool());
+  this->setId(query.value(id).toInt());
+  this->setAnswer(query.value(idAnswer).toString());
+  this->setValue(query.value(idValue).toString());
+  this->setIsActive(query.value(idIsActive).toBool());
 
   return this;
 }
@@ -368,10 +368,10 @@ Question *Question::convertFromQSqlQuery(QSqlQuery *query) {
   columnValue = query->record().indexOf(COLUMN_VALUE);
   columnAnswer = query->record().indexOf(COLUMN_ANSWER);
 
-  q->set_id(query->value(columnId).toInt());
-  q->set_isActive(query->value(columnIsActive).toBool());
-  q->set_answer(query->value(columnAnswer).toString());
-  q->set_value(query->value(columnValue).toString());
+  q->setId(query->value(columnId).toInt());
+  q->setIsActive(query->value(columnIsActive).toBool());
+  q->setAnswer(query->value(columnAnswer).toString());
+  q->setValue(query->value(columnValue).toString());
   return q;
 }
 ///

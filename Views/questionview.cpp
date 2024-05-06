@@ -65,13 +65,13 @@ void QuestionView::on_b_create_question_clicked() {
 ///
 Question *QuestionView::addQuestionToDb() {
   Question *q = new Question(this);
-  q->set_answer(ui->te_answer->toPlainText());
-  q->set_value(ui->te_value->toPlainText());
-  q->set_isActive(ui->rb_isActive->isChecked());
+  q->setAnswer(ui->te_answer->toPlainText());
+  q->setValue(ui->te_value->toPlainText());
+  q->setIsActive(ui->rb_isActive->isChecked());
 
   try {
     if (q->isCreate()) {
-      q->set_id(q->findId());
+      q->setId(q->findId());
       this->_table_model->select();
       this->cleanTextEditors();
       this->printInfo(QUESTION_CREATED_CORRECTLY);
@@ -106,9 +106,9 @@ void QuestionView::on_b_update_question_clicked() {
     return;
   }
 
-  this->_selected_question->set_answer(this->ui->te_answer->toPlainText());
-  this->_selected_question->set_value(this->ui->te_value->toPlainText());
-  this->_selected_question->set_isActive(this->ui->rb_isActive->isChecked());
+  this->_selected_question->setAnswer(this->ui->te_answer->toPlainText());
+  this->_selected_question->setValue(this->ui->te_value->toPlainText());
+  this->_selected_question->setIsActive(this->ui->rb_isActive->isChecked());
 
   if (this->_selected_question->isUpdate()) {
     this->_table_model->select();

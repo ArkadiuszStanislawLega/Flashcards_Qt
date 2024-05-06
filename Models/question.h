@@ -43,11 +43,11 @@ public:
   bool is_tag_already_related(Tag *);
   bool get_isActive() const;
 
-  void set_id(int);
-  void set_value(QString);
-  void set_answer(QString);
+  void setId(int);
+  void setValue(QString);
+  void setAnswer(QString);
   void set_tags(QList<Tag *>);
-  void set_isActive(bool);
+  void setIsActive(bool);
 
   QString to_string();
   bool isCreate();

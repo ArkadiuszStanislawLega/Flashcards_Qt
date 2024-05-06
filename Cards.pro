@@ -11,6 +11,7 @@ CONFIG += c++17
 
 SOURCES += \
     Database/dbmanager.cpp \
+    Database/questionmodelsql.cpp \
     Database/selectsql.cpp \
     Database/wheresql.cpp \
     Models/question.cpp \
@@ -28,6 +29,7 @@ HEADERS += \
     Database/crud.h \
     Database/dbmanager.h \
     Database/manytomany.h \
+    Database/questionmodelsql.h \
     Database/selectsql.h \
     Database/wheresql.h \
     Models/question.h \
