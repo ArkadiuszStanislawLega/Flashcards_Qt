@@ -1,9 +1,19 @@
+
 #include "questionmodelsql.h"
+
+QuestionModelSql::QuestionModelSql(Question *model, QObject *parent)
+    : QObject{parent} {
+  this->_model = model;
+}
 
 template <typename T>
 T QuestionModelSql::getQualityFromQuery(QSqlQuery *query, QString columnName) {
   if (!query) {
     throw std::invalid_argument("Query is empty.");
+  }
+
+  if (columnName.isEmpty()) {
+    throw std::invalid_argument("Colmun name is empty.");
   }
 
   int columnIndex = query->record().indexOf(columnName);
@@ -25,30 +35,27 @@ QString QuestionModelSql::getQStringFromQuery(QSqlQuery *query,
   if (!query) {
     throw std::invalid_argument("Query is empty.");
   }
+
+  if (columnName.isEmpty()) {
+    throw std::invalid_argument("Column name is emtpy.");
+  }
+
   int columnIndex = query->record().indexOf(columnName);
   return query->value(columnIndex).toString();
 }
 
-QuestionModelSql::QuestionModelSql(Question *model, QObject *parent)
-    : QObject{parent} {
-  this->_model = model;
-}
-
-Question *QuestionModelSql::selectQuesiton(int id) {
+Question *QuestionModelSql::selectQuestion(int id) {
   if (id <= 0) {
-    throw std::invalid_argument("QuestionModelSql::selectQuestion - id = 0");
+    throw std::invalid_argument(
+        "QuestionModelSql::selectQuestion - property id is zero or subzero.");
   }
 
+  QString criteria = COLUMN_ID + " = (:" + COLUMN_ID + ") LIMIT 1";
+  SelectWithCriteriaSql *selectSql =
+      new SelectWithCriteriaSql(TABLE_QUESTIONS, {}, criteria, this);
+
   QSqlQuery query;
-
-  SelectSql *selectSql = new SelectSql(TABLE_QUESTIONS, {}, this);
-  WhereSql *whereSql =
-      new WhereSql(COLUMN_ID + " = (:" + COLUMN_ID + ") LIMIT 1");
-
-  QString select = selectSql->generate();
-  QString where = whereSql->generate();
-
-  query.prepare(select + where);
+  query.prepare(selectSql->generate());
   query.bindValue(":" + COLUMN_ID, id);
 
   if (!query.exec()) {

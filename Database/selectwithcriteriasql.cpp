@@ -1,7 +1,7 @@
 #include "selectwithcriteriasql.h"
 #include "Constants/strings.h"
 
-selectWithCriteriaSql::selectWithCriteriaSql(QString table,
+SelectWithCriteriaSql::SelectWithCriteriaSql(QString table,
                                              QList<QString> columns,
                                              QString criteria, QObject *parent)
     : QObject{parent} {
@@ -10,7 +10,7 @@ selectWithCriteriaSql::selectWithCriteriaSql(QString table,
   this->_criteria = criteria;
 }
 
-QString selectWithCriteriaSql::generate() {
+QString SelectWithCriteriaSql::generate() {
   if (this->_table.isEmpty()) {
     throw std::invalid_argument("Select::generate -- table property is empty.");
   }

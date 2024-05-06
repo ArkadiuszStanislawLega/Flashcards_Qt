@@ -1,10 +1,12 @@
 #ifndef QUESTIONMODELSQL_H
 #define QUESTIONMODELSQL_H
 
+#include <QObject>
+
 #include "../Models/question.h"
 #include "selectsql.h"
+#include "selectwithcriteriasql.h"
 #include "wheresql.h"
-#include <QObject>
 
 class QuestionModelSql : public QObject {
 private:
@@ -17,7 +19,7 @@ private:
 
 public:
   explicit QuestionModelSql(Question *model, QObject *parent = nullptr);
-  Question *selectQuesiton(int id);
+  Question *selectQuestion(int id);
 
 signals:
 };
