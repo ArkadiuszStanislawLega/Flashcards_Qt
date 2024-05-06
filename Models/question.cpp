@@ -1,5 +1,8 @@
 #include "question.h"
 
+#include <Database/select.h>
+#include <Database/wheresql.h>
+
 Question::~Question() { qDebug() << "Destruction: " << this; }
 
 Question::Question(QObject *parent) : QObject(parent) {
@@ -82,8 +85,15 @@ Question *Question::isRead() {
   }
 
   QSqlQuery query;
-  query.prepare(SELECT + "* " + FROM + TABLE_QUESTIONS + " " + WHERE +
-                COLUMN_ID + " = (:" + COLUMN_ID + ") limit 1");
+
+  Select *selectSql = new Select(TABLE_QUESTIONS, {}, this);
+  WhereSql *whereSql =
+      new WhereSql(COLUMN_ID + " = (:" + COLUMN_ID + ") LIMIT 1");
+
+  QString select = selectSql->genarte();
+  QString where = whereSql->generate();
+
+  query.prepare(select + where);
   query.bindValue(":" + COLUMN_ID, this->_id);
 
   if (!query.exec()) {
