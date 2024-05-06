@@ -1,6 +1,6 @@
 #include "question.h"
 
-#include <Database/select.h>
+#include <Database/selectsql.h>
 #include <Database/wheresql.h>
 
 Question::~Question() { qDebug() << "Destruction: " << this; }
@@ -86,11 +86,11 @@ Question *Question::isRead() {
 
   QSqlQuery query;
 
-  Select *selectSql = new Select(TABLE_QUESTIONS, {}, this);
+  SelectSql *selectSql = new SelectSql(TABLE_QUESTIONS, {}, this);
   WhereSql *whereSql =
       new WhereSql(COLUMN_ID + " = (:" + COLUMN_ID + ") LIMIT 1");
 
-  QString select = selectSql->genarte();
+  QString select = selectSql->generate();
   QString where = whereSql->generate();
 
   query.prepare(select + where);
