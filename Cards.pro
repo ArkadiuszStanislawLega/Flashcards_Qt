@@ -13,6 +13,7 @@ SOURCES += \
     Database/dbmanager.cpp \
     Database/questionmodelsql.cpp \
     Database/selectsql.cpp \
+    Database/selectwithcriteriasql.cpp \
     Database/wheresql.cpp \
     Models/question.cpp \
     Models/tag.cpp \
@@ -31,6 +32,7 @@ HEADERS += \
     Database/manytomany.h \
     Database/questionmodelsql.h \
     Database/selectsql.h \
+    Database/selectwithcriteriasql.h \
     Database/wheresql.h \
     Models/question.h \
     Models/tag.h \
