@@ -1,47 +1,11 @@
 
 #include "questionmodelsql.h"
 
+#include "../Converters/querytovalueconverter.h"
+
 QuestionModelSql::QuestionModelSql(Question *model, QObject *parent)
     : QObject{parent} {
   this->_model = model;
-}
-
-template <typename T>
-T QuestionModelSql::getQualityFromQuery(QSqlQuery *query, QString columnName) {
-  if (!query) {
-    throw std::invalid_argument("Query is empty.");
-  }
-
-  if (columnName.isEmpty()) {
-    throw std::invalid_argument("Colmun name is empty.");
-  }
-
-  int columnIndex = query->record().indexOf(columnName);
-
-  if (std::is_same_v<T, int>) {
-    return query->value(columnIndex).toInt();
-  }
-
-  if (std::is_same_v<T, bool>) {
-    return query->value(columnIndex).toBool();
-  };
-
-  return -1;
-}
-
-QString QuestionModelSql::getQStringFromQuery(QSqlQuery *query,
-                                              QString columnName) {
-
-  if (!query) {
-    throw std::invalid_argument("Query is empty.");
-  }
-
-  if (columnName.isEmpty()) {
-    throw std::invalid_argument("Column name is emtpy.");
-  }
-
-  int columnIndex = query->record().indexOf(columnName);
-  return query->value(columnIndex).toString();
 }
 
 Question *QuestionModelSql::selectQuestion(int id) {
@@ -63,11 +27,10 @@ Question *QuestionModelSql::selectQuestion(int id) {
         "QuestionSql::selectQuestion - the query failed.");
   }
 
-  this->_model->setId(getQualityFromQuery<int>(&query, COLUMN_ID));
-  this->_model->setAnswer(getQStringFromQuery(&query, COLUMN_ANSWER));
-  this->_model->setValue(getQStringFromQuery(&query, COLUMN_VALUE));
-  this->_model->setIsActive(
-      getQualityFromQuery<bool>(&query, COLUMN_IS_ACTIVE));
+  this->_model->setId(QueryToValueConverter::get<int>(&query, COLUMN_ID));
+  this->_model->setAnswer(QueryToValueConverter::get<QString>(&query, COLUMN_ANSWER));
+  this->_model->setValue(QueryToValueConverter::get<QString>(&query, COLUMN_VALUE));
+  this->_model->setIsActive(QueryToValueConverter::get<bool>(&query, COLUMN_IS_ACTIVE));
 
   return this->_model;
 }

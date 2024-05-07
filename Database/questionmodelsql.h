@@ -3,6 +3,7 @@
 
 #include <QObject>
 
+#include "../Converters/querytovalueconverter.h"
 #include "../Models/question.h"
 #include "selectsql.h"
 #include "selectwithcriteriasql.h"
@@ -13,9 +14,8 @@ private:
   Q_OBJECT
   Question *_model;
 
-  template <typename T>
+  template <class T>
   T getQualityFromQuery(QSqlQuery *query, QString coulmnName);
-  QString getQStringFromQuery(QSqlQuery *query, QString columnName);
 
 public:
   explicit QuestionModelSql(Question *model, QObject *parent = nullptr);
