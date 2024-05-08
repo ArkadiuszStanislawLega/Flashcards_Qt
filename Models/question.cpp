@@ -1,5 +1,6 @@
 #include "question.h"
 
+#include <Database/questionmodelsql.h>
 #include <Database/selectsql.h>
 #include <Database/wheresql.h>
 
@@ -80,39 +81,9 @@ bool Question::isCreate() {
 /// \brief Question::isRead is reading Queistion from database.
 /// \return Quetion from database if id is setted else throw invalid_argument.
 Question *Question::isRead() {
-  if (this->_id <= 0) {
-    throw std::invalid_argument("Question::isRead - id = 0");
-  }
 
-  QSqlQuery query;
-
-  SelectSql *selectSql = new SelectSql(TABLE_QUESTIONS, {}, this);
-  WhereSql *whereSql =
-      new WhereSql(COLUMN_ID + " = (:" + COLUMN_ID + ") LIMIT 1");
-
-  QString select = selectSql->generate();
-  QString where = whereSql->generate();
-
-  query.prepare(select + where);
-  query.bindValue(":" + COLUMN_ID, this->_id);
-
-  if (!query.exec()) {
-    throw std::invalid_argument("Question::isRead - the query failed.");
-  }
-
-  int id, idValue, idAnswer, idIsActive;
-
-  id = query.record().indexOf(COLUMN_ID);
-  idIsActive = query.record().indexOf(COLUMN_IS_ACTIVE);
-  idValue = query.record().indexOf(COLUMN_VALUE);
-  idAnswer = query.record().indexOf(COLUMN_ANSWER);
-
-  this->setId(query.value(id).toInt());
-  this->setAnswer(query.value(idAnswer).toString());
-  this->setValue(query.value(idValue).toString());
-  this->setIsActive(query.value(idIsActive).toBool());
-
-  return this;
+  QuestionModelSql *sql = new QuestionModelSql(this, this);
+  return sql->selectQuestion(this->_id);
 }
 
 ///
