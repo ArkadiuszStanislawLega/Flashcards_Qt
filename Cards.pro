@@ -12,6 +12,7 @@ CONFIG += c++17
 SOURCES += \
     Converters/querytovalueconverter.cpp \
     Database/dbmanager.cpp \
+    Database/findbykeysql.cpp \
     Database/questionmodelsql.cpp \
     Database/selectsql.cpp \
     Database/selectwithcriteriasql.cpp \
@@ -31,6 +32,7 @@ HEADERS += \
     Converters/querytovalueconverter.h \
     Database/crud.h \
     Database/dbmanager.h \
+    Database/findbykeysql.h \
     Database/manytomany.h \
     Database/questionmodelsql.h \
     Database/selectsql.h \
