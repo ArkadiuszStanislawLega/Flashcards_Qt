@@ -13,6 +13,7 @@ SOURCES += \
     Converters/querytovalueconverter.cpp \
     Database/dbmanager.cpp \
     Database/findbykeysql.cpp \
+    Database/insertsql.cpp \
     Database/questionmodelsql.cpp \
     Database/selectsql.cpp \
     Database/selectwithcriteriasql.cpp \
@@ -33,6 +34,7 @@ HEADERS += \
     Database/crud.h \
     Database/dbmanager.h \
     Database/findbykeysql.h \
+    Database/insertsql.h \
     Database/manytomany.h \
     Database/questionmodelsql.h \
     Database/selectsql.h \

@@ -1,5 +1,6 @@
 #include "question.h"
 
+#include <Database/insertsql.h>
 #include <Database/questionmodelsql.h>
 #include <Database/selectsql.h>
 #include <Database/wheresql.h>
@@ -59,18 +60,12 @@ QString Question::to_string() {
 /// \return created question, if fail to execute throwing invalid_argument.
 ///
 bool Question::isCreate() {
-  QSqlQuery query;
+  QString isActive = &""[this->_isActive];
+  InsertSql query = InsertSql(TABLE_QUESTIONS,
+                              {COLUMN_VALUE, COLUMN_ANSWER, COLUMN_IS_ACTIVE},
+                              {this->_value, this->_answer, isActive}, this);
 
-  query.prepare(INSERT + TABLE_QUESTIONS + "(" + COLUMN_VALUE + ", " +
-                COLUMN_ANSWER + ", " + COLUMN_IS_ACTIVE + ")" + VALUES +
-                "(:" + COLUMN_VALUE + ", :" + COLUMN_ANSWER +
-                ", :" + COLUMN_IS_ACTIVE + ")");
-
-  query.bindValue(":" + COLUMN_VALUE, this->_value);
-  query.bindValue(":" + COLUMN_ANSWER, this->_answer);
-  query.bindValue(":" + COLUMN_IS_ACTIVE, this->_isActive);
-
-  if (!query.exec()) {
+  if (!query.generate().exec()) {
     throw std::invalid_argument("Question::isCreate - the query fialed");
   }
 
