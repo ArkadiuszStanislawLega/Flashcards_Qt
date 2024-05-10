@@ -49,7 +49,6 @@ QString InsertSql::prepareQuery() {
 
   sQuery += ")";
 
-  qDebug() << sQuery;
   return sQuery;
 }
 

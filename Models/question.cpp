@@ -109,7 +109,7 @@ bool Question::isUpdate() {
 ///
 bool Question::isRemoved() {
   if (this->_id) {
-    throw std::invalid_argument("Queistion::isRemoved - _id = 0");
+    throw std::invalid_argument("Question::isRemoved - _id = 0");
   }
 
   QSqlQuery query;

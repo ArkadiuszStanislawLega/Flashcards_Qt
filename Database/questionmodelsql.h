@@ -19,7 +19,9 @@ private:
 
 public:
   explicit QuestionModelSql(Question *model, QObject *parent = nullptr);
+  bool isInsertedSql();
   Question *selectQuestion(int id);
+  Question *findByCriteria();
 
 signals:
 };
