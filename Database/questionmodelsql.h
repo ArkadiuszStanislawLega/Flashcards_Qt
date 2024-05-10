@@ -18,6 +18,7 @@ private:
 
   template <class T>
   T getQualityFromQuery(QSqlQuery *query, QString coulmnName);
+  void convertQueryToQuestion(QSqlQuery *query);
 
 public:
   explicit QuestionModelSql(Question *model, QObject *parent = nullptr);

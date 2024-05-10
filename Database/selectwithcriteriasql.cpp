@@ -1,5 +1,4 @@
 #include "selectwithcriteriasql.h"
-#include "Constants/strings.h"
 
 SelectWithCriteriaSql::SelectWithCriteriaSql(QString table,
                                              QList<QString> columns,
@@ -30,7 +29,7 @@ QString SelectWithCriteriaSql::generate() {
     }
   }
 
-  query = FROM + this->_table;
-  query = " " + WHERE + this->_criteria;
+  query += " " + FROM + this->_table;
+  query += " " + WHERE + this->_criteria;
   return query;
 }

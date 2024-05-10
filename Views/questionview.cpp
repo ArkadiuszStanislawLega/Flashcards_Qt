@@ -1,5 +1,7 @@
 #include "questionview.h"
 
+#include <Database/questionmodelsql.h>
+
 void QuestionView::initialQuestionsListView() {
   this->_table_model = new QSqlRelationalTableModel;
   this->_table_model->setTable(TABLE_QUESTIONS);
@@ -69,9 +71,10 @@ Question *QuestionView::addQuestionToDb() {
   q->setValue(ui->te_value->toPlainText());
   q->setIsActive(ui->rb_isActive->isChecked());
 
+  QuestionModelSql sql = QuestionModelSql(q, this);
+
   try {
-    if (q->isCreate()) {
-      q->setId(q->findId());
+    if (sql.isInsertedSql()) {
       this->_table_model->select();
       this->cleanTextEditors();
       this->printInfo(QUESTION_CREATED_CORRECTLY);
@@ -80,6 +83,8 @@ Question *QuestionView::addQuestionToDb() {
     qWarning() << "QuestionView::addQuestionToDb" << e.what();
     this->printInfo(DATABASE_ERROR, true);
   }
+
+  qDebug() << q->getId();
   return q;
 }
 

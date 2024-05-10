@@ -18,7 +18,7 @@ bool QuestionModelSql::isInsertedSql() {
 
   if (!insert.generate().exec()) {
     throw std::invalid_argument(
-        "QuestionModelSql::isInsertSql -- query failed to execute.");
+        "QuestionModelSql::isInsertSql -- the query failed.");
   }
   this->findByCriteria();
   return true;
@@ -58,28 +58,39 @@ Question *QuestionModelSql::findByCriteria() {
     throw std::invalid_argument(
         "QuestionModelSql::selectQuestion -- answer is empty.");
   }
-  QString criteria = COLUMN_VALUE + " = " + this->_model->getValue() + ", " +
-                     COLUMN_ANSWER + " = " + this->_model->getAnswer();
 
-  SelectWithCriteriaSql sql = SelectWithCriteriaSql(
-      TABLE_QUESTIONS, {COLUMN_VALUE, COLUMN_ANSWER}, criteria, this);
+  QString criteria = COLUMN_VALUE + "=:" + COLUMN_VALUE + " " + AND +
+                     COLUMN_ANSWER + "=:" + COLUMN_ANSWER;
+
+  SelectWithCriteriaSql select =
+      SelectWithCriteriaSql(TABLE_QUESTIONS, {}, criteria, this);
 
   QSqlQuery query;
-  query.prepare(sql.generate());
+  query.prepare(select.generate());
+  query.bindValue(":" + COLUMN_VALUE, this->_model->getValue());
+  query.bindValue(":" + COLUMN_ANSWER, this->_model->getAnswer());
 
   if (!query.exec()) {
     throw std::invalid_argument(
-        "QuestionSql::selectQuestion - the query failed.");
+        "QuestionModelSql::findByCriteria - the query failed.");
   }
-  this->_model->setId(QueryToValueConverter::get<int>(&query, COLUMN_ID));
-  this->_model->setAnswer(
-      QueryToValueConverter::get<QString>(&query, COLUMN_ANSWER));
-  this->_model->setValue(
-      QueryToValueConverter::get<QString>(&query, COLUMN_VALUE));
-  this->_model->setIsActive(
-      QueryToValueConverter::get<bool>(&query, COLUMN_IS_ACTIVE));
 
-  qDebug() << this->_model->getId();
+  if (!query.next()) {
+    throw std::invalid_argument(
+        "QuestionModelSql::findByCriteria - can't find question in database.");
+  }
+
+  this->convertQueryToQuestion(&query);
 
   return this->_model;
+}
+
+void QuestionModelSql::convertQueryToQuestion(QSqlQuery *query) {
+  this->_model->setId(QueryToValueConverter::get<int>(query, COLUMN_ID));
+  this->_model->setAnswer(
+      QueryToValueConverter::get<QString>(query, COLUMN_ANSWER));
+  this->_model->setValue(
+      QueryToValueConverter::get<QString>(query, COLUMN_VALUE));
+  this->_model->setIsActive(
+      QueryToValueConverter::get<bool>(query, COLUMN_IS_ACTIVE));
 }
