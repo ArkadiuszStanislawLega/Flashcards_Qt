@@ -5,6 +5,8 @@
 
 #include "../Converters/querytovalueconverter.h"
 #include "../Models/question.h"
+#include "findbykeysql.h"
+#include "insertsql.h"
 #include "selectsql.h"
 #include "selectwithcriteriasql.h"
 #include "wheresql.h"

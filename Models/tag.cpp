@@ -26,7 +26,7 @@ bool Tag::isQuestionAlreadyRelated(Question *q) {
         "Tag::isQuestionAlreadyRelated -- Question is empy");
   }
 
-  for (Tag *t : q->get_tags()) {
+  for (Tag *t : q->getTags()) {
     if (t->getId() == this->_id) {
       return true;
     }
@@ -69,7 +69,7 @@ bool Tag::isRelationCreated(Question *q) {
     throw std::invalid_argument("Tag::isRlationCreated -- Question is empy");
   }
 
-  if (q->get_id() <= 0) {
+  if (q->getId() <= 0) {
     throw std::invalid_argument(
         "Tag::isRelationCreated -- Question->getId is 0");
   }
@@ -82,7 +82,7 @@ bool Tag::isRelationCreated(Question *q) {
   query.prepare(INSERT + TABLE_QUESTIONS_TAGS + "(" + COLUMN_QUESTION_ID +
                 ", " + COLUMN_TAG_ID + ")" + VALUES +
                 "(:" + COLUMN_QUESTION_ID + ", :" + COLUMN_TAG_ID + ")");
-  query.bindValue(":" + COLUMN_QUESTION_ID, q->get_id());
+  query.bindValue(":" + COLUMN_QUESTION_ID, q->getId());
   query.bindValue(":" + COLUMN_TAG_ID, this->_id);
 
   try {
@@ -106,7 +106,7 @@ bool Tag::isRemovedRelation(Question *q) {
   if (!q) {
     throw std::invalid_argument("Tag::isRemovedRelation -- Questin is empy");
   }
-  if (q->get_id() <= 0) {
+  if (q->getId() <= 0) {
     throw std::invalid_argument(
         "Tag::isRemovedRelation -- Question->getId is 0.");
   }
@@ -121,7 +121,7 @@ bool Tag::isRemovedRelation(Question *q) {
                 TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID +
                 "=:" + COLUMN_QUESTION_ID + " " + AND + TABLE_QUESTIONS_TAGS +
                 "." + COLUMN_TAG_ID + "=:" + COLUMN_TAG_ID);
-  query.bindValue(":" + COLUMN_QUESTION_ID, q->get_id());
+  query.bindValue(":" + COLUMN_QUESTION_ID, q->getId());
   query.bindValue(":" + COLUMN_TAG_ID, this->_id);
 
   try {

@@ -36,12 +36,12 @@ public:
            QObject *parent = nullptr);
   ~Question();
 
-  int get_id();
-  QString get_value() const;
-  QString get_answer() const;
-  QList<Tag *> get_tags() const;
+  int getId();
+  QString getValue() const;
+  QString getAnswer() const;
+  QList<Tag *> getTags() const;
   bool is_tag_already_related(Tag *);
-  bool get_isActive() const;
+  bool getIsActive() const;
 
   void setId(int);
   void setValue(QString);

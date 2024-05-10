@@ -27,13 +27,13 @@ Question::Question(int id, QString value, QString answer, bool isActive,
 }
 
 void Question::setId(int value) { this->_id = value; }
-QList<Tag *> Question::get_tags() const { return this->_tags; }
-QString Question::get_value() const { return this->_value; }
-QString Question::get_answer() const { return this->_answer; }
-int Question::get_id() { return this->_id; }
+QList<Tag *> Question::getTags() const { return this->_tags; }
+QString Question::getValue() const { return this->_value; }
+QString Question::getAnswer() const { return this->_answer; }
+int Question::getId() { return this->_id; }
+bool Question::getIsActive() const { return this->_isActive; }
 void Question::setAnswer(QString value) { this->_answer = value; }
 void Question::setValue(QString value) { this->_value = value; }
-bool Question::get_isActive() const { return this->_isActive; }
 void Question::setIsActive(bool value) { _isActive = value; }
 
 bool Question::is_tag_already_related(Tag *t) {

@@ -1,8 +1,5 @@
 #include "questionmodelsql.h"
 
-#include "findbykeysql.h"
-#include "insertsql.h"
-
 QuestionModelSql::QuestionModelSql(Question *model, QObject *parent)
     : QObject{parent} {
   this->_model = model;
@@ -15,8 +12,8 @@ bool QuestionModelSql::isInsertedSql() {
   }
   InsertSql insert = InsertSql(
       TABLE_QUESTIONS, {COLUMN_VALUE, COLUMN_ANSWER, COLUMN_IS_ACTIVE},
-      {this->_model->get_value(), this->_model->get_answer(),
-       this->_model->get_isActive() ? "1" : "0"},
+      {this->_model->getValue(), this->_model->getAnswer(),
+       this->_model->getIsActive() ? "1" : "0"},
       this);
 
   if (!insert.generate().exec()) {
@@ -53,16 +50,16 @@ Question *QuestionModelSql::selectQuestion(int id) {
 }
 
 Question *QuestionModelSql::findByCriteria() {
-  if (this->_model->get_value().isEmpty()) {
+  if (this->_model->getValue().isEmpty()) {
     throw std::invalid_argument(
         "QuestionModelSql::selectQuestion -- value is empty.");
   }
-  if (this->_model->get_answer().isEmpty()) {
+  if (this->_model->getAnswer().isEmpty()) {
     throw std::invalid_argument(
         "QuestionModelSql::selectQuestion -- answer is empty.");
   }
-  QString criteria = COLUMN_VALUE + " = " + this->_model->get_value() + ", " +
-                     COLUMN_ANSWER + " = " + this->_model->get_answer();
+  QString criteria = COLUMN_VALUE + " = " + this->_model->getValue() + ", " +
+                     COLUMN_ANSWER + " = " + this->_model->getAnswer();
 
   SelectWithCriteriaSql sql = SelectWithCriteriaSql(
       TABLE_QUESTIONS, {COLUMN_VALUE, COLUMN_ANSWER}, criteria, this);
@@ -82,7 +79,7 @@ Question *QuestionModelSql::findByCriteria() {
   this->_model->setIsActive(
       QueryToValueConverter::get<bool>(&query, COLUMN_IS_ACTIVE));
 
-  qDebug() << this->_model->get_id();
+  qDebug() << this->_model->getId();
 
   return this->_model;
 }

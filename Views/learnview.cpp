@@ -76,7 +76,7 @@ void LearnView::show_first_card_attribute() {
 void LearnView::set_question() {
   if (this->_randomised_questions.size()) {
     this->ui->l_value->setText(
-        this->_randomised_questions.first()->get_value());
+        this->_randomised_questions.first()->getValue());
   }
 }
 
@@ -84,7 +84,7 @@ void LearnView::set_question() {
 void LearnView::set_answer() {
   if (this->_randomised_questions.size()) {
     this->ui->l_answer->setText(
-        this->_randomised_questions.first()->get_answer());
+        this->_randomised_questions.first()->getAnswer());
   }
 }
 

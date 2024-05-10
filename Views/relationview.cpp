@@ -47,7 +47,7 @@ void RelationView::initialQuestionTagsListView() {
   QList<QString> tags;
 
   this->ui->lv_question_tags->setModel(gm_model);
-  for (Tag *tag : this->_selected_question->get_tags()) {
+  for (Tag *tag : this->_selected_question->getTags()) {
     tags.append(tag->getTag());
   }
   gm_model->setStringList(tags);
@@ -113,7 +113,7 @@ void RelationView::on_lv_questions_clicked(const QModelIndex &index) {
 
 void RelationView::on_lv_question_tags_clicked(const QModelIndex &index) {
   this->_tag_from_selected_question =
-      this->_selected_question->get_tags().at(index.row());
+      this->_selected_question->getTags().at(index.row());
 }
 
 void RelationView::on_b_create_relation_clicked() {
