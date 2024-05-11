@@ -26,6 +26,7 @@ public:
   bool isDeleteSql();
   Question *selectQuestion(int id);
   Question *findByCriteria();
+  Question *updateSql(Question *q);
 
 signals:
 };
