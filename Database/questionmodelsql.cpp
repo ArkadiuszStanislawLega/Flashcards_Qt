@@ -1,5 +1,7 @@
 #include "questionmodelsql.h"
 
+#include "deletesql.h"
+
 QuestionModelSql::QuestionModelSql(Question *model, QObject *parent)
     : QObject{parent} {
   this->_model = model;
@@ -24,6 +26,30 @@ bool QuestionModelSql::isInsertedSql() {
   return true;
 }
 
+bool QuestionModelSql::isDeleteSql() {
+  if (!this->_model) {
+    throw std::invalid_argument(
+        "QuestionModelSql::isDeleteSql -- pointer to question is null.");
+  }
+
+  if (this->_model->getId() <= 0) {
+    throw std::invalid_argument("QuestionModelSql::isDeleteSql -- property id "
+                                "of the model is zero or below zero");
+  }
+
+  DeleteSql queryS = DeleteSql(TABLE_QUESTIONS, {COLUMN_ID}, this);
+
+  QSqlQuery query;
+  query.prepare(queryS.generate());
+  query.bindValue(":" + COLUMN_ID, this->_model->getId());
+
+  if (!query.exec()) {
+    throw std::invalid_argument(
+        "QuestionModelSql::isDeleteSql -- the query failed.");
+  }
+  return true;
+}
+
 Question *QuestionModelSql::selectQuestion(int id) {
   if (id <= 0) {
     throw std::invalid_argument(
@@ -38,13 +64,7 @@ Question *QuestionModelSql::selectQuestion(int id) {
         "QuestionSql::selectQuestion - the query failed.");
   }
 
-  this->_model->setId(QueryToValueConverter::get<int>(&query, COLUMN_ID));
-  this->_model->setAnswer(
-      QueryToValueConverter::get<QString>(&query, COLUMN_ANSWER));
-  this->_model->setValue(
-      QueryToValueConverter::get<QString>(&query, COLUMN_VALUE));
-  this->_model->setIsActive(
-      QueryToValueConverter::get<bool>(&query, COLUMN_IS_ACTIVE));
+  this->convertQueryToQuestion(&query);
 
   return this->_model;
 }

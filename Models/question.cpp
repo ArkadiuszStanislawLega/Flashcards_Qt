@@ -56,32 +56,6 @@ QString Question::to_string() {
 }
 
 ///
-/// \brief Question::isCreate creating query in database.
-/// \return created question, if fail to execute throwing invalid_argument.
-///
-bool Question::isCreate() {
-  QString isActive = &""[this->_isActive];
-  InsertSql query = InsertSql(TABLE_QUESTIONS,
-                              {COLUMN_VALUE, COLUMN_ANSWER, COLUMN_IS_ACTIVE},
-                              {this->_value, this->_answer, isActive}, this);
-
-  if (!query.generate().exec()) {
-    throw std::invalid_argument("Question::isCreate - the query fialed");
-  }
-
-  return true;
-}
-
-///
-/// \brief Question::isRead is reading Queistion from database.
-/// \return Quetion from database if id is setted else throw invalid_argument.
-Question *Question::isRead() {
-
-  QuestionModelSql *sql = new QuestionModelSql(this, this);
-  return sql->selectQuestion(this->_id);
-}
-
-///
 /// \brief Question::isUpdate Updating question in database.
 /// \return True if updated successfull, throw invalid_argument if execution not
 /// possible.
@@ -99,27 +73,6 @@ bool Question::isUpdate() {
   if (!query.exec()) {
     throw std::invalid_argument("Question::isUpdate - the query failed.");
   }
-  return true;
-}
-
-///
-/// \brief Question::isRemoved removing question from databese. Should be setted
-/// id before colled. \return True if successful removed question from database.
-/// Throw invalid argumen if id = 0, or query filed.
-///
-bool Question::isRemoved() {
-  if (this->_id) {
-    throw std::invalid_argument("Question::isRemoved - _id = 0");
-  }
-
-  QSqlQuery query;
-  query.prepare(DELETE + TABLE_QUESTIONS + " " + WHERE + COLUMN_ID +
-                "=:" + COLUMN_ID);
-  query.bindValue(":" + COLUMN_ID, this->_id);
-  if (!query.exec()) {
-    throw std::invalid_argument("Question::isRemoved - the query failed.");
-  }
-
   return true;
 }
 

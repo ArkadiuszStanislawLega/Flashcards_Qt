@@ -132,7 +132,14 @@ void QuestionView::on_b_remove_question_clicked() {
     return;
   }
 
-  if (this->_selected_question->isRemoved()) {
+  if (this->_selected_question->getId() <= 0) {
+    throw std::invalid_argument("QuestionView::on_b_remove_question_clicked -- "
+                                "id property in question is zero or subzero.");
+  }
+
+  QuestionModelSql query = QuestionModelSql(this->_selected_question, this);
+
+  if (query.isDeleteSql()) {
     this->_selected_question = nullptr;
     this->_table_model->select();
     this->cleanTextEditors();

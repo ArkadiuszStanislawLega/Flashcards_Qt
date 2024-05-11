@@ -14,7 +14,7 @@
 
 class Tag;
 
-class Question : public QObject, public Crud<Question>, public ManyToMany<Tag> {
+class Question : public QObject, public ManyToMany<Tag> {
 private:
   Q_OBJECT
   int _id;
@@ -50,10 +50,7 @@ public:
   void setIsActive(bool);
 
   QString to_string();
-  bool isCreate();
-  Question *isRead();
   bool isUpdate();
-  bool isRemoved();
   int findId();
   static Question *convertFromQSqlQuery(QSqlQuery *);
   static QList<Question *> getAll();
