@@ -49,8 +49,6 @@ public:
   void setIsActive(bool);
 
   QString to_string();
-  bool isUpdate();
-  int findId();
   static Question *convertFromQSqlQuery(QSqlQuery *);
   static QList<Question *> getAll();
 

@@ -55,58 +55,6 @@ QString Question::to_string() {
   return QString::number(this->_id) + ". " + this->_value + " " + this->_answer;
 }
 
-///
-/// \brief Question::isUpdate Updating question in database.
-/// \return True if updated successfull, throw invalid_argument if execution not
-/// possible.
-///
-bool Question::isUpdate() {
-  QSqlQuery query;
-  query.prepare(UPDATE + TABLE_QUESTIONS + " " + SET + COLUMN_VALUE + "=:" +
-                COLUMN_VALUE + ", " + COLUMN_ANSWER + "=:" + COLUMN_ANSWER +
-                ", " + COLUMN_IS_ACTIVE + "=:" + COLUMN_IS_ACTIVE + " " +
-                WHERE + COLUMN_ID + "=:" + COLUMN_ID);
-  query.bindValue(":" + COLUMN_VALUE, this->_value);
-  query.bindValue(":" + COLUMN_ANSWER, this->_answer);
-  query.bindValue(":" + COLUMN_IS_ACTIVE, this->_isActive);
-  query.bindValue(":" + COLUMN_ID, this->_id);
-  if (!query.exec()) {
-    throw std::invalid_argument("Question::isUpdate - the query failed.");
-  }
-  return true;
-}
-
-///
-/// \brief Question::findId searching database for question with value and
-/// answer as setted in properties. \return id of question with the same values
-/// as property. Throwing invalid argument if query failed or if can't find
-/// question.
-///
-int Question::findId() {
-  QSqlQuery query;
-  query.prepare(SELECT + "* " + FROM + TABLE_QUESTIONS + " " + WHERE +
-                COLUMN_VALUE + "=:" + COLUMN_VALUE + " " + AND + COLUMN_ANSWER +
-                "=:" + COLUMN_ANSWER + " limit 1");
-  query.bindValue(":" + COLUMN_VALUE, this->_value);
-  query.bindValue(":" + COLUMN_ANSWER, this->_answer);
-
-  if (!query.exec()) {
-    throw std::invalid_argument("Question::findId - the query failed.");
-  }
-
-  if (!query.next()) {
-    throw std::invalid_argument(
-        "Question::findId - can't find question in database.");
-  }
-
-  int idColumn;
-
-  idColumn = query.record().indexOf(COLUMN_ID);
-  this->_id = query.value(idColumn).toInt();
-
-  return this->_id;
-}
-
 /*! Check is question and tag can be related. Id should be setted before called
    this function.
    \param Tag t Tag what we want to make relation with question.
