@@ -1,7 +1,5 @@
 #include "questionmodelsql.h"
 
-#include "deletesql.h"
-
 QuestionModelSql::QuestionModelSql(Question *model, QObject *parent)
     : QObject{parent} {
   this->_model = model;
@@ -109,15 +107,32 @@ Question *QuestionModelSql::findByCriteria() {
   return this->_model;
 }
 
-Question *QuestionModelSql::updateSql(Question *q) {
+bool QuestionModelSql::updateSql(Question *q) {
   if (!q) {
     throw std::invalid_argument(
-        "QuestionModelSql::updateSql -- pointer to question is emtpy.");
+        "QuestionModelSql::updateSql -- question reference is empty.");
   }
 
-  this->_model = q;
+  if (q->getId() <= 0) {
+    throw std::invalid_argument("QuestionModelSql::updateSql -- property id in "
+                                "question is zero or subzero.");
+  }
 
-  return this->_model;
+  UpdateSql sql = UpdateSql(
+      TABLE_QUESTIONS, {COLUMN_VALUE, COLUMN_ANSWER, COLUMN_IS_ACTIVE}, this);
+
+  QSqlQuery query;
+  query.prepare(sql.generate());
+  query.bindValue(":" + COLUMN_VALUE, this->_model->getValue());
+  query.bindValue(":" + COLUMN_ANSWER, this->_model->getAnswer());
+  query.bindValue(":" + COLUMN_IS_ACTIVE, this->_model->getIsActive());
+
+  if (!query.exec()) {
+    throw std::invalid_argument(
+        "QuestionModelSql::updateSql -- query does not execute.");
+  }
+
+  return true;
 }
 
 void QuestionModelSql::convertQueryToQuestion(QSqlQuery *query) {

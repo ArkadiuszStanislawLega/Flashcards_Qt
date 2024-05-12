@@ -5,10 +5,12 @@
 
 #include "../Converters/querytovalueconverter.h"
 #include "../Models/question.h"
+#include "deletesql.h"
 #include "findbykeysql.h"
 #include "insertsql.h"
 #include "selectsql.h"
 #include "selectwithcriteriasql.h"
+#include "updatesql.h"
 #include "wheresql.h"
 
 class QuestionModelSql : public QObject {
@@ -24,9 +26,9 @@ public:
   explicit QuestionModelSql(Question *model, QObject *parent = nullptr);
   bool isInsertedSql();
   bool isDeleteSql();
+  bool updateSql(Question *q);
   Question *selectQuestion(int id);
   Question *findByCriteria();
-  Question *updateSql(Question *q);
 
 signals:
 };
