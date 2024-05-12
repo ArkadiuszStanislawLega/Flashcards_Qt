@@ -210,3 +210,5 @@ void QuestionView::on_le_searching_bar_textChanged(const QString &arg1) {
                                 " LIKE \"%" + arg1 + "%\"");
   this->_table_model->select();
 }
+
+void QuestionView::added_tag_to_db() { this->_cb_tags_model->select(); }

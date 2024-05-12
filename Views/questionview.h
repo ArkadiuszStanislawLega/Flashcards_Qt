@@ -36,6 +36,8 @@ private slots:
   void on_cb_tags_currentIndexChanged(int index);
 
   void on_le_searching_bar_textChanged(const QString &arg1);
+public slots:
+  void added_tag_to_db();
 
 private:
   Q_OBJECT
