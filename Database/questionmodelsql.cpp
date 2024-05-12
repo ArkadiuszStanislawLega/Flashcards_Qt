@@ -13,12 +13,15 @@ bool QuestionModelSql::isInsertedSql() {
         "QuestionModelSql::isInsertedSql -- pointer to question is null.");
   }
   InsertSql insert = InsertSql(
-      TABLE_QUESTIONS, {COLUMN_VALUE, COLUMN_ANSWER, COLUMN_IS_ACTIVE},
-      {this->_model->getValue(), this->_model->getAnswer(),
-       this->_model->getIsActive() ? "1" : "0"},
-      this);
+      TABLE_QUESTIONS, {COLUMN_VALUE, COLUMN_ANSWER, COLUMN_IS_ACTIVE}, this);
 
-  if (!insert.generate().exec()) {
+  QSqlQuery query;
+  query.prepare(insert.generate());
+  query.bindValue(":" + COLUMN_VALUE, this->_model->getValue());
+  query.bindValue(":" + COLUMN_ANSWER, this->_model->getAnswer());
+  query.bindValue(":" + COLUMN_IS_ACTIVE, this->_model->getIsActive());
+
+  if (!query.exec()) {
     throw std::invalid_argument(
         "QuestionModelSql::isInsertSql -- the query failed.");
   }

@@ -8,14 +8,12 @@ class InsertSql : public QObject {
 private:
   Q_OBJECT
   QString _table;
-  QList<QString> _values, _columns;
-
-  QString prepareQuery();
+  QList<QString> _columns;
 
 public:
   explicit InsertSql(QString table, QList<QString> colmuns,
-                     QList<QString> values, QObject *parent = nullptr);
-  QSqlQuery generate();
+                     QObject *parent = nullptr);
+  QString generate();
 
 signals:
 };
