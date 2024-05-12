@@ -7,10 +7,13 @@
 class UpdateSql : public QObject {
 private:
   Q_OBJECT
+  QString _table;
+  QList<QString> _columns;
 
 public:
-  explicit UpdateSql(QObject *parent = nullptr);
-  QSqlQuery generate();
+  explicit UpdateSql(QString table, QList<QString> columns,
+                     QObject *parent = nullptr);
+  QString generate();
 
 signals:
 };
