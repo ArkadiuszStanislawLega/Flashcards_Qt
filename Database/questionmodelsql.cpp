@@ -107,13 +107,13 @@ Question *QuestionModelSql::findByCriteria() {
   return this->_model;
 }
 
-bool QuestionModelSql::updateSql(Question *q) {
-  if (!q) {
+bool QuestionModelSql::updateSql() {
+  if (!this->_model) {
     throw std::invalid_argument(
         "QuestionModelSql::updateSql -- question reference is empty.");
   }
 
-  if (q->getId() <= 0) {
+  if (this->_model->getId() <= 0) {
     throw std::invalid_argument("QuestionModelSql::updateSql -- property id in "
                                 "question is zero or subzero.");
   }
@@ -123,9 +123,11 @@ bool QuestionModelSql::updateSql(Question *q) {
 
   QSqlQuery query;
   query.prepare(sql.generate());
+  query.bindValue(":" + COLUMN_ID, this->_model->getId());
   query.bindValue(":" + COLUMN_VALUE, this->_model->getValue());
   query.bindValue(":" + COLUMN_ANSWER, this->_model->getAnswer());
   query.bindValue(":" + COLUMN_IS_ACTIVE, this->_model->getIsActive());
+  qDebug() << query.lastQuery();
 
   if (!query.exec()) {
     throw std::invalid_argument(

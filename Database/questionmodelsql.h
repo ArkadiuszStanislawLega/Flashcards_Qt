@@ -26,7 +26,7 @@ public:
   explicit QuestionModelSql(Question *model, QObject *parent = nullptr);
   bool isInsertedSql();
   bool isDeleteSql();
-  bool updateSql(Question *q);
+  bool updateSql();
   Question *selectQuestion(int id);
   Question *findByCriteria();
 

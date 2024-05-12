@@ -115,7 +115,9 @@ void QuestionView::on_b_update_question_clicked() {
   this->_selected_question->setValue(this->ui->te_value->toPlainText());
   this->_selected_question->setIsActive(this->ui->rb_isActive->isChecked());
 
-  if (this->_selected_question->isUpdate()) {
+  QuestionModelSql question = QuestionModelSql(this->_selected_question, this);
+
+  if (question.updateSql()) {
     this->_table_model->select();
     this->printInfo(QUESTION_UPDATED);
     this->cleanTextEditors();

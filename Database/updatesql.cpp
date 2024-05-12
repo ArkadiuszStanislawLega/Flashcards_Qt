@@ -17,5 +17,6 @@ QString UpdateSql::generate() {
       query += ", ";
     }
   }
+  query += " " + WHERE + COLUMN_ID + "=:" + COLUMN_ID;
   return query;
 }
