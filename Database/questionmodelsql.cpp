@@ -36,7 +36,6 @@ bool QuestionModelSql::isDeleteSql() {
     throw std::invalid_argument("QuestionModelSql::isDeleteSql -- property id "
                                 "of the model is zero or below zero");
   }
-
   DeleteSql queryS = DeleteSql(TABLE_QUESTIONS, {COLUMN_ID}, this);
 
   QSqlQuery query;
@@ -56,8 +55,10 @@ Question *QuestionModelSql::selectQuestion(int id) {
         "QuestionModelSql::selectQuestion - property id is zero or subzero.");
   }
 
-  FindByKeySql *sql = new FindByKeySql(TABLE_QUESTIONS, id, {}, this);
-  QSqlQuery query = sql->generate();
+  FindByKeySql *sql = new FindByKeySql(TABLE_QUESTIONS, {}, this);
+  QSqlQuery query;
+  query.prepare(sql->generate());
+  query.bindValue(":" + COLUMN_ID, id);
 
   if (!query.exec()) {
     throw std::invalid_argument(
@@ -101,6 +102,17 @@ Question *QuestionModelSql::findByCriteria() {
   }
 
   this->convertQueryToQuestion(&query);
+
+  return this->_model;
+}
+
+Question *QuestionModelSql::updateSql(Question *q) {
+  if (!q) {
+    throw std::invalid_argument(
+        "QuestionModelSql::updateSql -- pointer to question is emtpy.");
+  }
+
+  this->_model = q;
 
   return this->_model;
 }

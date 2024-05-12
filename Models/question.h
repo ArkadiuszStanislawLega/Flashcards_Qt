@@ -8,7 +8,6 @@
 #include <QString>
 
 #include "../Constants/strings.h"
-#include "../Database/crud.h"
 #include "../Database/manytomany.h"
 #include "tag.h"
 

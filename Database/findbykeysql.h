@@ -9,13 +9,12 @@ class FindByKeySql : public QObject {
 private:
   Q_OBJECT
   QString _table;
-  int _id;
   QList<QString> _columns;
 
 public:
-  explicit FindByKeySql(QString table, int id, QList<QString> coulmns,
+  explicit FindByKeySql(QString table, QList<QString> coulmns,
                         QObject *parent = nullptr);
-  QSqlQuery generate();
+  QString generate();
 
 signals:
 };
