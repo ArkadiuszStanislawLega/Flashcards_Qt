@@ -71,20 +71,19 @@ Question *QuestionView::addQuestionToDb() {
   q->setValue(ui->te_value->toPlainText());
   q->setIsActive(ui->rb_isActive->isChecked());
 
-  QuestionModelSql sql = QuestionModelSql(q, this);
+  QuestionModelSql sqlModel = QuestionModelSql(q, this);
 
   try {
-    if (sql.isInsertedSql()) {
+    if (sqlModel.isInsertedSql()) {
       this->_table_model->select();
       this->cleanTextEditors();
       this->printInfo(QUESTION_CREATED_CORRECTLY);
     }
   } catch (std::invalid_argument &e) {
-    qWarning() << "QuestionView::addQuestionToDb" << e.what();
     this->printInfo(DATABASE_ERROR, true);
+    qWarning() << "QuestionView::addQuestionToDb" << e.what();
   }
 
-  qDebug() << q->getId();
   return q;
 }
 
@@ -115,17 +114,19 @@ void QuestionView::on_b_update_question_clicked() {
   this->_selected_question->setValue(this->ui->te_value->toPlainText());
   this->_selected_question->setIsActive(this->ui->rb_isActive->isChecked());
 
-  QuestionModelSql question = QuestionModelSql(this->_selected_question, this);
+  QuestionModelSql sqlModel = QuestionModelSql(this->_selected_question, this);
 
-  if (question.updateSql()) {
-    this->_table_model->select();
-    this->printInfo(QUESTION_UPDATED);
-    this->cleanTextEditors();
-  } else {
+  try {
+    if (sqlModel.updateSql()) {
+      this->_table_model->select();
+      this->printInfo(QUESTION_UPDATED);
+      this->cleanTextEditors();
+    }
+    emit update_question_from_db();
+  } catch (std::invalid_argument &e) {
     this->printInfo(DATABASE_ERROR, true);
+    qWarning() << "QuestionView::on_b_update_question_clicked" << e.what();
   }
-
-  emit update_question_from_db();
 }
 
 void QuestionView::on_b_remove_question_clicked() {
@@ -139,17 +140,20 @@ void QuestionView::on_b_remove_question_clicked() {
                                 "id property in question is zero or subzero.");
   }
 
-  QuestionModelSql query = QuestionModelSql(this->_selected_question, this);
+  QuestionModelSql sqlModel = QuestionModelSql(this->_selected_question, this);
 
-  if (query.isDeleteSql()) {
-    this->_selected_question = nullptr;
-    this->_table_model->select();
-    this->cleanTextEditors();
-    this->printInfo(QUESTION_SUCCESFULLY_REMOVED);
-  } else {
+  try {
+    if (sqlModel.isDeleteSql()) {
+      this->_selected_question = nullptr;
+      this->_table_model->select();
+      this->cleanTextEditors();
+      this->printInfo(QUESTION_SUCCESFULLY_REMOVED);
+    }
+    emit remove_question_from_db();
+  } catch (std::invalid_argument &e) {
     this->printInfo(DATABASE_ERROR, true);
+    qWarning() << "QuestionView::on_b_remove_question_clicked" << e.what();
   }
-  emit remove_question_from_db();
 }
 
 void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index) {
