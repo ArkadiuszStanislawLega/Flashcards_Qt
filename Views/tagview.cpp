@@ -87,8 +87,10 @@ void TagView::on_b_remove_tag_clicked() {
     return;
   }
 
+  TagModelSql query = TagModelSql(this->_selected_tag, this);
+
   try {
-    if (this->_selected_tag->isRemoved()) {
+    if (query.isDeleteSql()) {
       this->_table_model->select();
       this->_selected_tag = nullptr;
       this->printInfo(TAG_SUCCESFULLY_REMOVED);

@@ -42,9 +42,6 @@ public:
   QList<Question *> getAllActiveRelated();
   bool isAllRelationRemoved();
 
-  // Db_crud interface
-  bool isCreate();
-  bool isRemoved();
   int findId();
   static QList<Tag *> getAll();
 };
