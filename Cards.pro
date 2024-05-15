@@ -18,6 +18,7 @@ SOURCES += \
     Database/questionmodelsql.cpp \
     Database/selectsql.cpp \
     Database/selectwithcriteriasql.cpp \
+    Database/tagandquestionrelationsql.cpp \
     Database/tagmodelsql.cpp \
     Database/updatesql.cpp \
     Database/wheresql.cpp \
@@ -43,6 +44,7 @@ HEADERS += \
     Database/questionmodelsql.h \
     Database/selectsql.h \
     Database/selectwithcriteriasql.h \
+    Database/tagandquestionrelationsql.h \
     Database/tagmodelsql.h \
     Database/updatesql.h \
     Database/wheresql.h \
