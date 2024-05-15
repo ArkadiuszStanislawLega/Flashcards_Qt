@@ -34,11 +34,11 @@ void TagView::on_b_create_tag_clicked() {
     return;
   }
 
-  Tag *tag = new Tag(this);
-  tag->setTag(ui->te_create_tag->toPlainText());
+  TagModelSql query =
+      TagModelSql(new Tag(ui->te_create_tag->toPlainText()), this);
 
   try {
-    if (tag->isCreate()) {
+    if (query.isInsertedSql()) {
       this->printInfo(TAG_CREATED_CORRECTLY);
     }
 

@@ -24,6 +24,7 @@ private:
 
 public:
   Tag(QObject *parent = nullptr);
+  Tag(QString, QObject *parent = nullptr);
   Tag(int, QString, QObject *parent = nullptr);
 
   int getId();

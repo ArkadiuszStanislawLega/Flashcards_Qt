@@ -5,6 +5,8 @@ Tag::Tag(QObject *parent) : QObject(parent) {
   this->_tag = "";
 }
 
+Tag::Tag(QString tag, QObject *parent) : Tag(parent) { this->_tag = tag; }
+
 Tag::Tag(int id, QString tag, QObject *parent) : QObject(parent) {
   this->_id = id;
   this->_tag = tag;
