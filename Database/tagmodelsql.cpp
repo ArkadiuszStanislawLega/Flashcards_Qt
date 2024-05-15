@@ -1,10 +1,15 @@
 #include "tagmodelsql.h"
 
 #include "../Converters/querytovalueconverter.h"
+#include "findbykeysql.h"
 #include "insertsql.h"
 #include "selectwithcriteriasql.h"
 
-void tagmodelsql::convertQueryToTag(QSqlQuery *query) {
+TagModelSql::TagModelSql(Tag *model, QObject *parent) : QObject{parent} {
+  this->_model = model;
+}
+
+void TagModelSql::convertQueryToTag(QSqlQuery *query) {
   if (!query) {
     throw std::invalid_argument(
         "TagModelSql::converterQueryToTag -- pointer to query is empty.");
@@ -13,11 +18,7 @@ void tagmodelsql::convertQueryToTag(QSqlQuery *query) {
   this->_model->setTag(QueryToValueConverter::get<QString>(query, COLUMN_TAG));
 }
 
-tagmodelsql::tagmodelsql(Tag *model, QObject *parent) : QObject{parent} {
-  this->_model = model;
-}
-
-bool tagmodelsql::isInsertedSql() {
+bool TagModelSql::isInsertedSql() {
   if (!this->_model) {
     throw std::invalid_argument(
         "TagModelSql::isInsertedSql -- pointer to property model is empty.");
@@ -34,16 +35,31 @@ bool tagmodelsql::isInsertedSql() {
   return true;
 }
 
-bool tagmodelsql::isDeleteSql() { return true; }
+bool TagModelSql::isDeleteSql() { return true; }
 
-bool tagmodelsql::updateSql() { return true; }
+bool TagModelSql::updateSql() { return true; }
 
-Tag *tagmodelsql::selectQuestion(int id) {
-  Tag *t;
-  return t;
+Tag *TagModelSql::selectTag(int id) {
+  if (id <= 0) {
+    throw std::invalid_argument(
+        "TagModel::selectTag -- id is zero or subzero.");
+  }
+
+  FindByKeySql *sql = new FindByKeySql(TABLE_TAGS, {}, this);
+  QSqlQuery query;
+  query.prepare(sql->generate());
+  query.bindValue(":" + COLUMN_ID, id);
+
+  if (!query.exec()) {
+    throw std::invalid_argument("TagMedelSql::selectTag -- the query failed.");
+  }
+
+  this->convertQueryToTag(&query);
+
+  return this->_model;
 }
 
-Tag *tagmodelsql::findByCriteria() {
+Tag *TagModelSql::findByCriteria() {
   if (this->_model->getTag().isEmpty()) {
     throw std::invalid_argument(
         "TagModelSql::findByCriteria -- value is empty.");

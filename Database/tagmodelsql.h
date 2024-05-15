@@ -4,18 +4,18 @@
 #include "../Models/tag.h"
 #include <QObject>
 
-class tagmodelsql : public QObject {
+class TagModelSql : public QObject {
 private:
   Q_OBJECT
   Tag *_model;
   void convertQueryToTag(QSqlQuery *query);
 
 public:
-  explicit tagmodelsql(Tag *model, QObject *parent = nullptr);
+  explicit TagModelSql(Tag *model, QObject *parent = nullptr);
   bool isInsertedSql();
   bool isDeleteSql();
   bool updateSql();
-  Tag *selectQuestion(int id);
+  Tag *selectTag(int id);
   Tag *findByCriteria();
 
 signals:
