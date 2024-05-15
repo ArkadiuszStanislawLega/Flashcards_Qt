@@ -4,6 +4,7 @@
 #include "findbykeysql.h"
 #include "insertsql.h"
 #include "selectwithcriteriasql.h"
+#include "updatesql.h"
 
 TagModelSql::TagModelSql(Tag *model, QObject *parent) : QObject{parent} {
   this->_model = model;
@@ -37,7 +38,31 @@ bool TagModelSql::isInsertedSql() {
 
 bool TagModelSql::isDeleteSql() { return true; }
 
-bool TagModelSql::updateSql() { return true; }
+bool TagModelSql::updateSql() {
+  if (!this->_model) {
+    throw std::invalid_argument(
+        "TagModelSql::updateSql -- tag reference is empty.");
+  }
+
+  if (this->_model->getId() <= 0) {
+    throw std::invalid_argument("TagModelSql::updateSql -- property id in "
+                                "tag is zero or subzero.");
+  }
+
+  UpdateSql sql = UpdateSql(TABLE_TAGS, {COLUMN_TAG}, this);
+
+  QSqlQuery query;
+  query.prepare(sql.generate());
+  query.bindValue(":" + COLUMN_ID, this->_model->getId());
+  query.bindValue(":" + COLUMN_TAG, this->_model->getTag());
+  qDebug() << query.lastQuery();
+
+  if (!query.exec()) {
+    throw std::invalid_argument("TagModelSql::updateSql -- the query failed.");
+  }
+
+  return true;
+}
 
 Tag *TagModelSql::selectTag(int id) {
   if (id <= 0) {
