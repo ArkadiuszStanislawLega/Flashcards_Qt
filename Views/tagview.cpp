@@ -1,5 +1,7 @@
 #include "tagview.h"
 
+#include <Database/tagmodelsql.h>
+
 TagView::TagView(QWidget *parent) : QWidget{parent}, ui(new Ui::TagView) {
   ui->setupUi(this);
   this->_selected_tag = nullptr;
@@ -62,9 +64,10 @@ void TagView::on_b_update_tag_clicked() {
   }
 
   this->_selected_tag->setTag(ui->te_create_tag->toPlainText());
+  TagModelSql query = TagModelSql(this->_selected_tag, this);
 
   try {
-    if (this->_selected_tag->isUpdate()) {
+    if (query.updateSql()) {
       this->_table_model->select();
       this->printInfo(TAG_UPDATE_SUCCESFULLY);
     }

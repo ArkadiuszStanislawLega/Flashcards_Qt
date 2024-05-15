@@ -288,69 +288,6 @@ bool Tag::isCreate() {
 }
 
 ///
-/// \brief Tag::isRead Reading tag from databes and returning instance of Tag
-/// class. Id should be settled before called. \return Instance of class filled
-/// with data from database, if does not find it, throwing invalid argument.
-///
-Tag *Tag::isRead() {
-  if (this->_id <= 0) {
-    throw std::invalid_argument("Tag::isRead -- tag property id is 0");
-  }
-
-  QSqlQuery query;
-
-  query.prepare(SELECT + "* " + FROM + TABLE_TAGS + " " + WHERE + COLUMN_ID +
-                "=(:" + COLUMN_ID + ") limit 1");
-  query.bindValue(":" + COLUMN_ID, this->_id);
-
-  try {
-    if (isQueryExecuted(&query)) {
-      if (!query.next()) {
-        throw std::invalid_argument(
-            "Tag::isRead -- can't find tag in database.");
-      }
-
-      int idColumn, tagColumn;
-
-      idColumn = query.record().indexOf(COLUMN_ID);
-      tagColumn = query.record().indexOf(COLUMN_TAG);
-
-      this->_id = query.value(idColumn).toInt();
-      this->_tag = query.value(tagColumn).toString();
-    }
-  } catch (std::invalid_argument &e) {
-    qWarning() << "Tag::isRead " << e.what();
-  }
-
-  return this;
-}
-
-///
-/// \brief Tag::isUpdate Updating tag proporty. Id shuld be settled before
-/// called. \return True if update in databese was successfuly completed.Can
-/// throw invalid argumnt if id is zero of subzero.
-///
-bool Tag::isUpdate() {
-  if (this->_id <= 0) {
-    throw std::invalid_argument("Tag::isRead -- tag property id is 0");
-  }
-
-  QSqlQuery query;
-  query.prepare(UPDATE + TABLE_TAGS + " " + SET + COLUMN_TAG +
-                "=:" + COLUMN_TAG + " " + WHERE + COLUMN_ID + "=:" + COLUMN_ID);
-
-  query.bindValue(":" + COLUMN_TAG, this->_tag);
-  query.bindValue(":" + COLUMN_ID, this->_id);
-
-  try {
-    return isQueryExecuted(&query);
-  } catch (std::invalid_argument &e) {
-    qWarning() << "Tag::isUpdate" << e.what();
-    return false;
-  }
-}
-
-///
 /// \brief Tag::isRemoved Removind tag from database. Id should be settled
 /// before called. \return True if removind from databse was succesfuly removed.
 /// Can throw invalid argument if id is 0 or subzero.

@@ -12,7 +12,7 @@
 
 class Question;
 
-class Tag : public QObject, public Crud<Tag>, public ManyToMany<Question> {
+class Tag : public QObject, public ManyToMany<Question> {
 private:
   Q_OBJECT
   int _id;
@@ -43,8 +43,6 @@ public:
 
   // Db_crud interface
   bool isCreate();
-  Tag *isRead();
-  bool isUpdate();
   bool isRemoved();
   int findId();
   static QList<Tag *> getAll();
