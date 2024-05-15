@@ -1,6 +1,7 @@
 #include "tagmodelsql.h"
 
 #include "../Converters/querytovalueconverter.h"
+#include "deletesql.h"
 #include "findbykeysql.h"
 #include "insertsql.h"
 #include "selectwithcriteriasql.h"
@@ -36,7 +37,28 @@ bool TagModelSql::isInsertedSql() {
   return true;
 }
 
-bool TagModelSql::isDeleteSql() { return true; }
+bool TagModelSql::isDeleteSql() {
+  if (!this->_model) {
+    throw std::invalid_argument(
+        "TagModelSql::isDeleteSql -- pointer to tag is null.");
+  }
+
+  if (this->_model->getId() <= 0) {
+    throw std::invalid_argument("TagModelSql::isDeleteSql -- property id "
+                                "of the model is zero or below zero");
+  }
+  DeleteSql queryS = DeleteSql(TABLE_TAGS, {COLUMN_ID}, this);
+
+  QSqlQuery query;
+  query.prepare(queryS.generate());
+  query.bindValue(":" + COLUMN_ID, this->_model->getId());
+
+  if (!query.exec()) {
+    throw std::invalid_argument(
+        "TagModelSql::isDeleteSql -- the query failed.");
+  }
+  return true;
+}
 
 bool TagModelSql::updateSql() {
   if (!this->_model) {
