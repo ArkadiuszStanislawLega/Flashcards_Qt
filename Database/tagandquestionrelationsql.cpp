@@ -99,12 +99,11 @@ QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
     if (!isQuestionAndTagValid()) {
       return {};
     }
-    FindByKeySql *sql = new FindByKeySql(
-        TABLE_QUESTIONS_TAGS, {COLUMN_TAG_ID, COLUMN_QUESTION_ID}, this);
+    FindByKeySql *sql =
+        new FindByKeySql(TABLE_QUESTIONS_TAGS, {COLUMN_QUESTION_ID}, this);
 
     QSqlQuery query;
     query.prepare(sql->generate());
-    query.bindValue(":" + COLUMN_TAG_ID, this->_tag->getId());
     query.bindValue(":" + COLUMN_QUESTION_ID, this->_question->getId());
 
     if (!query.exec()) {
@@ -126,6 +125,46 @@ QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
   }
 
   return tags;
+}
+
+QList<Question *> TagAndQuestionRelationSql::getRelatedQuestions() {
+  QList<Question *> questions;
+
+  try {
+    if (!isQuestionAndTagValid()) {
+      return {};
+    }
+    FindByKeySql *sql =
+        new FindByKeySql(TABLE_QUESTIONS_TAGS, {COLUMN_TAG_ID}, this);
+
+    QSqlQuery query;
+    query.prepare(sql->generate());
+    query.bindValue(":" + COLUMN_TAG_ID, this->_tag->getId());
+
+    if (!query.exec()) {
+      throw std::invalid_argument(
+          "TagAndQuestionRelationSql::getRelatedTags -- the query failed.");
+    }
+
+    while (query.next()) {
+      int qIdColumn{}, qValueColumn{}, qAnswerColumn{}, qIsActiveColumn{};
+      qIdColumn = query.record().indexOf(COLUMN_ID);
+      qValueColumn = query.record().indexOf(COLUMN_VALUE);
+      qAnswerColumn = query.record().indexOf(COLUMN_ANSWER);
+      qIsActiveColumn = query.record().indexOf(COLUMN_IS_ACTIVE);
+      questions.push_back(
+          new Question(query.record().value(qIdColumn).toInt(),
+                       query.record().value(qValueColumn).toString(),
+                       query.record().value(qAnswerColumn).toString(),
+                       query.record().value(qIsActiveColumn).toBool(),
+                       getRelatedTags(), this));
+    }
+  } catch (std::invalid_argument &e) {
+    qWarning() << "TagAndQuestionRelationSql::isDeleteSql" << e.what();
+    return {};
+  }
+
+  return questions;
 }
 
 template <typename T> void TagAndQuestionRelationSql::executeQuery(T *sql) {
