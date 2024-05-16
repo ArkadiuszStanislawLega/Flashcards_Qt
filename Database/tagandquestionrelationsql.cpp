@@ -92,6 +92,42 @@ bool TagAndQuestionRelationSql::isSelectedSql() {
   return true;
 }
 
+QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
+  QList<Tag *> tags;
+
+  try {
+    if (!isQuestionAndTagValid()) {
+      return {};
+    }
+    FindByKeySql *sql = new FindByKeySql(
+        TABLE_QUESTIONS_TAGS, {COLUMN_TAG_ID, COLUMN_QUESTION_ID}, this);
+
+    QSqlQuery query;
+    query.prepare(sql->generate());
+    query.bindValue(":" + COLUMN_TAG_ID, this->_tag->getId());
+    query.bindValue(":" + COLUMN_QUESTION_ID, this->_question->getId());
+
+    if (!query.exec()) {
+      throw std::invalid_argument(
+          "TagAndQuestionRelationSql::getRelatedTags -- the query failed.");
+    }
+
+    while (query.next()) {
+      int tIdColumn{}, tTagColumn{};
+      tIdColumn = query.record().indexOf(COLUMN_ID);
+      tTagColumn = query.record().indexOf(COLUMN_TAG);
+      tags.push_back(new Tag(query.record().value(tIdColumn).toInt(),
+                             query.record().value(tTagColumn).toString(),
+                             this));
+    }
+  } catch (std::invalid_argument &e) {
+    qWarning() << "TagAndQuestionRelationSql::isDeleteSql" << e.what();
+    return {};
+  }
+
+  return tags;
+}
+
 template <typename T> void TagAndQuestionRelationSql::executeQuery(T *sql) {
   QSqlQuery query;
   query.prepare(sql->generate());
