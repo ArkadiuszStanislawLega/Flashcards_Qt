@@ -1,6 +1,7 @@
 #include "questionview.h"
 
 #include <Database/questionmodelsql.h>
+#include <Database/tagandquestionrelationsql.h>
 
 void QuestionView::initialQuestionsListView() {
   this->_table_model = new QSqlRelationalTableModel;
@@ -184,8 +185,11 @@ void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index) {
                  .data(Qt::DisplayRole)
                  .toBool();
 
-  this->_selected_question = new Question(id, value, answer, isActive, {});
-  this->_selected_question->getAllRelated();
+  TagAndQuestionRelationSql *relation =
+      new TagAndQuestionRelationSql(nullptr, this->_selected_question, this);
+
+  this->_selected_question =
+      new Question(id, value, answer, isActive, relation->getRelatedTags());
 
   this->ui->te_answer->setText(answer);
   this->ui->te_value->setText(value);

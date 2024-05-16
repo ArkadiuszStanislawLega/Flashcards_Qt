@@ -96,9 +96,18 @@ QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
   QList<Tag *> tags;
 
   try {
-    if (!isQuestionAndTagValid()) {
-      return {};
+    if (!this->_question) {
+      throw std::invalid_argument(
+          "TagAndQuestionRelationSql::getRelatedTags -- poninter to question "
+          "is empty.");
     }
+
+    if (this->_question->getId() <= 0) {
+      throw std::invalid_argument(
+          "TagAndQuestionRelationSql::getRelatedTags -- property id in "
+          "question is zero or subzero.");
+    }
+
     FindByKeySql *sql =
         new FindByKeySql(TABLE_QUESTIONS_TAGS, {COLUMN_QUESTION_ID}, this);
 
@@ -131,9 +140,18 @@ QList<Question *> TagAndQuestionRelationSql::getRelatedQuestions() {
   QList<Question *> questions;
 
   try {
-    if (!isQuestionAndTagValid()) {
-      return {};
+    if (!this->_tag) {
+      throw std::invalid_argument(
+          "TagAndQuestionRelationSql::getRelatedQuestions -- poninter to tag "
+          "is empty.");
     }
+
+    if (this->_tag->getId() <= 0) {
+      throw std::invalid_argument(
+          "TagAndQuestionRelationSql::getRelatedQuestions -- property id in "
+          "tag is zero or subzero.");
+    }
+
     FindByKeySql *sql =
         new FindByKeySql(TABLE_QUESTIONS_TAGS, {COLUMN_TAG_ID}, this);
 
