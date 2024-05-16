@@ -12,13 +12,15 @@ private:
   Q_OBJECT
   Tag *_tag;
   Question *_question;
+  bool isQuestionAndTagValid();
+  template <typename T> void executeQuery(T *);
 
 public:
   explicit TagAndQuestionRelationSql(Tag *, Question *,
                                      QObject *parent = nullptr);
   bool isInsertedSql();
-  bool isDeleted();
-  bool isReaded();
+  bool isDeletedSql();
+  bool isSelectedSql();
 
 signals:
 };
