@@ -42,7 +42,6 @@ public:
   QList<Question *> getAllActiveRelated();
   bool isAllRelationRemoved();
 
-  int findId();
   static QList<Tag *> getAll();
 };
 #endif
