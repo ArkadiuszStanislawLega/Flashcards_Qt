@@ -188,8 +188,13 @@ void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index) {
   TagAndQuestionRelationSql *relation =
       new TagAndQuestionRelationSql(nullptr, this->_selected_question, this);
 
-  this->_selected_question =
-      new Question(id, value, answer, isActive, relation->getRelatedTags());
+  try {
+    this->_selected_question =
+        new Question(id, value, answer, isActive, relation->getRelatedTags());
+  } catch (std::invalid_argument &e) {
+    qWarning() << "QuestionView::on_lv_created_quesions_pressed" << e.what();
+    this->printInfo(DATABASE_ERROR, true);
+  }
 
   this->ui->te_answer->setText(answer);
   this->ui->te_value->setText(value);

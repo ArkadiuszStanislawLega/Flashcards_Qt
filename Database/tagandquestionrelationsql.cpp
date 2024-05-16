@@ -95,42 +95,36 @@ bool TagAndQuestionRelationSql::isSelectedSql() {
 QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
   QList<Tag *> tags;
 
-  try {
-    if (!this->_question) {
-      throw std::invalid_argument(
-          "TagAndQuestionRelationSql::getRelatedTags -- poninter to question "
-          "is empty.");
-    }
+  if (!this->_question) {
+    throw std::invalid_argument(
+        "TagAndQuestionRelationSql::getRelatedTags -- poninter to question "
+        "is empty.");
+  }
 
-    if (this->_question->getId() <= 0) {
-      throw std::invalid_argument(
-          "TagAndQuestionRelationSql::getRelatedTags -- property id in "
-          "question is zero or subzero.");
-    }
+  if (this->_question->getId() <= 0) {
+    throw std::invalid_argument(
+        "TagAndQuestionRelationSql::getRelatedTags -- property id in "
+        "question is zero or subzero.");
+  }
 
-    FindByKeySql *sql =
-        new FindByKeySql(TABLE_QUESTIONS_TAGS, {COLUMN_QUESTION_ID}, this);
+  FindByKeySql *sql =
+      new FindByKeySql(TABLE_QUESTIONS_TAGS, {COLUMN_QUESTION_ID}, this);
 
-    QSqlQuery query;
-    query.prepare(sql->generate());
-    query.bindValue(":" + COLUMN_QUESTION_ID, this->_question->getId());
+  QSqlQuery query;
+  query.prepare(sql->generate());
+  query.bindValue(":" + COLUMN_QUESTION_ID, this->_question->getId());
 
-    if (!query.exec()) {
-      throw std::invalid_argument(
-          "TagAndQuestionRelationSql::getRelatedTags -- the query failed.");
-    }
+  if (!query.exec()) {
+    throw std::invalid_argument(
+        "TagAndQuestionRelationSql::getRelatedTags -- the query failed.");
+  }
 
-    while (query.next()) {
-      int tIdColumn{}, tTagColumn{};
-      tIdColumn = query.record().indexOf(COLUMN_ID);
-      tTagColumn = query.record().indexOf(COLUMN_TAG);
-      tags.push_back(new Tag(query.record().value(tIdColumn).toInt(),
-                             query.record().value(tTagColumn).toString(),
-                             this));
-    }
-  } catch (std::invalid_argument &e) {
-    qWarning() << "TagAndQuestionRelationSql::isDeleteSql" << e.what();
-    return {};
+  while (query.next()) {
+    int tIdColumn{}, tTagColumn{};
+    tIdColumn = query.record().indexOf(COLUMN_ID);
+    tTagColumn = query.record().indexOf(COLUMN_TAG);
+    tags.push_back(new Tag(query.record().value(tIdColumn).toInt(),
+                           query.record().value(tTagColumn).toString(), this));
   }
 
   return tags;
@@ -139,47 +133,42 @@ QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
 QList<Question *> TagAndQuestionRelationSql::getRelatedQuestions() {
   QList<Question *> questions;
 
-  try {
-    if (!this->_tag) {
-      throw std::invalid_argument(
-          "TagAndQuestionRelationSql::getRelatedQuestions -- poninter to tag "
-          "is empty.");
-    }
+  if (!this->_tag) {
+    throw std::invalid_argument(
+        "TagAndQuestionRelationSql::getRelatedQuestions -- poninter to tag "
+        "is empty.");
+  }
 
-    if (this->_tag->getId() <= 0) {
-      throw std::invalid_argument(
-          "TagAndQuestionRelationSql::getRelatedQuestions -- property id in "
-          "tag is zero or subzero.");
-    }
+  if (this->_tag->getId() <= 0) {
+    throw std::invalid_argument(
+        "TagAndQuestionRelationSql::getRelatedQuestions -- property id in "
+        "tag is zero or subzero.");
+  }
 
-    FindByKeySql *sql =
-        new FindByKeySql(TABLE_QUESTIONS_TAGS, {COLUMN_TAG_ID}, this);
+  FindByKeySql *sql =
+      new FindByKeySql(TABLE_QUESTIONS_TAGS, {COLUMN_TAG_ID}, this);
 
-    QSqlQuery query;
-    query.prepare(sql->generate());
-    query.bindValue(":" + COLUMN_TAG_ID, this->_tag->getId());
+  QSqlQuery query;
+  query.prepare(sql->generate());
+  query.bindValue(":" + COLUMN_TAG_ID, this->_tag->getId());
 
-    if (!query.exec()) {
-      throw std::invalid_argument(
-          "TagAndQuestionRelationSql::getRelatedTags -- the query failed.");
-    }
+  if (!query.exec()) {
+    throw std::invalid_argument(
+        "TagAndQuestionRelationSql::getRelatedTags -- the query failed.");
+  }
 
-    while (query.next()) {
-      int qIdColumn{}, qValueColumn{}, qAnswerColumn{}, qIsActiveColumn{};
-      qIdColumn = query.record().indexOf(COLUMN_ID);
-      qValueColumn = query.record().indexOf(COLUMN_VALUE);
-      qAnswerColumn = query.record().indexOf(COLUMN_ANSWER);
-      qIsActiveColumn = query.record().indexOf(COLUMN_IS_ACTIVE);
-      questions.push_back(
-          new Question(query.record().value(qIdColumn).toInt(),
-                       query.record().value(qValueColumn).toString(),
-                       query.record().value(qAnswerColumn).toString(),
-                       query.record().value(qIsActiveColumn).toBool(),
-                       getRelatedTags(), this));
-    }
-  } catch (std::invalid_argument &e) {
-    qWarning() << "TagAndQuestionRelationSql::isDeleteSql" << e.what();
-    return {};
+  while (query.next()) {
+    int qIdColumn{}, qValueColumn{}, qAnswerColumn{}, qIsActiveColumn{};
+    qIdColumn = query.record().indexOf(COLUMN_ID);
+    qValueColumn = query.record().indexOf(COLUMN_VALUE);
+    qAnswerColumn = query.record().indexOf(COLUMN_ANSWER);
+    qIsActiveColumn = query.record().indexOf(COLUMN_IS_ACTIVE);
+    questions.push_back(
+        new Question(query.record().value(qIdColumn).toInt(),
+                     query.record().value(qValueColumn).toString(),
+                     query.record().value(qAnswerColumn).toString(),
+                     query.record().value(qIsActiveColumn).toBool(),
+                     getRelatedTags(), this));
   }
 
   return questions;
