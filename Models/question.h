@@ -13,7 +13,7 @@
 
 class Tag;
 
-class Question : public QObject, public ManyToMany<Tag> {
+class Question : public QObject {
 private:
   Q_OBJECT
   int _id;
@@ -51,10 +51,5 @@ public:
   QString to_string();
   static Question *convertFromQSqlQuery(QSqlQuery *);
   static QList<Question *> getAll();
-
-  bool isRelationCreated(Tag *);
-  bool isRemovedRelation(Tag *);
-  bool isAllRelationRemoved();
-  QList<Tag *> getAllRelated();
 };
 #endif

@@ -1,5 +1,7 @@
 #include "relationview.h"
 
+#include <Database/tagandquestionrelationsql.h>
+
 RelationView::RelationView(QWidget *parent)
     : QWidget{parent}, ui(new Ui::RelationView) {
   this->ui->setupUi(this);
@@ -98,10 +100,15 @@ void RelationView::on_lv_questions_clicked(const QModelIndex &index) {
           .data(Qt::DisplayRole)
           .toBool();
 
-  this->_selected_question = new Question(id, value, answer, is_active, {});
-
   try {
-    this->_selected_question->getAllRelated();
+    this->_selected_question = new Question(id, value, answer, is_active, {});
+
+    TagAndQuestionRelationSql *relation =
+        new TagAndQuestionRelationSql(nullptr, this->_selected_question, this);
+
+    this->_selected_question->setTags(relation->getRelatedTags());
+    this->_selected_question->setParent(this);
+
   } catch (std::invalid_argument &e) {
     qWarning() << "RelationView::on_lv_questions_clicked " << e.what();
     this->_selected_question = {};

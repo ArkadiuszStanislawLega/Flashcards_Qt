@@ -1,5 +1,7 @@
 #include "tag.h"
 
+#include <Converters/fromquerytoquestionconverter.h>
+
 Tag::Tag(QObject *parent) : QObject(parent) {
   this->_id = 0;
   this->_tag = "";
@@ -230,7 +232,8 @@ QList<Question *> Tag::createQuestionListFromQuery(QSqlQuery *query) {
 
   try {
     while (query->next()) {
-      questions.push_back(Question::convertFromQSqlQuery(query));
+      questions.push_back(FromQueryToQuestionConverter::get(query));
+      questions.back()->setParent(this);
     }
   } catch (std::invalid_argument &e) {
     qWarning() << "Question::createQuestionListFromQuery " << e.what();

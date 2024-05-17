@@ -151,6 +151,9 @@ QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
 }
 
 QList<Question *> TagAndQuestionRelationSql::getRelatedQuestions() {
+  throw std::invalid_argument("TagAndQuestionRelationSql::getRelatedQuestions "
+                              "-- NOT IMPLEMENTED YET!!!!");
+
   QList<Question *> questions;
 
   if (!this->_tag) {

@@ -189,7 +189,6 @@ void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index) {
   try {
 
     this->_selected_question = new Question(id, value, answer, isActive, {});
-    this->_selected_question->getAllRelated();
     TagAndQuestionRelationSql *relation =
         new TagAndQuestionRelationSql(nullptr, this->_selected_question, this);
 
