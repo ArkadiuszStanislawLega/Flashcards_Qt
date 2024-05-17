@@ -4,6 +4,16 @@
 #include "findbykeysql.h"
 #include "insertsql.h"
 
+#include <Converters/querytovalueconverter.h>
+
+TagAndQuestionRelationSql::TagAndQuestionRelationSql(Tag *tag,
+                                                     Question *question,
+                                                     QObject *parent)
+    : QObject{parent} {
+  this->_tag = tag;
+  this->_question = question;
+}
+
 bool TagAndQuestionRelationSql::isQuestionAndTagValid() {
   if (!this->_tag) {
     throw std::invalid_argument(
@@ -28,14 +38,6 @@ bool TagAndQuestionRelationSql::isQuestionAndTagValid() {
         "question is zero or subzero.");
   }
   return true;
-}
-
-TagAndQuestionRelationSql::TagAndQuestionRelationSql(Tag *tag,
-                                                     Question *question,
-                                                     QObject *parent)
-    : QObject{parent} {
-  this->_tag = tag;
-  this->_question = question;
 }
 
 bool TagAndQuestionRelationSql::isInsertedSql() {
@@ -120,11 +122,13 @@ QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
   }
 
   while (query.next()) {
-    int tIdColumn{}, tTagColumn{};
-    tIdColumn = query.record().indexOf(COLUMN_ID);
-    tTagColumn = query.record().indexOf(COLUMN_TAG);
-    tags.push_back(new Tag(query.record().value(tIdColumn).toInt(),
-                           query.record().value(tTagColumn).toString(), this));
+    try {
+      tags.push_back(
+          new Tag(QueryToValueConverter::get<int>(&query, COLUMN_ID),
+                  QueryToValueConverter::get<QString>(&query, COLUMN_TAG)));
+    } catch (std::invalid_argument &e) {
+      qWarning() << "TagAndQuestionRelationSql::getRelatedTags -- " << e.what();
+    }
   }
 
   return tags;
@@ -158,17 +162,17 @@ QList<Question *> TagAndQuestionRelationSql::getRelatedQuestions() {
   }
 
   while (query.next()) {
-    int qIdColumn{}, qValueColumn{}, qAnswerColumn{}, qIsActiveColumn{};
-    qIdColumn = query.record().indexOf(COLUMN_ID);
-    qValueColumn = query.record().indexOf(COLUMN_VALUE);
-    qAnswerColumn = query.record().indexOf(COLUMN_ANSWER);
-    qIsActiveColumn = query.record().indexOf(COLUMN_IS_ACTIVE);
-    questions.push_back(
-        new Question(query.record().value(qIdColumn).toInt(),
-                     query.record().value(qValueColumn).toString(),
-                     query.record().value(qAnswerColumn).toString(),
-                     query.record().value(qIsActiveColumn).toBool(),
-                     getRelatedTags(), this));
+    try {
+      questions.push_back(new Question(
+          QueryToValueConverter::get<int>(&query, COLUMN_ID),
+          QueryToValueConverter::get<QString>(&query, COLUMN_VALUE),
+          QueryToValueConverter::get<QString>(&query, COLUMN_ANSWER),
+          QueryToValueConverter::get<bool>(&query, COLUMN_IS_ACTIVE),
+          getRelatedTags(), this));
+    } catch (std::invalid_argument(&e)) {
+      qWarning() << "TagAndQuestionRelationSql::getRelatedQuestions -- "
+                 << e.what();
+    }
   }
 
   return questions;
