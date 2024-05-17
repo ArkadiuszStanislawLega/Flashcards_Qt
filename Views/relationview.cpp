@@ -135,8 +135,9 @@ void RelationView::on_b_create_relation_clicked() {
   }
 
   try {
-    if (this->_selected_tag_to_question_add->isRelationCreated(
-            this->_selected_question)) {
+    TagAndQuestionRelationSql relation = TagAndQuestionRelationSql(
+        this->_selected_tag_to_question_add, this->_selected_question, this);
+    if (relation.isInsertedSql()) {
       this->_questions_table_model->select();
       this->printInfo(RELATION_QUESTION_WIT_TAG_CREATED);
     }
@@ -161,8 +162,10 @@ void RelationView::on_b_remove_relation_clicked() {
   }
 
   try {
-    if (this->_tag_from_selected_question->isRemovedRelation(
-            this->_selected_question)) {
+    TagAndQuestionRelationSql relation = TagAndQuestionRelationSql(
+        this->_tag_from_selected_question, this->_selected_question, this);
+
+    if (relation.isDeletedSql()) {
       this->_questions_table_model->select();
       this->printInfo(REMOVED_RELATION_QUESTION_AND_TAG_SUCCESFULLY);
     }

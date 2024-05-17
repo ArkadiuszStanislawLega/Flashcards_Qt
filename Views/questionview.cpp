@@ -89,8 +89,30 @@ Question *QuestionView::addQuestionToDb() {
 }
 
 void QuestionView::createRelationQuestionAndTag(Question *q) {
+  if (!q) {
+    throw std::invalid_argument("QuestionView::createRelationQuestionAndTag -- "
+                                "pointer to question is empty.");
+  }
+
+  if (!this->_selected_tag) {
+    throw std::invalid_argument("QuestionView::createRelationQuestionAndTag -- "
+                                "pointer to tag is empty.");
+  }
+
+  if (q->getId() <= 0) {
+    throw std::invalid_argument("QuestionView::createRelationQuestionAndTag -- "
+                                "porperty id in quesiton is zero or subzero.");
+  }
+
+  if (this->_selected_tag->getId() <= 0) {
+    throw std::invalid_argument("QuestionView::createRelationQuestionAndTag -- "
+                                "property id in quesiton is zer or subzero");
+  }
+
   if (q && this->_selected_tag) {
-    this->_selected_tag->isRelationCreated(q);
+    TagAndQuestionRelationSql relation =
+        TagAndQuestionRelationSql(this->_selected_tag, q, this);
+    relation.isInsertedSql();
     delete q;
   }
 }

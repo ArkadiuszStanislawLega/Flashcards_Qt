@@ -60,83 +60,6 @@ Tag *Tag::convertFromQSqlQuery(QSqlQuery *query) {
 }
 
 ///
-/// \brief Tag::isRelationCreated Create relation between tag and question in
-/// database. Id should be settled before called. \param q Question with whom
-/// relation can be created. \return True if relation successfuly created in
-/// databese. Can throw invalid argument if:
-/// - question is nullptr,
-/// - question id is zero or subzero;
-/// - tag is zero or subzero.
-///
-bool Tag::isRelationCreated(Question *q) {
-  if (!q) {
-    throw std::invalid_argument("Tag::isRlationCreated -- Question is empy");
-  }
-
-  if (q->getId() <= 0) {
-    throw std::invalid_argument(
-        "Tag::isRelationCreated -- Question->getId is 0");
-  }
-
-  if (this->_id <= 0) {
-    throw std::invalid_argument("Tag::isRelationCreated -- property id is 0.");
-  }
-
-  QSqlQuery query;
-  query.prepare(INSERT + TABLE_QUESTIONS_TAGS + "(" + COLUMN_QUESTION_ID +
-                ", " + COLUMN_TAG_ID + ")" + VALUES +
-                "(:" + COLUMN_QUESTION_ID + ", :" + COLUMN_TAG_ID + ")");
-  query.bindValue(":" + COLUMN_QUESTION_ID, q->getId());
-  query.bindValue(":" + COLUMN_TAG_ID, this->_id);
-
-  try {
-    return isQueryExecuted(&query);
-  } catch (std::invalid_argument &e) {
-    qWarning() << "Tag::isRelationCreated" << e.what();
-    return false;
-  }
-}
-
-///
-/// \brief Tag::isRemovedRelation Removind relation between question and tag in
-/// database. Id should be settled before called. \param q Quesiton with whom
-/// relation should be removed. \return True if relation removing from databose
-/// was successfuly finished. Can throw invalid arguments if:
-/// - question is nullptr,
-/// - queistoin->id is zero or subzero,
-/// - tag->id is zero or subzero.
-///
-bool Tag::isRemovedRelation(Question *q) {
-  if (!q) {
-    throw std::invalid_argument("Tag::isRemovedRelation -- Questin is empy");
-  }
-  if (q->getId() <= 0) {
-    throw std::invalid_argument(
-        "Tag::isRemovedRelation -- Question->getId is 0.");
-  }
-
-  if (this->_id <= 0) {
-    throw std::invalid_argument("Tag::isRemovedRealation -- property id is 0");
-  }
-
-  QSqlQuery query;
-
-  query.prepare(DELETE + TABLE_QUESTIONS_TAGS + " " + WHERE +
-                TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID +
-                "=:" + COLUMN_QUESTION_ID + " " + AND + TABLE_QUESTIONS_TAGS +
-                "." + COLUMN_TAG_ID + "=:" + COLUMN_TAG_ID);
-  query.bindValue(":" + COLUMN_QUESTION_ID, q->getId());
-  query.bindValue(":" + COLUMN_TAG_ID, this->_id);
-
-  try {
-    return isQueryExecuted(&query);
-  } catch (std::invalid_argument &e) {
-    qWarning() << "Tag::isRemovedRelation " << e.what();
-    return false;
-  }
-}
-
-///
 /// \brief Tag::isQueryExecuted Executing query, if can't execute throw
 /// invalid_argument. \param query Query to execute. \return True if query was
 /// successfuly executed.
@@ -151,34 +74,6 @@ bool Tag::isQueryExecuted(QSqlQuery *query) {
   }
 
   return true;
-}
-
-QList<Question *> Tag::getAllRelated() {
-  if (this->_id <= 0) {
-    throw std::invalid_argument("Tag::getAllRelated - id <= 0");
-  }
-
-  QSqlQuery query;
-  query.prepare(SELECT + TABLE_QUESTIONS + "." + COLUMN_ID + ", " +
-                COLUMN_VALUE + ", " + COLUMN_ANSWER + " " + FROM +
-                TABLE_QUESTIONS + " " + INNER_JOIN + TABLE_QUESTIONS_TAGS +
-                " " + ON + TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID +
-                "=" + TABLE_QUESTIONS + "." + COLUMN_ID + " " + INNER_JOIN +
-                TABLE_TAGS + " " + ON + TABLE_TAGS + "." + COLUMN_ID + "=" +
-                TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + " " + WHERE +
-                TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + "=:" + COLUMN_ID +
-                " " + ORDER_BY + TABLE_QUESTIONS + "." + COLUMN_VALUE);
-
-  query.bindValue(":" + COLUMN_ID, this->_id);
-
-  try {
-    isQueryExecuted(&query);
-  } catch (std::invalid_argument &e) {
-    qWarning() << "Tag::getAllRelated " << e.what();
-    return {};
-  }
-
-  return createQuestionListFromQuery(&query);
 }
 
 ///

@@ -23,7 +23,7 @@ QString DeleteSql::generate() {
   for (int i{}; i < this->_columns.size(); i++) {
     query += this->_columns[i] + "=:" + this->_columns[i];
     if (i < this->_columns.size() - 1) {
-      query += AND;
+      query += " " + AND;
     }
   }
   return query;
