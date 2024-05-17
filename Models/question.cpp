@@ -263,4 +263,4 @@ bool Question::isAllRelationRemoved() {
   return true;
 }
 
-void Question::set_tags(QList<Tag *> t) { this->_tags = t; }
+void Question::setTags(QList<Tag *> t) { this->_tags = t; }

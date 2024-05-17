@@ -4,6 +4,7 @@
 #include "findbykeysql.h"
 #include "insertsql.h"
 
+#include <Converters/fromquerytoquestionconverter.h>
 #include <Converters/querytovalueconverter.h>
 
 TagAndQuestionRelationSql::TagAndQuestionRelationSql(Tag *tag,
@@ -162,17 +163,9 @@ QList<Question *> TagAndQuestionRelationSql::getRelatedQuestions() {
   }
 
   while (query.next()) {
-    try {
-      questions.push_back(new Question(
-          QueryToValueConverter::get<int>(&query, COLUMN_ID),
-          QueryToValueConverter::get<QString>(&query, COLUMN_VALUE),
-          QueryToValueConverter::get<QString>(&query, COLUMN_ANSWER),
-          QueryToValueConverter::get<bool>(&query, COLUMN_IS_ACTIVE),
-          getRelatedTags(), this));
-    } catch (std::invalid_argument(&e)) {
-      qWarning() << "TagAndQuestionRelationSql::getRelatedQuestions -- "
-                 << e.what();
-    }
+    questions.push_back(FromQueryToQuestionConverter::get(&query));
+    questions.back()->setTags(getRelatedTags());
+    questions.back()->setParent(this);
   }
 
   return questions;

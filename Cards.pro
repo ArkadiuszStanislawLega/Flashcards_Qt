@@ -10,6 +10,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Converters/fromquerytoquestionconverter.cpp \
     Converters/querytovalueconverter.cpp \
     Database/dbmanager.cpp \
     Database/deletesql.cpp \
@@ -34,6 +35,7 @@ SOURCES += \
 HEADERS += \
     Constants/strings.h \
     Constants/values.h \
+    Converters/fromquerytoquestionconverter.h \
     Converters/querytovalueconverter.h \
     Database/crud.h \
     Database/dbmanager.h \

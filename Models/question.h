@@ -45,7 +45,7 @@ public:
   void setId(int);
   void setValue(QString);
   void setAnswer(QString);
-  void set_tags(QList<Tag *>);
+  void setTags(QList<Tag *>);
   void setIsActive(bool);
 
   QString to_string();
