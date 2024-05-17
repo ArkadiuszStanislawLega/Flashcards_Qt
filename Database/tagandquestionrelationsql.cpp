@@ -99,8 +99,6 @@ bool TagAndQuestionRelationSql::isSelectedSql() {
 }
 
 QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
-  QList<Tag *> tags;
-
   if (!this->_question) {
     throw std::invalid_argument(
         "TagAndQuestionRelationSql::getRelatedTags -- poninter to question "
@@ -112,6 +110,7 @@ QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
         "TagAndQuestionRelationSql::getRelatedTags -- property id in "
         "question is zero or subzero.");
   }
+  QList<Tag *> tags;
 
   QList<QString> requriedFields = {TABLE_TAGS + "." + COLUMN_ID,
                                    TABLE_TAGS + "." + COLUMN_TAG};
@@ -133,8 +132,6 @@ QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
   QSqlQuery query;
   query.prepare(sql->generate());
   query.bindValue(":" + COLUMN_QUESTION_ID, this->_question->getId());
-
-  qDebug() << query.lastQuery();
 
   if (!query.exec()) {
     throw std::invalid_argument(
