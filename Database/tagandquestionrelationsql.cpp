@@ -5,6 +5,7 @@
 #include "insertsql.h"
 
 #include <Converters/fromquerytoquestionconverter.h>
+#include <Converters/fromquerytotagconverter.h>
 #include <Converters/querytovalueconverter.h>
 
 TagAndQuestionRelationSql::TagAndQuestionRelationSql(Tag *tag,
@@ -124,9 +125,8 @@ QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
 
   while (query.next()) {
     try {
-      tags.push_back(
-          new Tag(QueryToValueConverter::get<int>(&query, COLUMN_ID),
-                  QueryToValueConverter::get<QString>(&query, COLUMN_TAG)));
+      tags.push_back(FromQueryToTagConverter::get(&query));
+      tags.back()->setParent(this);
     } catch (std::invalid_argument &e) {
       qWarning() << "TagAndQuestionRelationSql::getRelatedTags -- " << e.what();
     }
@@ -140,7 +140,7 @@ QList<Question *> TagAndQuestionRelationSql::getRelatedQuestions() {
 
   if (!this->_tag) {
     throw std::invalid_argument(
-        "TagAndQuestionRelationSql::getRelatedQuestions -- poninter to tag "
+        "TagAndQuestionRelationSql::getRelatedQuestions -- pointer to tag "
         "is empty.");
   }
 
@@ -163,9 +163,14 @@ QList<Question *> TagAndQuestionRelationSql::getRelatedQuestions() {
   }
 
   while (query.next()) {
-    questions.push_back(FromQueryToQuestionConverter::get(&query));
-    questions.back()->setTags(getRelatedTags());
-    questions.back()->setParent(this);
+    try {
+      questions.push_back(FromQueryToQuestionConverter::get(&query));
+      questions.back()->setTags(getRelatedTags());
+      questions.back()->setParent(this);
+    } catch (std::invalid_argument &e) {
+      qWarning() << "TagAndQuestionRelationSql::getRelatedQuestions -- "
+                 << e.what();
+    }
   }
 
   return questions;
