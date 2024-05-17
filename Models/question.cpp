@@ -170,6 +170,7 @@ QList<Tag *> Question::getAllRelated() {
                 COLUMN_QUESTION_ID + "=:" + COLUMN_QUESTION_ID);
 
   query.bindValue(":" + COLUMN_QUESTION_ID, this->_id);
+  qDebug() << query.lastQuery();
 
   if (!query.exec()) {
     throw std::invalid_argument("Question::getAllRelated - the query failed.");

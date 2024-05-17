@@ -168,6 +168,7 @@ void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index) {
   id_column_index = this->_table_model->record().indexOf(COLUMN_ID);
   value_column_index = this->_table_model->record().indexOf(COLUMN_VALUE);
   answer_column_index = this->_table_model->record().indexOf(COLUMN_ANSWER);
+
   is_active_column_index =
       this->_table_model->record().indexOf(COLUMN_IS_ACTIVE);
 
@@ -185,12 +186,15 @@ void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index) {
                  .data(Qt::DisplayRole)
                  .toBool();
 
-  TagAndQuestionRelationSql *relation =
-      new TagAndQuestionRelationSql(nullptr, this->_selected_question, this);
-
   try {
-    this->_selected_question =
-        new Question(id, value, answer, isActive, relation->getRelatedTags());
+
+    this->_selected_question = new Question(id, value, answer, isActive, {});
+    this->_selected_question->getAllRelated();
+    TagAndQuestionRelationSql *relation =
+        new TagAndQuestionRelationSql(nullptr, this->_selected_question, this);
+
+    this->_selected_question->setTags(relation->getRelatedTags());
+    this->_selected_question->setParent(this);
   } catch (std::invalid_argument &e) {
     qWarning() << "QuestionView::on_lv_created_quesions_pressed" << e.what();
     this->printInfo(DATABASE_ERROR, true);

@@ -3,6 +3,8 @@
 #include "deletesql.h"
 #include "findbykeysql.h"
 #include "insertsql.h"
+#include "selectwithcriteriasql.h"
+#include "selectwithjoinsql.h"
 
 #include <Converters/fromquerytoquestionconverter.h>
 #include <Converters/fromquerytotagconverter.h>
@@ -111,12 +113,28 @@ QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
         "question is zero or subzero.");
   }
 
-  FindByKeySql *sql =
-      new FindByKeySql(TABLE_QUESTIONS_TAGS, {COLUMN_QUESTION_ID}, this);
+  QList<QString> requriedFields = {TABLE_TAGS + "." + COLUMN_ID,
+                                   TABLE_TAGS + "." + COLUMN_TAG};
+
+  QList<std::pair<QString, QString>> connectedTables = {
+      {TABLE_QUESTIONS_TAGS, TABLE_TAGS},
+      {TABLE_QUESTIONS, TABLE_QUESTIONS_TAGS}};
+
+  QList<std::pair<QString, QString>> connectedValues = {
+      {COLUMN_TAG_ID, COLUMN_ID}, {COLUMN_ID, COLUMN_QUESTION_ID}};
+
+  QString criteria = TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID +
+                     "=:" + COLUMN_QUESTION_ID;
+
+  SelectWithJoinSql *sql =
+      new SelectWithJoinSql(TABLE_TAGS, requriedFields, connectedTables,
+                            connectedValues, criteria, this);
 
   QSqlQuery query;
   query.prepare(sql->generate());
   query.bindValue(":" + COLUMN_QUESTION_ID, this->_question->getId());
+
+  qDebug() << query.lastQuery();
 
   if (!query.exec()) {
     throw std::invalid_argument(
