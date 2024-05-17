@@ -8,10 +8,10 @@ Question *FromQueryToQuestionConverter::get(QSqlQuery *query) {
 
   try {
     return new Question(
-        QueryToValueConverter::get<int>(query, COLUMN_ID),
-        QueryToValueConverter::get<QString>(query, COLUMN_ANSWER),
-        QueryToValueConverter::get<QString>(query, COLUMN_VALUE),
-        QueryToValueConverter::get<bool>(query, COLUMN_IS_ACTIVE), {});
+        FromQueryToValueConverter::get<int>(query, COLUMN_ID),
+        FromQueryToValueConverter::get<QString>(query, COLUMN_ANSWER),
+        FromQueryToValueConverter::get<QString>(query, COLUMN_VALUE),
+        FromQueryToValueConverter::get<bool>(query, COLUMN_IS_ACTIVE), {});
   } catch (std::invalid_argument &e) {
     qWarning() << "FromQueryToQuestionConverter::get" << e.what();
   }

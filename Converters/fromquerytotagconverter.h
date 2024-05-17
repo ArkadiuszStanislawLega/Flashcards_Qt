@@ -2,7 +2,7 @@
 #define FROMQUERYTOTAGCONVERTER_H
 
 #include "../Models/tag.h"
-#include "querytovalueconverter.h"
+#include "fromquerytovalueconverter.h"
 #include <QSqlQuery>
 
 class FromQueryToTagConverter {

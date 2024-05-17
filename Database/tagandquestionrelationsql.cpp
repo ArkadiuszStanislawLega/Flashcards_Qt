@@ -6,7 +6,7 @@
 
 #include <Converters/fromquerytoquestionconverter.h>
 #include <Converters/fromquerytotagconverter.h>
-#include <Converters/querytovalueconverter.h>
+#include <Converters/fromquerytovalueconverter.h>
 
 TagAndQuestionRelationSql::TagAndQuestionRelationSql(Tag *tag,
                                                      Question *question,

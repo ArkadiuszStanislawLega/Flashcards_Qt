@@ -3,7 +3,7 @@
 
 #include "Models/question.h"
 #include "qsqlquery.h"
-#include "querytovalueconverter.h"
+#include "fromquerytovalueconverter.h"
 
 class FromQueryToQuestionConverter {
 public:

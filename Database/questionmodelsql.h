@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "../Converters/querytovalueconverter.h"
+#include "../Converters/fromquerytovalueconverter.h"
 #include "../Models/question.h"
 #include "deletesql.h"
 #include "findbykeysql.h"

@@ -1,10 +1,10 @@
-#ifndef QUERYTOVALUECONVERTER_H
-#define QUERYTOVALUECONVERTER_H
+#ifndef FROMQUERYTOVALUECONVERTER_H
+#define FROMQUERYTOVALUECONVERTER_H
 
 #include "qsqlrecord.h"
 #include <QSqlQuery>
 
-class QueryToValueConverter {
+class FromQueryToValueConverter {
 public:
   template <typename T> static T get(QSqlQuery *query, QString columnName) {
     if (!query) {
@@ -31,4 +31,4 @@ public:
   }
 };
 
-#endif // QUERYTOVALUECONVERTER_H
+#endif // FROMQUERYTOVALUECONVERTER_H

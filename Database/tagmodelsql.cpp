@@ -1,6 +1,6 @@
 #include "tagmodelsql.h"
 
-#include "../Converters/querytovalueconverter.h"
+#include "../Converters/fromquerytovalueconverter.h"
 #include "deletesql.h"
 #include "findbykeysql.h"
 #include "insertsql.h"
@@ -16,8 +16,8 @@ void TagModelSql::convertQueryToTag(QSqlQuery *query) {
     throw std::invalid_argument(
         "TagModelSql::converterQueryToTag -- pointer to query is empty.");
   }
-  this->_model->setId(QueryToValueConverter::get<int>(query, COLUMN_ID));
-  this->_model->setTag(QueryToValueConverter::get<QString>(query, COLUMN_TAG));
+  this->_model->setId(FromQueryToValueConverter::get<int>(query, COLUMN_ID));
+  this->_model->setTag(FromQueryToValueConverter::get<QString>(query, COLUMN_TAG));
 }
 
 bool TagModelSql::isInsertedSql() {

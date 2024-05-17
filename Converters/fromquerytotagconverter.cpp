@@ -6,8 +6,8 @@ Tag *FromQueryToTagConverter::get(QSqlQuery *query) {
         "FromQueryToQuestionConverter::get -- pointer to query is empty.");
   }
   try {
-    return new Tag(QueryToValueConverter::get<int>(query, COLUMN_ID),
-                   QueryToValueConverter::get<QString>(query, COLUMN_TAG));
+    return new Tag(FromQueryToValueConverter::get<int>(query, COLUMN_ID),
+                   FromQueryToValueConverter::get<QString>(query, COLUMN_TAG));
   } catch (std::invalid_argument &e) {
     qWarning() << "FromQueryToQuestionConverter::get" << e.what();
   }

@@ -138,11 +138,11 @@ bool QuestionModelSql::updateSql() {
 }
 
 void QuestionModelSql::convertQueryToQuestion(QSqlQuery *query) {
-  this->_model->setId(QueryToValueConverter::get<int>(query, COLUMN_ID));
+  this->_model->setId(FromQueryToValueConverter::get<int>(query, COLUMN_ID));
   this->_model->setAnswer(
-      QueryToValueConverter::get<QString>(query, COLUMN_ANSWER));
+      FromQueryToValueConverter::get<QString>(query, COLUMN_ANSWER));
   this->_model->setValue(
-      QueryToValueConverter::get<QString>(query, COLUMN_VALUE));
+      FromQueryToValueConverter::get<QString>(query, COLUMN_VALUE));
   this->_model->setIsActive(
-      QueryToValueConverter::get<bool>(query, COLUMN_IS_ACTIVE));
+      FromQueryToValueConverter::get<bool>(query, COLUMN_IS_ACTIVE));
 }

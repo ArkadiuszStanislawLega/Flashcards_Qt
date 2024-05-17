@@ -12,7 +12,7 @@ CONFIG += c++17
 SOURCES += \
     Converters/fromquerytoquestionconverter.cpp \
     Converters/fromquerytotagconverter.cpp \
-    Converters/querytovalueconverter.cpp \
+    Converters/fromquerytovalueconverter.cpp \
     Database/dbmanager.cpp \
     Database/deletesql.cpp \
     Database/findbykeysql.cpp \
@@ -38,7 +38,7 @@ HEADERS += \
     Constants/values.h \
     Converters/fromquerytoquestionconverter.h \
     Converters/fromquerytotagconverter.h \
-    Converters/querytovalueconverter.h \
+    Converters/fromquerytovalueconverter.h \
     Database/crud.h \
     Database/dbmanager.h \
     Database/deletesql.h \
