@@ -49,7 +49,5 @@ public:
   void setIsActive(bool);
 
   QString to_string();
-  static Question *convertFromQSqlQuery(QSqlQuery *);
-  static QList<Question *> getAll();
 };
 #endif
