@@ -106,19 +106,13 @@ bool TagAndQuestionRelationSql::isAllRelationRemoved() {
         "pointers are null.");
   }
 
-  if (this->_question->getId() <= 0 && this->_tag->getId() <= 0) {
-    throw std::invalid_argument(
-        "TagAndQuestionRelationSql::isAllRelationRemoved -- proprety id in "
-        "question and tag are zero or subzero.");
-  }
-
   QSqlQuery query;
 
-  if (this->_tag->getId()) {
+  if (this->_tag && this->_tag->getId()) {
     DeleteSql sql = DeleteSql(TABLE_QUESTIONS_TAGS, {COLUMN_TAG_ID}, this);
     query.prepare(sql.generate());
     query.bindValue(":" + COLUMN_TAG_ID, this->_tag->getId());
-  } else {
+  } else if (this->_question && this->_question->getId()) {
     DeleteSql sql = DeleteSql(TABLE_QUESTIONS_TAGS, {COLUMN_QUESTION_ID}, this);
     query.prepare(sql.generate());
     query.bindValue(":" + COLUMN_QUESTION_ID, this->_question->getId());
