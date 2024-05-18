@@ -39,27 +39,6 @@ bool Tag::isQuestionAlreadyRelated(Question *q) {
 }
 
 ///
-/// \brief Tag::convertFromQSqlQuery Convert QSqlQuery to instance of tag.
-/// \param query Query to database with selected tag.
-/// \return Instance of tag with properties from databese. Can throw invalid
-/// argument.
-///
-Tag *Tag::convertFromQSqlQuery(QSqlQuery *query) {
-  if (!query) {
-    throw std::invalid_argument(
-        "Tag::is_question_already_related -- Questin is empy");
-  }
-
-  int idColumn, tagColumn;
-
-  idColumn = query->record().indexOf(COLUMN_ID);
-  tagColumn = query->record().indexOf(COLUMN_TAG);
-
-  return new Tag(query->value(idColumn).toInt(),
-                 query->value(tagColumn).toString());
-}
-
-///
 /// \brief Tag::isQueryExecuted Executing query, if can't execute throw
 /// invalid_argument. \param query Query to execute. \return True if query was
 /// successfuly executed.
@@ -74,68 +53,6 @@ bool Tag::isQueryExecuted(QSqlQuery *query) {
   }
 
   return true;
-}
-
-///
-/// \brief Tag::getAllActiveRelated Creatind list of active questions related
-/// with tag. \return List of active question relatied with tag. Can throw
-/// invalid argument if property id is zer or below zero.
-///
-QList<Question *> Tag::getAllActiveRelated() {
-  if (this->_id <= 0) {
-    throw std::invalid_argument("Tag::getAllActiveRelated - id <= 0");
-  }
-
-  QSqlQuery query;
-  query.prepare(
-      SELECT + TABLE_QUESTIONS + "." + COLUMN_ID + ", " + TABLE_QUESTIONS +
-      "." + COLUMN_VALUE + ", " + TABLE_QUESTIONS + "." + COLUMN_ANSWER + ", " +
-      TABLE_QUESTIONS + "." + COLUMN_IS_ACTIVE + " " + FROM + TABLE_QUESTIONS +
-      " " + INNER_JOIN + TABLE_QUESTIONS_TAGS + " " + ON +
-      TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID + "=" + TABLE_QUESTIONS +
-      "." + COLUMN_ID + " " + INNER_JOIN + TABLE_TAGS + " " + ON + TABLE_TAGS +
-      "." + COLUMN_ID + "=" + TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + " " +
-      WHERE + TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID + "=:" + COLUMN_ID +
-      " AND " + TABLE_QUESTIONS + "." + COLUMN_IS_ACTIVE + "=1 " + ORDER_BY +
-      TABLE_QUESTIONS + "." + COLUMN_VALUE);
-
-  query.bindValue(":" + COLUMN_ID, this->_id);
-
-  try {
-    isQueryExecuted(&query);
-  } catch (std::invalid_argument &e) {
-    qWarning() << "Tag::getAllActiveRelated" << e.what();
-    return {};
-  }
-
-  return createQuestionListFromQuery(&query);
-}
-
-///
-/// \brief Tag::createQuestionListFromQuery Create list with questions from
-/// selected query. \param query Query with data from database. \return List
-/// with instances of Questions classes filled with data from database. Can
-/// throw invalid argument if query is nullptr.
-///
-QList<Question *> Tag::createQuestionListFromQuery(QSqlQuery *query) {
-  QList<Question *> questions{};
-
-  if (!query) {
-    throw std::invalid_argument(
-        "Tag::createQuestionListFromQuery -- query is nullptr.");
-  }
-
-  try {
-    while (query->next()) {
-      questions.push_back(FromQueryToQuestionConverter::get(query));
-      questions.back()->setParent(this);
-    }
-  } catch (std::invalid_argument &e) {
-    qWarning() << "Question::createQuestionListFromQuery " << e.what();
-    return {};
-  }
-
-  return questions;
 }
 
 ///
@@ -160,25 +77,4 @@ bool Tag::isAllRelationRemoved() {
     qWarning() << "Tag::isAllRelationRemoved" << e.what();
     return false;
   }
-}
-
-///
-/// \brief Tag::getAll get all tags from database and throw as list of instances
-/// Tag class. \return List of Tags from database.
-///
-QList<Tag *> Tag::getAll() {
-  QList<Tag *> tags;
-  QSqlQuery query;
-
-  query.prepare(SELECT + "* " + FROM + TABLE_TAGS + " " + ORDER_BY +
-                TABLE_TAGS + "." + COLUMN_TAG);
-
-  if (!query.exec()) {
-    throw std::runtime_error("Tag::getAll -- query not executed.");
-  }
-
-  while (query.next()) {
-    tags.push_back(Tag::convertFromQSqlQuery(&query));
-  }
-  return tags;
 }

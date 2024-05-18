@@ -14,8 +14,8 @@ SelectSql::SelectSql(QString table, QList<QString> columns, QObject *parent)
 }
 
 ///
-/// \brief SelectSql::generate Generate SELECT sql query, if property coulumns empty
-/// get all columns from database. \return SelectSql Query to database.
+/// \brief SelectSql::generate Generate SELECT sql query, if property coulumns
+/// empty get all columns from database. \return SelectSql Query to database.
 ///
 QString SelectSql::generate() {
   if (this->_table.isEmpty()) {
@@ -37,6 +37,6 @@ QString SelectSql::generate() {
     }
   }
 
-  query = FROM + this->_table;
+  query += FROM + this->_table;
   return query;
 }

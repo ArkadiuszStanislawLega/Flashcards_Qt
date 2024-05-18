@@ -3,6 +3,7 @@
 #include "deletesql.h"
 #include "findbykeysql.h"
 #include "insertsql.h"
+#include "selectsql.h"
 #include "selectwithcriteriasql.h"
 #include "selectwithjoinsql.h"
 
@@ -187,6 +188,64 @@ QList<Question *> TagAndQuestionRelationSql::getRelatedQuestions() {
       questions.back()->setParent(this);
     } catch (std::invalid_argument &e) {
       qWarning() << "TagAndQuestionRelationSql::getRelatedQuestions -- "
+                 << e.what();
+    }
+  }
+
+  return questions;
+}
+
+QList<Question *> TagAndQuestionRelationSql::getRelatedActiveQuesitons() {
+  if (!this->_tag) {
+    throw std::invalid_argument(
+        "TagAndQuestionRelationSql::getRelatedActiveQuesitons -- poninter to "
+        "tag is empty.");
+  }
+
+  if (this->_tag->getId() <= 0) {
+    throw std::invalid_argument("TagAndQuestionRelationSql::"
+                                "getRelatedActiveQuesitons -- property id in "
+                                "tag is zero or subzero.");
+  }
+  QList<Question *> questions;
+
+  QList<QString> requriedFields = {TABLE_QUESTIONS + "." + COLUMN_ID,
+                                   TABLE_QUESTIONS + "." + COLUMN_VALUE,
+                                   TABLE_QUESTIONS + "." + COLUMN_ANSWER,
+                                   TABLE_QUESTIONS + "." + COLUMN_IS_ACTIVE};
+
+  QList<std::pair<QString, QString>> connectedTables = {
+      {TABLE_QUESTIONS_TAGS, TABLE_QUESTIONS},
+      {TABLE_TAGS, TABLE_QUESTIONS_TAGS}};
+
+  QList<std::pair<QString, QString>> connectedValues = {
+      {COLUMN_QUESTION_ID, COLUMN_ID}, {COLUMN_ID, COLUMN_TAG_ID}};
+
+  QString criteria = TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID +
+                     "=:" + COLUMN_ID + " AND " + TABLE_QUESTIONS + "." +
+                     COLUMN_IS_ACTIVE + "=1 " + ORDER_BY + TABLE_QUESTIONS +
+                     "." + COLUMN_VALUE;
+
+  SelectWithJoinSql *sql =
+      new SelectWithJoinSql(TABLE_QUESTIONS, requriedFields, connectedTables,
+                            connectedValues, criteria, this);
+
+  QSqlQuery query;
+  query.prepare(sql->generate());
+  query.bindValue(":" + COLUMN_ID, this->_tag->getId());
+
+  if (!query.exec()) {
+    throw std::invalid_argument(
+        "TagAndQuestionRelationSql::getRelatedActiveQuesitons -- the query "
+        "failed.");
+  }
+
+  while (query.next()) {
+    try {
+      questions.push_back(FromQueryToQuestionConverter::get(&query));
+      questions.back()->setParent(this);
+    } catch (std::invalid_argument &e) {
+      qWarning() << "TagAndQuestionRelationSql::getRelatedActiveQuesitons -- "
                  << e.what();
     }
   }

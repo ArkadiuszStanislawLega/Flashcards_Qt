@@ -1,5 +1,8 @@
 #include "learnview.h"
 
+#include <Database/tagandquestionrelationsql.h>
+#include <Database/tagmodelsql.h>
+
 LearnView::LearnView(QWidget *parent) : QWidget{parent}, ui(new Ui::LearnView) {
   this->ui->setupUi(this);
   this->ui->l_answer->setText("");
@@ -31,8 +34,12 @@ void LearnView::initialTagListView() {
 }
 
 void LearnView::prepare_tags_list(QList<QString> &list) {
-  for (Tag *t : Tag::getAll()) {
-    int question_number = t->getAllActiveRelated().size();
+  TagModelSql sqlModel = TagModelSql(new Tag(this), this);
+
+  for (Tag *t : sqlModel.getAllTags()) {
+    TagAndQuestionRelationSql relation =
+        TagAndQuestionRelationSql(t, new Question(this), this);
+    int question_number = relation.getRelatedActiveQuesitons().size();
     QString value =
         t->getTag() + " [" + std::to_string(question_number).c_str() + "]";
     this->_tags_list.append(t);
@@ -44,7 +51,11 @@ void LearnView::prepare_tags_list(QList<QString> &list) {
 void LearnView::make_randomised_questions_list_new() {
   int i;
   QList<Question *> questions;
-  questions = this->_tags_list.at(this->_selected_index)->getAllActiveRelated();
+  TagAndQuestionRelationSql relation = TagAndQuestionRelationSql(
+      this->_tags_list.at(this->_selected_index), new Question(this), this);
+  // questions =
+  // this->_tags_list.at(this->_selected_index)->getAllActiveRelated();
+  questions = relation.getRelatedActiveQuesitons();
 
   for (i = this->_max_questions_number; i > 0; i--) {
     long index = QRandomGenerator::global()->bounded(questions.size());
@@ -75,8 +86,7 @@ void LearnView::show_first_card_attribute() {
 // Updates the view, the "value" property of the currently selected question.
 void LearnView::set_question() {
   if (this->_randomised_questions.size()) {
-    this->ui->l_value->setText(
-        this->_randomised_questions.first()->getValue());
+    this->ui->l_value->setText(this->_randomised_questions.first()->getValue());
   }
 }
 

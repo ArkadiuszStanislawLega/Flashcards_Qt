@@ -17,10 +17,7 @@ private:
   Q_OBJECT
   int _id;
   QString _tag;
-
   bool isQueryExecuted(QSqlQuery *query);
-
-  QList<Question *> createQuestionListFromQuery(QSqlQuery *query);
 
 public:
   Tag(QObject *parent = nullptr);
@@ -32,13 +29,8 @@ public:
 
   void setId(int);
   void setTag(QString);
-  bool isQuestionAlreadyRelated(Question *);
-  static Tag *convertFromQSqlQuery(QSqlQuery *);
-
+  bool isQuestionAlreadyRelated(Question *q);
   // ManyToMany interface
-  QList<Question *> getAllActiveRelated();
   bool isAllRelationRemoved();
-
-  static QList<Tag *> getAll();
 };
 #endif

@@ -23,6 +23,7 @@ public:
   bool isSelectedSql();
   QList<Tag *> getRelatedTags();
   QList<Question *> getRelatedQuestions();
+  QList<Question *> getRelatedActiveQuesitons();
 
 signals:
 };

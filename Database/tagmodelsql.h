@@ -17,7 +17,7 @@ public:
   bool updateSql();
   Tag *selectTag(int id);
   Tag *findByCriteria();
-
+  QList<Tag *> getAllTags();
 signals:
 };
 

@@ -4,8 +4,11 @@
 #include "deletesql.h"
 #include "findbykeysql.h"
 #include "insertsql.h"
+#include "selectsql.h"
 #include "selectwithcriteriasql.h"
 #include "updatesql.h"
+
+#include <Converters/fromquerytotagconverter.h>
 
 TagModelSql::TagModelSql(Tag *model, QObject *parent) : QObject{parent} {
   this->_model = model;
@@ -17,7 +20,8 @@ void TagModelSql::convertQueryToTag(QSqlQuery *query) {
         "TagModelSql::converterQueryToTag -- pointer to query is empty.");
   }
   this->_model->setId(FromQueryToValueConverter::get<int>(query, COLUMN_ID));
-  this->_model->setTag(FromQueryToValueConverter::get<QString>(query, COLUMN_TAG));
+  this->_model->setTag(
+      FromQueryToValueConverter::get<QString>(query, COLUMN_TAG));
 }
 
 bool TagModelSql::isInsertedSql() {
@@ -137,4 +141,20 @@ Tag *TagModelSql::findByCriteria() {
   }
 
   return this->_model;
+}
+
+QList<Tag *> TagModelSql::getAllTags() {
+  SelectSql sql = SelectSql(TABLE_TAGS, {}, this);
+  QSqlQuery query;
+  query.prepare(sql.generate());
+
+  if (!query.exec()) {
+    throw std::invalid_argument("TagModelSql::getAllTags -- the query failed.");
+  }
+  QList<Tag *> tags;
+  while (query.next()) {
+    tags.push_back(FromQueryToTagConverter::get(&query));
+    tags.back()->setParent(this);
+  }
+  return tags;
 }
