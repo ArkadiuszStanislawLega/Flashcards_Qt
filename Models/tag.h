@@ -5,9 +5,6 @@
 #include <QObject>
 #include <QString>
 
-#include "../Constants/strings.h"
-#include "../Database/crud.h"
-#include "../Database/manytomany.h"
 #include "question.h"
 
 class Question;
@@ -17,7 +14,6 @@ private:
   Q_OBJECT
   int _id;
   QString _tag;
-  bool isQueryExecuted(QSqlQuery *query);
 
 public:
   Tag(QObject *parent = nullptr);
@@ -30,7 +26,5 @@ public:
   void setId(int);
   void setTag(QString);
   bool isQuestionAlreadyRelated(Question *q);
-  // ManyToMany interface
-  bool isAllRelationRemoved();
 };
 #endif

@@ -164,9 +164,11 @@ void QuestionView::on_b_remove_question_clicked() {
   }
 
   QuestionModelSql sqlModel = QuestionModelSql(this->_selected_question, this);
+  TagAndQuestionRelationSql relation =
+      TagAndQuestionRelationSql(new Tag(this), this->_selected_question, this);
 
   try {
-    if (sqlModel.isDeleteSql()) {
+    if (relation.isAllRelationRemoved() && sqlModel.isDeleteSql()) {
       this->_selected_question = nullptr;
       this->_table_model->select();
       this->cleanTextEditors();

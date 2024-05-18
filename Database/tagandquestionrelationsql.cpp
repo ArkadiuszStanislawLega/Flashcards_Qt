@@ -99,6 +99,38 @@ bool TagAndQuestionRelationSql::isSelectedSql() {
   return true;
 }
 
+bool TagAndQuestionRelationSql::isAllRelationRemoved() {
+  if (!this->_question && !this->_tag) {
+    throw std::invalid_argument(
+        "TagAndQuestionRelationSql::isAllRelationRemoved -- question and tag "
+        "pointers are null.");
+  }
+
+  if (this->_question->getId() <= 0 && this->_tag->getId() <= 0) {
+    throw std::invalid_argument(
+        "TagAndQuestionRelationSql::isAllRelationRemoved -- proprety id in "
+        "question and tag are zero or subzero.");
+  }
+
+  QSqlQuery query;
+
+  if (this->_tag->getId()) {
+    DeleteSql sql = DeleteSql(TABLE_QUESTIONS_TAGS, {COLUMN_TAG_ID}, this);
+    query.prepare(sql.generate());
+    query.bindValue(":" + COLUMN_TAG_ID, this->_tag->getId());
+  } else {
+    DeleteSql sql = DeleteSql(TABLE_QUESTIONS_TAGS, {COLUMN_QUESTION_ID}, this);
+    query.prepare(sql.generate());
+    query.bindValue(":" + COLUMN_QUESTION_ID, this->_question->getId());
+  }
+
+  if (!query.exec()) {
+    throw std::invalid_argument(
+        "TagAndQuestionRelationSql::isAllRelationRemoved -- the query failed.");
+  }
+  return true;
+}
+
 QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
   if (!this->_question) {
     throw std::invalid_argument(

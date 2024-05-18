@@ -1,5 +1,6 @@
 #include "tagview.h"
 
+#include <Database/tagandquestionrelationsql.h>
 #include <Database/tagmodelsql.h>
 
 TagView::TagView(QWidget *parent) : QWidget{parent}, ui(new Ui::TagView) {
@@ -88,9 +89,11 @@ void TagView::on_b_remove_tag_clicked() {
   }
 
   TagModelSql query = TagModelSql(this->_selected_tag, this);
+  TagAndQuestionRelationSql relation =
+      TagAndQuestionRelationSql(this->_selected_tag, new Question(this), this);
 
   try {
-    if (query.isDeleteSql()) {
+    if (relation.isAllRelationRemoved() && query.isDeleteSql()) {
       this->_table_model->select();
       this->_selected_tag = nullptr;
       this->printInfo(TAG_SUCCESFULLY_REMOVED);
