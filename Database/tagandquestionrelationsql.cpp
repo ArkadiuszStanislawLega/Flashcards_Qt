@@ -285,8 +285,6 @@ template <typename T> void TagAndQuestionRelationSql::executeQuery(T *sql) {
   query.bindValue(":" + COLUMN_TAG_ID, this->_tag->getId());
   query.bindValue(":" + COLUMN_QUESTION_ID, this->_question->getId());
 
-  qDebug() << query.lastQuery();
-
   if (!query.exec()) {
     throw std::invalid_argument(
         "TagAndQuestionRelationSql::isDeleteSql -- the query failed.");
