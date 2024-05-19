@@ -11,6 +11,8 @@
 #include <Converters/fromquerytotagconverter.h>
 #include <Converters/fromquerytovalueconverter.h>
 
+#include <QException>
+
 TagAndQuestionRelationSql::TagAndQuestionRelationSql(Tag *tag,
                                                      Question *question,
                                                      QObject *parent)
@@ -75,7 +77,8 @@ bool TagAndQuestionRelationSql::isDeletedSql() {
     executeQuery<DeleteSql>(sql);
 
   } catch (std::invalid_argument &e) {
-    qWarning() << "TagAndQuestionRelationSql::isDeleteSql" << e.what();
+    qWarning() << this->metaObject()->className() << "::isDeleteSql"
+               << e.what();
     return false;
   }
   return true;
@@ -93,7 +96,8 @@ bool TagAndQuestionRelationSql::isSelectedSql() {
     executeQuery<FindByKeySql>(sql);
 
   } catch (std::invalid_argument &e) {
-    qWarning() << "TagAndQuestionRelationSql::isDeleteSql" << e.what();
+    qWarning() << this->metaObject()->className() << "::isDeleteSql"
+               << e.what();
     return false;
   }
   return true;
@@ -114,8 +118,9 @@ bool TagAndQuestionRelationSql::isAlreadyRelated() {
   query.bindValue(":" + COLUMN_QUESTION_ID, this->_question->getId());
 
   if (!query.exec()) {
-    throw std::invalid_argument(
-        "TagAndQuestionRelationSql::isAlreadyRelated -- the query failed.");
+    QString message = this->metaObject()->className();
+    message += "::isAlreadyRelated --" + THE_QUERY_FAILED;
+    throw std::invalid_argument(message.toStdString());
   }
   return query.next();
 }
@@ -191,7 +196,8 @@ QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
       tags.push_back(FromQueryToTagConverter::get(&query));
       tags.back()->setParent(this);
     } catch (std::invalid_argument &e) {
-      qWarning() << "TagAndQuestionRelationSql::getRelatedTags -- " << e.what();
+      qWarning() << this->metaObject()->className() << "::getRelatedTags -- "
+                 << e.what();
     }
   }
 
@@ -234,8 +240,8 @@ QList<Question *> TagAndQuestionRelationSql::getRelatedQuestions() {
       questions.back()->setTags(getRelatedTags());
       questions.back()->setParent(this);
     } catch (std::invalid_argument &e) {
-      qWarning() << "TagAndQuestionRelationSql::getRelatedQuestions -- "
-                 << e.what();
+      qWarning() << this->metaObject()->className()
+                 << "::getRelatedQuestions -- " << e.what();
     }
   }
 
@@ -292,8 +298,8 @@ QList<Question *> TagAndQuestionRelationSql::getRelatedActiveQuesitons() {
       questions.push_back(FromQueryToQuestionConverter::get(&query));
       questions.back()->setParent(this);
     } catch (std::invalid_argument &e) {
-      qWarning() << "TagAndQuestionRelationSql::getRelatedActiveQuesitons -- "
-                 << e.what();
+      qWarning() << this->metaObject()->className()
+                 << "::getRelatedActiveQuesitons -- " << e.what();
     }
   }
 

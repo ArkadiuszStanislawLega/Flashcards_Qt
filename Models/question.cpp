@@ -6,13 +6,16 @@
 #include <Database/wheresql.h>
 
 Question::~Question() {
-  qDebug() << "Destruction: " << this << this->to_string();
+  qDebug() << "Destruction: " << this << metaObject()->metaType()
+           << metaObject()->className();
 }
 
 Question::Question(QObject *parent) : QObject(parent) {
   this->_id = 0;
   this->_value = "";
   this->_answer = "";
+  // this->setObjectName("Question");
+  metaObject()->className();
 }
 
 Question::Question(int id, QObject *parent) : Question(parent) {
