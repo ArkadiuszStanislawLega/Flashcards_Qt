@@ -21,6 +21,7 @@ public:
   bool isInsertedSql();
   bool isDeletedSql();
   bool isSelectedSql();
+  bool isAlreadyRelated();
   bool isAllRelationRemoved();
   QList<Tag *> getRelatedTags();
   QList<Question *> getRelatedQuestions();

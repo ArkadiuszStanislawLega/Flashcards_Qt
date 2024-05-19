@@ -25,6 +25,5 @@ public:
 
   void setId(int);
   void setTag(QString);
-  bool isQuestionAlreadyRelated(Question *q);
 };
 #endif

@@ -99,6 +99,27 @@ bool TagAndQuestionRelationSql::isSelectedSql() {
   return true;
 }
 
+bool TagAndQuestionRelationSql::isAlreadyRelated() {
+  if (!isQuestionAndTagValid()) {
+    return false;
+  }
+  QString criteria = COLUMN_TAG_ID + "=:" + COLUMN_TAG_ID + " AND " +
+                     COLUMN_QUESTION_ID + "=:" + COLUMN_QUESTION_ID;
+  SelectWithCriteriaSql *sql =
+      new SelectWithCriteriaSql(TABLE_QUESTIONS_TAGS, {}, criteria, this);
+
+  QSqlQuery query;
+  query.prepare(sql->generate());
+  query.bindValue(":" + COLUMN_TAG_ID, this->_tag->getId());
+  query.bindValue(":" + COLUMN_QUESTION_ID, this->_question->getId());
+
+  if (!query.exec()) {
+    throw std::invalid_argument(
+        "TagAndQuestionRelationSql::isAlreadyRelated -- the query failed.");
+  }
+  return query.next();
+}
+
 bool TagAndQuestionRelationSql::isAllRelationRemoved() {
   if (!this->_question && !this->_tag) {
     throw std::invalid_argument(

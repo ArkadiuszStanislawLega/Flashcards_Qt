@@ -137,6 +137,12 @@ void RelationView::on_b_create_relation_clicked() {
   try {
     TagAndQuestionRelationSql relation = TagAndQuestionRelationSql(
         this->_selected_tag_to_question_add, this->_selected_question, this);
+
+    if (relation.isAlreadyRelated()) {
+      this->printInfo("Question and Tag are already related.");
+      return;
+    }
+
     if (relation.isInsertedSql()) {
       this->_questions_table_model->select();
       this->printInfo(RELATION_QUESTION_WIT_TAG_CREATED);

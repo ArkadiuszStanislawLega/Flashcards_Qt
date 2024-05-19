@@ -18,22 +18,3 @@ int Tag::getId() { return this->_id; }
 QString Tag::getTag() { return this->_tag; }
 void Tag::setId(int id) { this->_id = id; }
 void Tag::setTag(QString tag) { this->_tag = tag; }
-
-///
-/// \brief Tag::isQuestionAlreadyRelated Check in database that tag is related
-/// with quesiton. \param q Question with whom can be related. \return true if
-/// question is relatied with tag. Can throw invalid argument.
-///
-bool Tag::isQuestionAlreadyRelated(Question *q) {
-  if (!q) {
-    throw std::invalid_argument(
-        "Tag::isQuestionAlreadyRelated -- Question is empy");
-  }
-
-  for (Tag *t : q->getTags()) {
-    if (t->getId() == this->_id) {
-      return true;
-    }
-  }
-  return false;
-}
