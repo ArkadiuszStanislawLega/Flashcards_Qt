@@ -7,6 +7,20 @@
 #include <Models/question.h>
 #include <Models/tag.h>
 
+#include <Database/SqlGenerators/deletesql.h>
+#include <Database/SqlGenerators/findbykeysql.h>
+#include <Database/SqlGenerators/insertsql.h>
+#include <Database/SqlGenerators/selectsql.h>
+#include <Database/SqlGenerators/selectwithcriteriasql.h>
+#include <Database/SqlGenerators/selectwithjoinsql.h>
+#include <Database/SqlGenerators/updatesql.h>
+
+#include <Converters/fromquerytoquestionconverter.h>
+#include <Converters/fromquerytotagconverter.h>
+#include <Converters/fromquerytovalueconverter.h>
+
+#include <QException>
+
 class TagAndQuestionRelationSql : public QObject {
 private:
   Q_OBJECT

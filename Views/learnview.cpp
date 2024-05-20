@@ -1,8 +1,5 @@
 #include "learnview.h"
 
-#include <Database/tagandquestionrelationsql.h>
-#include <Database/tagmodelsql.h>
-
 LearnView::LearnView(QWidget *parent) : QWidget{parent}, ui(new Ui::LearnView) {
   this->ui->setupUi(this);
   this->ui->l_answer->setText("");

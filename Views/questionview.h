@@ -1,9 +1,11 @@
 #ifndef QUESTIONVIEW_H
 #define QUESTIONVIEW_H
 
-#include "../Constants/strings.h"
-#include "../Models/question.h"
 #include "ui_questionview.h"
+#include <Constants/strings.h>
+#include <Database/SqlModels/questionmodelsql.h>
+#include <Database/SqlModels/tagandquestionrelationsql.h>
+#include <Models/question.h>
 #include <QDebug>
 #include <QSqlRelationalTableModel>
 #include <QSqlTableModel>

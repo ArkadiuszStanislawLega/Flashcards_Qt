@@ -1,8 +1,5 @@
 #include "questionview.h"
 
-#include <Database/questionmodelsql.h>
-#include <Database/tagandquestionrelationsql.h>
-
 void QuestionView::initialQuestionsListView() {
   this->_table_model = new QSqlRelationalTableModel;
   this->_table_model->setTable(TABLE_QUESTIONS);

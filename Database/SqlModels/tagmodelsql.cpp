@@ -1,15 +1,5 @@
 #include "tagmodelsql.h"
 
-#include "../Converters/fromquerytovalueconverter.h"
-#include "deletesql.h"
-#include "findbykeysql.h"
-#include "insertsql.h"
-#include "selectsql.h"
-#include "selectwithcriteriasql.h"
-#include "updatesql.h"
-
-#include <Converters/fromquerytotagconverter.h>
-
 TagModelSql::TagModelSql(Tag *model, QObject *parent) : QObject{parent} {
   this->_model = model;
 }

@@ -1,18 +1,5 @@
 #include "tagandquestionrelationsql.h"
 
-#include "deletesql.h"
-#include "findbykeysql.h"
-#include "insertsql.h"
-#include "selectsql.h"
-#include "selectwithcriteriasql.h"
-#include "selectwithjoinsql.h"
-
-#include <Converters/fromquerytoquestionconverter.h>
-#include <Converters/fromquerytotagconverter.h>
-#include <Converters/fromquerytovalueconverter.h>
-
-#include <QException>
-
 TagAndQuestionRelationSql::TagAndQuestionRelationSql(Tag *tag,
                                                      Question *question,
                                                      QObject *parent)

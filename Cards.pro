@@ -14,17 +14,17 @@ SOURCES += \
     Converters/fromquerytotagconverter.cpp \
     Converters/fromquerytovalueconverter.cpp \
     Database/dbmanager.cpp \
-    Database/deletesql.cpp \
-    Database/findbykeysql.cpp \
-    Database/insertsql.cpp \
-    Database/questionmodelsql.cpp \
-    Database/selectsql.cpp \
-    Database/selectwithcriteriasql.cpp \
-    Database/selectwithjoinsql.cpp \
-    Database/tagandquestionrelationsql.cpp \
-    Database/tagmodelsql.cpp \
-    Database/updatesql.cpp \
-    Database/wheresql.cpp \
+    Database/SqlGenerators/deletesql.cpp \
+    Database/SqlGenerators/findbykeysql.cpp \
+    Database/SqlGenerators/insertsql.cpp \
+    Database/SqlGenerators/selectwithcriteriasql.cpp \
+    Database/SqlGenerators/selectwithjoinsql.cpp \
+    Database/SqlGenerators/updatesql.cpp \
+    Database/SqlGenerators/wheresql.cpp \
+    Database/SqlGenerators/selectsql.cpp \
+    Database/SqlModels/questionmodelsql.cpp \
+    Database/SqlModels/tagmodelsql.cpp \
+    Database/SqlModels/tagandquestionrelationsql.cpp \
     Models/question.cpp \
     Models/tag.cpp \
     Views/learnview.cpp \
@@ -42,18 +42,18 @@ HEADERS += \
     Converters/fromquerytovalueconverter.h \
     Database/crud.h \
     Database/dbmanager.h \
-    Database/deletesql.h \
-    Database/findbykeysql.h \
-    Database/insertsql.h \
     Database/manytomany.h \
-    Database/questionmodelsql.h \
-    Database/selectsql.h \
-    Database/selectwithcriteriasql.h \
-    Database/selectwithjoinsql.h \
-    Database/tagandquestionrelationsql.h \
-    Database/tagmodelsql.h \
-    Database/updatesql.h \
-    Database/wheresql.h \
+    Database/SqlGenerators/deletesql.h \
+    Database/SqlGenerators/findbykeysql.h \
+    Database/SqlGenerators/insertsql.h \
+    Database/SqlGenerators/selectwithcriteriasql.h \
+    Database/SqlGenerators/selectwithjoinsql.h \
+    Database/SqlModels/questionmodelsql.h \
+    Database/SqlModels/tagmodelsql.h \
+    Database/SqlModels/tagandquestionrelationsql.h \
+    Database/SqlGenerators/updatesql.h \
+    Database/SqlGenerators/wheresql.h \
+    Database/SqlGenerators/selectsql.h \
     Models/question.h \
     Models/tag.h \
     Views/learnview.h \

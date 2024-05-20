@@ -1,8 +1,5 @@
 #include "tagview.h"
 
-#include <Database/tagandquestionrelationsql.h>
-#include <Database/tagmodelsql.h>
-
 TagView::TagView(QWidget *parent) : QWidget{parent}, ui(new Ui::TagView) {
   ui->setupUi(this);
   this->_selected_tag = nullptr;

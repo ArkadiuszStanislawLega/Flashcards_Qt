@@ -145,4 +145,5 @@ static const QString SELECT_TAG_FROM_QUESTION =
 static const QString SELECT_QUESTION_FIRST = "Quest should be selected.";
 static const QString RELATION_QUESTION_WIT_TAG_CREATED =
     "Relation between question and tag was corectly created.";
+static const QString THE_QUERY_FAILED = "The query failed.";
 #endif

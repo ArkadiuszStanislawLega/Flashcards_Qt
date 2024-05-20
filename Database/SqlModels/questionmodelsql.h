@@ -3,15 +3,15 @@
 
 #include <QObject>
 
-#include "../Converters/fromquerytovalueconverter.h"
-#include "../Models/question.h"
-#include "deletesql.h"
-#include "findbykeysql.h"
-#include "insertsql.h"
-#include "selectsql.h"
-#include "selectwithcriteriasql.h"
-#include "updatesql.h"
-#include "wheresql.h"
+#include <Converters/fromquerytoquestionconverter.h>
+#include <Database/SqlGenerators/deletesql.h>
+#include <Database/SqlGenerators/findbykeysql.h>
+#include <Database/SqlGenerators/insertsql.h>
+#include <Database/SqlGenerators/selectsql.h>
+#include <Database/SqlGenerators/selectwithcriteriasql.h>
+#include <Database/SqlGenerators/updatesql.h>
+#include <Database/SqlGenerators/wheresql.h>
+#include <Models/question.h>
 
 class QuestionModelSql : public QObject {
 private:

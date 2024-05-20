@@ -1,9 +1,9 @@
 #include "question.h"
 
-#include <Database/insertsql.h>
-#include <Database/questionmodelsql.h>
-#include <Database/selectsql.h>
-#include <Database/wheresql.h>
+#include <Database/SqlGenerators/insertsql.h>
+#include <Database/SqlGenerators/selectsql.h>
+#include <Database/SqlGenerators/wheresql.h>
+#include <Database/SqlModels/questionmodelsql.h>
 
 Question::~Question() {
   qDebug() << "Destruction: " << this << metaObject()->metaType()

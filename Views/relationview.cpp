@@ -1,7 +1,5 @@
 #include "relationview.h"
 
-#include <Database/tagandquestionrelationsql.h>
-
 RelationView::RelationView(QWidget *parent)
     : QWidget{parent}, ui(new Ui::RelationView) {
   this->ui->setupUi(this);

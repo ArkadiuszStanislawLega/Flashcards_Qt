@@ -1,10 +1,11 @@
 #ifndef RELATIONVIEW_H
 #define RELATIONVIEW_H
 
-#include "../Constants/strings.h"
-#include "../Models/question.h"
-#include "../Models/tag.h"
 #include "ui_relationview.h"
+#include <Constants/strings.h>
+#include <Database/SqlModels/tagandquestionrelationsql.h>
+#include <Models/question.h>
+#include <Models/tag.h>
 #include <QSqlQueryModel>
 #include <QSqlRelation>
 #include <QSqlRelationalTableModel>

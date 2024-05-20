@@ -1,15 +1,16 @@
 #ifndef LEARNVIEW_H
 #define LEARNVIEW_H
 
-#include "../Constants/strings.h"
-#include "../Models/question.h"
-#include "../Models/tag.h"
 #include "ui_learnview.h"
+#include <Constants/strings.h>
+#include <Database/SqlModels/tagandquestionrelationsql.h>
+#include <Database/SqlModels/tagmodelsql.h>
+#include <Models/question.h>
+#include <Models/tag.h>
 #include <QRandomGenerator>
 #include <QStringListModel>
 #include <QThread>
 #include <QWidget>
-#include <vector>
 
 namespace Ui {
 class LearnView;

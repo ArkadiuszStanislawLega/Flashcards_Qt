@@ -1,8 +1,16 @@
 #ifndef TAGMODELSQL_H
 #define TAGMODELSQL_H
 
-#include "../Models/tag.h"
+#include <Models/tag.h>
 #include <QObject>
+#include <Converters/fromquerytovalueconverter.h>
+#include <Database/SqlGenerators/deletesql.h>
+#include <Database/SqlGenerators/findbykeysql.h>
+#include <Database/SqlGenerators/insertsql.h>
+#include <Database/SqlGenerators/selectsql.h>
+#include <Database/SqlGenerators/selectwithcriteriasql.h>
+#include <Database/SqlGenerators/updatesql.h>
+#include <Converters/fromquerytotagconverter.h>
 
 class TagModelSql : public QObject {
 private:
