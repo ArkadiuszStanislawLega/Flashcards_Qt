@@ -1,5 +1,7 @@
 #include "findbykeysql.h"
 
+#include <stringmanager.h>
+
 FindByKeySql::FindByKeySql(QString table, QList<QString> columns,
                            QObject *parent)
     : QObject{parent} {
@@ -25,8 +27,9 @@ QString FindByKeySql::generate() {
       }
     }
   }
-  query = FROM + this->_table + " " + WHERE + COLUMN_ID + " = (:" + COLUMN_ID +
-          ") LIMIT 1";
+  query = FROM + this->_table + " " + WHERE +
+          StringManager::get(StringID::ColumnId) +
+          " = (:" + StringManager::get(StringID::ColumnId) + ") LIMIT 1";
 
   return query;
 }

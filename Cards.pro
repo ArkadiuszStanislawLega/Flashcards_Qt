@@ -32,7 +32,8 @@ SOURCES += \
     Views/relationview.cpp \
     Views/tagview.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    stringmanager.cpp
 
 HEADERS += \
     Constants/strings.h \
@@ -40,9 +41,7 @@ HEADERS += \
     Converters/fromquerytoquestionconverter.h \
     Converters/fromquerytotagconverter.h \
     Converters/fromquerytovalueconverter.h \
-    Database/crud.h \
     Database/dbmanager.h \
-    Database/manytomany.h \
     Database/SqlGenerators/deletesql.h \
     Database/SqlGenerators/findbykeysql.h \
     Database/SqlGenerators/insertsql.h \
@@ -54,13 +53,15 @@ HEADERS += \
     Database/SqlGenerators/updatesql.h \
     Database/SqlGenerators/wheresql.h \
     Database/SqlGenerators/selectsql.h \
+    Enums/StringID.h \
     Models/question.h \
     Models/tag.h \
     Views/learnview.h \
     Views/questionview.h \
     Views/relationview.h \
     Views/tagview.h \
-    mainwindow.h
+    mainwindow.h \
+    stringmanager.h
 
 FORMS += \
     Views/learnview.ui \

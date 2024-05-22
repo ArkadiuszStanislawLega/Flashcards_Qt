@@ -1,5 +1,7 @@
 #include "tagandquestionrelationsql.h"
 
+#include <stringmanager.h>
+
 TagAndQuestionRelationSql::TagAndQuestionRelationSql(Tag *tag,
                                                      Question *question,
                                                      QObject *parent)
@@ -40,8 +42,11 @@ bool TagAndQuestionRelationSql::isInsertedSql() {
       return false;
     }
 
-    InsertSql *sql = new InsertSql(TABLE_QUESTIONS_TAGS,
-                                   {COLUMN_TAG_ID, COLUMN_QUESTION_ID}, this);
+    InsertSql *sql =
+        new InsertSql(StringManager::get(StringID::TableQuestionsTags),
+                      {StringManager::get(StringID::ColumnTagId),
+                       StringManager::get(StringID::ColumnQuestionId)},
+                      this);
 
     executeQuery<InsertSql>(sql);
 
@@ -58,8 +63,11 @@ bool TagAndQuestionRelationSql::isDeletedSql() {
     if (!(isQuestionAndTagValid())) {
       return false;
     }
-    DeleteSql *sql = new DeleteSql(TABLE_QUESTIONS_TAGS,
-                                   {COLUMN_TAG_ID, COLUMN_QUESTION_ID}, this);
+    DeleteSql *sql =
+        new DeleteSql(StringManager::get(StringID::TableQuestionsTags),
+                      {StringManager::get(StringID::ColumnTagId),
+                       StringManager::get(StringID::ColumnQuestionId)},
+                      this);
 
     executeQuery<DeleteSql>(sql);
 
@@ -77,8 +85,11 @@ bool TagAndQuestionRelationSql::isSelectedSql() {
       return false;
     }
 
-    FindByKeySql *sql = new FindByKeySql(
-        TABLE_QUESTIONS_TAGS, {COLUMN_TAG_ID, COLUMN_QUESTION_ID}, this);
+    FindByKeySql *sql =
+        new FindByKeySql(StringManager::get(StringID::TableQuestionsTags),
+                         {StringManager::get(StringID::ColumnTagId),
+                          StringManager::get(StringID::ColumnQuestionId)},
+                         this);
 
     executeQuery<FindByKeySql>(sql);
 
@@ -94,19 +105,24 @@ bool TagAndQuestionRelationSql::isAlreadyRelated() {
   if (!isQuestionAndTagValid()) {
     return false;
   }
-  QString criteria = COLUMN_TAG_ID + "=:" + COLUMN_TAG_ID + " AND " +
-                     COLUMN_QUESTION_ID + "=:" + COLUMN_QUESTION_ID;
-  SelectWithCriteriaSql *sql =
-      new SelectWithCriteriaSql(TABLE_QUESTIONS_TAGS, {}, criteria, this);
+  QString criteria = StringManager::get(StringID::ColumnTagId) +
+                     "=:" + StringManager::get(StringID::ColumnTagId) +
+                     " AND " + StringManager::get(StringID::ColumnQuestionId) +
+                     "=:" + StringManager::get(StringID::ColumnQuestionId);
+  SelectWithCriteriaSql *sql = new SelectWithCriteriaSql(
+      StringManager::get(StringID::TableQuestionsTags), {}, criteria, this);
 
   QSqlQuery query;
   query.prepare(sql->generate());
-  query.bindValue(":" + COLUMN_TAG_ID, this->_tag->getId());
-  query.bindValue(":" + COLUMN_QUESTION_ID, this->_question->getId());
+  query.bindValue(":" + StringManager::get(StringID::ColumnTagId),
+                  this->_tag->getId());
+  query.bindValue(":" + StringManager::get(StringID::ColumnQuestionId),
+                  this->_question->getId());
 
   if (!query.exec()) {
     QString message = this->metaObject()->className();
-    message += "::isAlreadyRelated --" + THE_QUERY_FAILED;
+    message +=
+        "::isAlreadyRelated --" + StringManager::get(StringID::TheQueryFailed);
     throw std::invalid_argument(message.toStdString());
   }
   return query.next();
@@ -122,13 +138,19 @@ bool TagAndQuestionRelationSql::isAllRelationRemoved() {
   QSqlQuery query;
 
   if (this->_tag && this->_tag->getId()) {
-    DeleteSql sql = DeleteSql(TABLE_QUESTIONS_TAGS, {COLUMN_TAG_ID}, this);
+    DeleteSql sql =
+        DeleteSql(StringManager::get(StringID::TableQuestionsTags),
+                  {StringManager::get(StringID::ColumnTagId)}, this);
     query.prepare(sql.generate());
-    query.bindValue(":" + COLUMN_TAG_ID, this->_tag->getId());
+    query.bindValue(":" + StringManager::get(StringID::ColumnTagId),
+                    this->_tag->getId());
   } else if (this->_question && this->_question->getId()) {
-    DeleteSql sql = DeleteSql(TABLE_QUESTIONS_TAGS, {COLUMN_QUESTION_ID}, this);
+    DeleteSql sql =
+        DeleteSql(StringManager::get(StringID::TableQuestionsTags),
+                  {StringManager::get(StringID::ColumnQuestionId)}, this);
     query.prepare(sql.generate());
-    query.bindValue(":" + COLUMN_QUESTION_ID, this->_question->getId());
+    query.bindValue(":" + StringManager::get(StringID::ColumnQuestionId),
+                    this->_question->getId());
   }
 
   if (!query.exec()) {
@@ -152,26 +174,36 @@ QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
   }
   QList<Tag *> tags;
 
-  QList<QString> requriedFields = {TABLE_TAGS + "." + COLUMN_ID,
-                                   TABLE_TAGS + "." + COLUMN_TAG};
+  QList<QString> requriedFields = {
+      StringManager::get(StringID::TableTags) + "." +
+          StringManager::get(StringID::ColumnId),
+      StringManager::get(StringID::TableTags) + "." +
+          StringManager::get(StringID::ColumnTag)};
 
   QList<std::pair<QString, QString>> connectedTables = {
-      {TABLE_QUESTIONS_TAGS, TABLE_TAGS},
-      {TABLE_QUESTIONS, TABLE_QUESTIONS_TAGS}};
+      {StringManager::get(StringID::TableQuestionsTags),
+       StringManager::get(StringID::TableTags)},
+      {StringManager::get(StringID::TableQuestions),
+       StringManager::get(StringID::TableQuestionsTags)}};
 
   QList<std::pair<QString, QString>> connectedValues = {
-      {COLUMN_TAG_ID, COLUMN_ID}, {COLUMN_ID, COLUMN_QUESTION_ID}};
+      {StringManager::get(StringID::ColumnTagId),
+       StringManager::get(StringID::ColumnId)},
+      {StringManager::get(StringID::ColumnId),
+       StringManager::get(StringID::ColumnQuestionId)}};
 
-  QString criteria = TABLE_QUESTIONS_TAGS + "." + COLUMN_QUESTION_ID +
-                     "=:" + COLUMN_QUESTION_ID;
+  QString criteria = StringManager::get(StringID::TableQuestionsTags) + "." +
+                     StringManager::get(StringID::ColumnQuestionId) +
+                     "=:" + StringManager::get(StringID::ColumnQuestionId);
 
-  SelectWithJoinSql *sql =
-      new SelectWithJoinSql(TABLE_TAGS, requriedFields, connectedTables,
-                            connectedValues, criteria, this);
+  SelectWithJoinSql *sql = new SelectWithJoinSql(
+      StringManager::get(StringID::TableTags), requriedFields, connectedTables,
+      connectedValues, criteria, this);
 
   QSqlQuery query;
   query.prepare(sql->generate());
-  query.bindValue(":" + COLUMN_QUESTION_ID, this->_question->getId());
+  query.bindValue(":" + StringManager::get(StringID::ColumnQuestionId),
+                  this->_question->getId());
 
   if (!query.exec()) {
     throw std::invalid_argument(
@@ -210,11 +242,13 @@ QList<Question *> TagAndQuestionRelationSql::getRelatedQuestions() {
   }
 
   FindByKeySql *sql =
-      new FindByKeySql(TABLE_QUESTIONS_TAGS, {COLUMN_TAG_ID}, this);
+      new FindByKeySql(StringManager::get(StringID::TableQuestionsTags),
+                       {StringManager::get(StringID::ColumnTagId)}, this);
 
   QSqlQuery query;
   query.prepare(sql->generate());
-  query.bindValue(":" + COLUMN_TAG_ID, this->_tag->getId());
+  query.bindValue(":" + StringManager::get(StringID::ColumnTagId),
+                  this->_tag->getId());
 
   if (!query.exec()) {
     throw std::invalid_argument(
@@ -249,30 +283,44 @@ QList<Question *> TagAndQuestionRelationSql::getRelatedActiveQuesitons() {
   }
   QList<Question *> questions;
 
-  QList<QString> requriedFields = {TABLE_QUESTIONS + "." + COLUMN_ID,
-                                   TABLE_QUESTIONS + "." + COLUMN_VALUE,
-                                   TABLE_QUESTIONS + "." + COLUMN_ANSWER,
-                                   TABLE_QUESTIONS + "." + COLUMN_IS_ACTIVE};
+  QList<QString> requriedFields = {
+      StringManager::get(StringID::TableQuestions) + "." +
+          StringManager::get(StringID::ColumnId),
+      StringManager::get(StringID::TableQuestions) + "." +
+          StringManager::get(StringID::ColumnValue),
+      StringManager::get(StringID::TableQuestions) + "." +
+          StringManager::get(StringID::ColumnAnswer),
+      StringManager::get(StringID::TableQuestions) + "." +
+          StringManager::get(StringID::ColumnIsActive)};
 
   QList<std::pair<QString, QString>> connectedTables = {
-      {TABLE_QUESTIONS_TAGS, TABLE_QUESTIONS},
-      {TABLE_TAGS, TABLE_QUESTIONS_TAGS}};
+      {StringManager::get(StringID::TableQuestionsTags),
+       StringManager::get(StringID::TableQuestions)},
+      {StringManager::get(StringID::TableTags),
+       StringManager::get(StringID::TableQuestionsTags)}};
 
   QList<std::pair<QString, QString>> connectedValues = {
-      {COLUMN_QUESTION_ID, COLUMN_ID}, {COLUMN_ID, COLUMN_TAG_ID}};
+      {StringManager::get(StringID::ColumnQuestionId),
+       StringManager::get(StringID::ColumnId)},
+      {StringManager::get(StringID::ColumnId),
+       StringManager::get(StringID::ColumnTagId)}};
 
-  QString criteria = TABLE_QUESTIONS_TAGS + "." + COLUMN_TAG_ID +
-                     "=:" + COLUMN_ID + " AND " + TABLE_QUESTIONS + "." +
-                     COLUMN_IS_ACTIVE + "=1 " + ORDER_BY + TABLE_QUESTIONS +
-                     "." + COLUMN_VALUE;
+  QString criteria = StringManager::get(StringID::TableQuestionsTags) + "." +
+                     StringManager::get(StringID::ColumnTagId) +
+                     "=:" + StringManager::get(StringID::ColumnId) + " AND " +
+                     StringManager::get(StringID::TableQuestions) + "." +
+                     StringManager::get(StringID::ColumnIsActive) + "=1 " +
+                     ORDER_BY + StringManager::get(StringID::TableQuestions) +
+                     "." + StringManager::get(StringID::ColumnValue);
 
-  SelectWithJoinSql *sql =
-      new SelectWithJoinSql(TABLE_QUESTIONS, requriedFields, connectedTables,
-                            connectedValues, criteria, this);
+  SelectWithJoinSql *sql = new SelectWithJoinSql(
+      StringManager::get(StringID::TableQuestions), requriedFields,
+      connectedTables, connectedValues, criteria, this);
 
   QSqlQuery query;
   query.prepare(sql->generate());
-  query.bindValue(":" + COLUMN_ID, this->_tag->getId());
+  query.bindValue(":" + StringManager::get(StringID::ColumnId),
+                  this->_tag->getId());
 
   if (!query.exec()) {
     throw std::invalid_argument(
@@ -296,8 +344,10 @@ QList<Question *> TagAndQuestionRelationSql::getRelatedActiveQuesitons() {
 template <typename T> void TagAndQuestionRelationSql::executeQuery(T *sql) {
   QSqlQuery query;
   query.prepare(sql->generate());
-  query.bindValue(":" + COLUMN_TAG_ID, this->_tag->getId());
-  query.bindValue(":" + COLUMN_QUESTION_ID, this->_question->getId());
+  query.bindValue(":" + StringManager::get(StringID::ColumnTagId),
+                  this->_tag->getId());
+  query.bindValue(":" + StringManager::get(StringID::ColumnQuestionId),
+                  this->_question->getId());
 
   if (!query.exec()) {
     throw std::invalid_argument(

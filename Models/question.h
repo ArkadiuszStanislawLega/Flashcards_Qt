@@ -7,9 +7,8 @@
 #include <QSqlRecord>
 #include <QString>
 
-#include "../Constants/strings.h"
-#include "../Database/manytomany.h"
 #include "tag.h"
+#include <Constants/strings.h>
 
 class Tag;
 

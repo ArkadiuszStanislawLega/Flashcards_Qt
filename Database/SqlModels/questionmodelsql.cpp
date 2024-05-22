@@ -1,5 +1,7 @@
 #include "questionmodelsql.h"
 
+#include <stringmanager.h>
+
 QuestionModelSql::QuestionModelSql(Question *model, QObject *parent)
     : QObject{parent} {
   this->_model = model;
@@ -10,14 +12,20 @@ bool QuestionModelSql::isInsertedSql() {
     throw std::invalid_argument(
         "QuestionModelSql::isInsertedSql -- pointer to question is null.");
   }
-  InsertSql insert = InsertSql(
-      TABLE_QUESTIONS, {COLUMN_VALUE, COLUMN_ANSWER, COLUMN_IS_ACTIVE}, this);
+  InsertSql insert = InsertSql(StringManager::get(StringID::TableQuestions),
+                               {StringManager::get(StringID::ColumnValue),
+                                StringManager::get(StringID::ColumnAnswer),
+                                StringManager::get(StringID::ColumnIsActive)},
+                               this);
 
   QSqlQuery query;
   query.prepare(insert.generate());
-  query.bindValue(":" + COLUMN_VALUE, this->_model->getValue());
-  query.bindValue(":" + COLUMN_ANSWER, this->_model->getAnswer());
-  query.bindValue(":" + COLUMN_IS_ACTIVE, this->_model->getIsActive());
+  query.bindValue(":" + StringManager::get(StringID::ColumnValue),
+                  this->_model->getValue());
+  query.bindValue(":" + StringManager::get(StringID::ColumnAnswer),
+                  this->_model->getAnswer());
+  query.bindValue(":" + StringManager::get(StringID::ColumnIsActive),
+                  this->_model->getIsActive());
 
   if (!query.exec()) {
     throw std::invalid_argument(
@@ -37,11 +45,13 @@ bool QuestionModelSql::isDeleteSql() {
     throw std::invalid_argument("QuestionModelSql::isDeleteSql -- property id "
                                 "of the model is zero or below zero");
   }
-  DeleteSql queryS = DeleteSql(TABLE_QUESTIONS, {COLUMN_ID}, this);
+  DeleteSql queryS = DeleteSql(StringManager::get(StringID::TableQuestions),
+                               {StringManager::get(StringID::ColumnId)}, this);
 
   QSqlQuery query;
   query.prepare(queryS.generate());
-  query.bindValue(":" + COLUMN_ID, this->_model->getId());
+  query.bindValue(":" + StringManager::get(StringID::ColumnId),
+                  this->_model->getId());
 
   if (!query.exec()) {
     throw std::invalid_argument(
@@ -56,10 +66,11 @@ Question *QuestionModelSql::selectQuestion(int id) {
         "QuestionModelSql::selectQuestion - property id is zero or subzero.");
   }
 
-  FindByKeySql *sql = new FindByKeySql(TABLE_QUESTIONS, {}, this);
+  FindByKeySql *sql =
+      new FindByKeySql(StringManager::get(StringID::TableQuestions), {}, this);
   QSqlQuery query;
   query.prepare(sql->generate());
-  query.bindValue(":" + COLUMN_ID, id);
+  query.bindValue(":" + StringManager::get(StringID::ColumnId), id);
 
   if (!query.exec()) {
     throw std::invalid_argument(
@@ -81,16 +92,20 @@ Question *QuestionModelSql::findByCriteria() {
         "QuestionModelSql::selectQuestion -- answer is empty.");
   }
 
-  QString criteria = COLUMN_VALUE + "=:" + COLUMN_VALUE + " " + AND +
-                     COLUMN_ANSWER + "=:" + COLUMN_ANSWER;
+  QString criteria = StringManager::get(StringID::ColumnValue) +
+                     "=:" + StringManager::get(StringID::ColumnValue) + " " +
+                     AND + StringManager::get(StringID::ColumnAnswer) +
+                     "=:" + StringManager::get(StringID::ColumnAnswer);
 
-  SelectWithCriteriaSql select =
-      SelectWithCriteriaSql(TABLE_QUESTIONS, {}, criteria, this);
+  SelectWithCriteriaSql select = SelectWithCriteriaSql(
+      StringManager::get(StringID::TableQuestions), {}, criteria, this);
 
   QSqlQuery query;
   query.prepare(select.generate());
-  query.bindValue(":" + COLUMN_VALUE, this->_model->getValue());
-  query.bindValue(":" + COLUMN_ANSWER, this->_model->getAnswer());
+  query.bindValue(":" + StringManager::get(StringID::ColumnValue),
+                  this->_model->getValue());
+  query.bindValue(":" + StringManager::get(StringID::ColumnAnswer),
+                  this->_model->getAnswer());
 
   if (!query.exec()) {
     throw std::invalid_argument(
@@ -118,15 +133,22 @@ bool QuestionModelSql::updateSql() {
                                 "question is zero or subzero.");
   }
 
-  UpdateSql sql = UpdateSql(
-      TABLE_QUESTIONS, {COLUMN_VALUE, COLUMN_ANSWER, COLUMN_IS_ACTIVE}, this);
+  UpdateSql sql = UpdateSql(StringManager::get(StringID::TableQuestions),
+                            {StringManager::get(StringID::ColumnValue),
+                             StringManager::get(StringID::ColumnAnswer),
+                             StringManager::get(StringID::ColumnIsActive)},
+                            this);
 
   QSqlQuery query;
   query.prepare(sql.generate());
-  query.bindValue(":" + COLUMN_ID, this->_model->getId());
-  query.bindValue(":" + COLUMN_VALUE, this->_model->getValue());
-  query.bindValue(":" + COLUMN_ANSWER, this->_model->getAnswer());
-  query.bindValue(":" + COLUMN_IS_ACTIVE, this->_model->getIsActive());
+  query.bindValue(":" + StringManager::get(StringID::ColumnId),
+                  this->_model->getId());
+  query.bindValue(":" + StringManager::get(StringID::ColumnValue),
+                  this->_model->getValue());
+  query.bindValue(":" + StringManager::get(StringID::ColumnAnswer),
+                  this->_model->getAnswer());
+  query.bindValue(":" + StringManager::get(StringID::ColumnIsActive),
+                  this->_model->getIsActive());
   qDebug() << query.lastQuery();
 
   if (!query.exec()) {
@@ -138,11 +160,12 @@ bool QuestionModelSql::updateSql() {
 }
 
 void QuestionModelSql::convertQueryToQuestion(QSqlQuery *query) {
-  this->_model->setId(FromQueryToValueConverter::get<int>(query, COLUMN_ID));
-  this->_model->setAnswer(
-      FromQueryToValueConverter::get<QString>(query, COLUMN_ANSWER));
-  this->_model->setValue(
-      FromQueryToValueConverter::get<QString>(query, COLUMN_VALUE));
-  this->_model->setIsActive(
-      FromQueryToValueConverter::get<bool>(query, COLUMN_IS_ACTIVE));
+  this->_model->setId(FromQueryToValueConverter::get<int>(
+      query, StringManager::get(StringID::ColumnId)));
+  this->_model->setAnswer(FromQueryToValueConverter::get<QString>(
+      query, StringManager::get(StringID::ColumnAnswer)));
+  this->_model->setValue(FromQueryToValueConverter::get<QString>(
+      query, StringManager::get(StringID::ColumnValue)));
+  this->_model->setIsActive(FromQueryToValueConverter::get<bool>(
+      query, StringManager::get(StringID::ColumnIsActive)));
 }

@@ -1,5 +1,7 @@
 #include "tagview.h"
 
+#include <stringmanager.h>
+
 TagView::TagView(QWidget *parent) : QWidget{parent}, ui(new Ui::TagView) {
   ui->setupUi(this);
   this->_selected_tag = nullptr;
@@ -18,26 +20,27 @@ void TagView::cleanTextEditors() { this->ui->te_create_tag->clear(); }
 
 void TagView::initialTagsListView() {
   this->_table_model = new QSqlRelationalTableModel;
-  this->_table_model->setTable(TABLE_TAGS);
+  this->_table_model->setTable(StringManager::get(StringID::TableTags));
   this->_table_model->select();
 
   this->ui->lv_created_tags->setModel(this->_table_model);
   this->ui->lv_created_tags->setModelColumn(
-      this->_table_model->record().indexOf(COLUMN_TAG));
+      this->_table_model->record().indexOf(
+          StringManager::get(StringID::ColumnTag)));
 }
 
 void TagView::on_b_create_tag_clicked() {
   if (ui->te_create_tag->toPlainText().isEmpty()) {
-    this->printInfo(FIELD_TAG_CANT_EMPTY, true);
+    this->printInfo(StringManager::get(StringID::FieldTagCantEmpty), true);
     return;
   }
 
-  TagModelSql query =
-      TagModelSql(new Tag(ui->te_create_tag->toPlainText()), this);
+  TagModelSql query = TagModelSql(
+      new Tag(ui->te_create_tag->toPlainText().toStdString().c_str()), this);
 
   try {
     if (query.isInsertedSql()) {
-      this->printInfo(TAG_CREATED_CORRECTLY);
+      this->printInfo(StringManager::get(StringID::TagCreatedCorrectly));
     }
 
     this->_table_model->select();
@@ -46,18 +49,18 @@ void TagView::on_b_create_tag_clicked() {
 
   } catch (std::invalid_argument &e) {
     qWarning() << "TagView::no_b_create_tag_clicked" << e.what();
-    this->printInfo(DATABASE_ERROR, true);
+    this->printInfo(StringManager::get(StringID::ErrorDatabase), true);
   }
 }
 
 void TagView::on_b_update_tag_clicked() {
   if (this->ui->te_create_tag->toPlainText().isEmpty()) {
-    this->printInfo(FIELD_TAG_CANT_EMPTY, true);
+    this->printInfo(StringManager::get(StringID::FieldTagCantEmpty), true);
     return;
   }
 
   if (!this->_selected_tag) {
-    this->printInfo(SELECT_TAG_FIRST, true);
+    this->printInfo(StringManager::get(StringID::SelectTagFirst), true);
     return;
   }
 
@@ -67,7 +70,7 @@ void TagView::on_b_update_tag_clicked() {
   try {
     if (query.updateSql()) {
       this->_table_model->select();
-      this->printInfo(TAG_UPDATE_SUCCESFULLY);
+      this->printInfo(StringManager::get(StringID::TagUpdateSuccesfully));
     }
 
     this->cleanTextEditors();
@@ -75,13 +78,13 @@ void TagView::on_b_update_tag_clicked() {
 
   } catch (std::invalid_argument &e) {
     qWarning() << "TagView::on_b_update_tag_clicked" << e.what();
-    this->printInfo(DATABASE_ERROR, true);
+    this->printInfo(StringManager::get(StringID::ErrorDatabase), true);
   }
 }
 
 void TagView::on_b_remove_tag_clicked() {
   if (!this->_selected_tag) {
-    this->printInfo(SELECT_TAG_FIRST, true);
+    this->printInfo(StringManager::get(StringID::SelectTagFirst), true);
     return;
   }
 
@@ -93,7 +96,7 @@ void TagView::on_b_remove_tag_clicked() {
     if (relation.isAllRelationRemoved() && query.isDeleteSql()) {
       this->_table_model->select();
       this->_selected_tag = nullptr;
-      this->printInfo(TAG_SUCCESFULLY_REMOVED);
+      this->printInfo(StringManager::get(StringID::TagSuccesfullyRemoved));
     }
 
     this->cleanTextEditors();
@@ -101,7 +104,7 @@ void TagView::on_b_remove_tag_clicked() {
 
   } catch (std::invalid_argument &e) {
     qWarning() << "TagView::on_b_remove_tag_clicked" << e.what();
-    this->printInfo(DATABASE_ERROR, true);
+    this->printInfo(StringManager::get(StringID::ErrorDatabase), true);
   }
 }
 
@@ -109,8 +112,10 @@ void TagView::on_lv_created_tags_clicked(const QModelIndex &index) {
   int id, id_column_index, tag_column_index;
   QString tag;
 
-  id_column_index = this->_table_model->record().indexOf(COLUMN_ID);
-  tag_column_index = this->_table_model->record().indexOf(COLUMN_TAG);
+  id_column_index = this->_table_model->record().indexOf(
+      StringManager::get(StringID::ColumnId));
+  tag_column_index = this->_table_model->record().indexOf(
+      StringManager::get(StringID::ColumnTag));
 
   id = this->_table_model->index(index.row(), id_column_index)
            .data(Qt::DisplayRole)

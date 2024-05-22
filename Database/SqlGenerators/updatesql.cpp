@@ -1,6 +1,8 @@
 #include "updatesql.h"
 #include "Constants/strings.h"
 
+#include <stringmanager.h>
+
 UpdateSql::UpdateSql(QString table, QList<QString> columns, QObject *parent)
     : QObject{parent} {
   this->_table = table;
@@ -17,6 +19,7 @@ QString UpdateSql::generate() {
       query += ", ";
     }
   }
-  query += " " + WHERE + COLUMN_ID + "=:" + COLUMN_ID;
+  query += " " + WHERE + StringManager::get(StringID::ColumnId) +
+           " = :" + StringManager::get(StringID::ColumnId);
   return query;
 }

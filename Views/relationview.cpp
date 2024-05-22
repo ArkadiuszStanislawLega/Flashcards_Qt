@@ -1,5 +1,7 @@
 #include "relationview.h"
 
+#include <stringmanager.h>
+
 RelationView::RelationView(QWidget *parent)
     : QWidget{parent}, ui(new Ui::RelationView) {
   this->ui->setupUi(this);
@@ -17,25 +19,30 @@ void RelationView::printInfo(const QString &value, bool isError) {
 
 void RelationView::initialQuestionsListView() {
   this->_questions_table_model = new QSqlRelationalTableModel;
-  this->_questions_table_model->setTable(TABLE_QUESTIONS);
+  this->_questions_table_model->setTable(
+      StringManager::get(StringID::TableQuestions));
   this->_questions_table_model->setSort(
-      this->_questions_table_model->record().indexOf(COLUMN_VALUE),
+      this->_questions_table_model->record().indexOf(
+          StringManager::get(StringID::ColumnValue)),
       Qt::AscendingOrder);
   this->_questions_table_model->select();
 
   this->ui->lv_questions->setModel(this->_questions_table_model);
   this->ui->lv_questions->setModelColumn(
-      this->_questions_table_model->record().indexOf(COLUMN_VALUE));
+      this->_questions_table_model->record().indexOf(
+          StringManager::get(StringID::ColumnValue)));
 }
 
 void RelationView::initialTagsComboBox() {
   this->_tags_combo_box_model = new QSqlRelationalTableModel;
-  this->_tags_combo_box_model->setTable(TABLE_TAGS);
+  this->_tags_combo_box_model->setTable(
+      StringManager::get(StringID::TableTags));
   this->_tags_combo_box_model->select();
 
   this->ui->cb_tags->setModel(this->_tags_combo_box_model);
   this->ui->cb_tags->setModelColumn(
-      this->_tags_combo_box_model->record().indexOf(COLUMN_TAG));
+      this->_tags_combo_box_model->record().indexOf(
+          StringManager::get(StringID::ColumnTag)));
 }
 
 void RelationView::initialQuestionTagsListView() {
@@ -57,8 +64,10 @@ void RelationView::on_cb_tags_currentIndexChanged(int index) {
   int id, id_column_index, tag_column_index;
   QString tag;
 
-  id_column_index = this->_tags_combo_box_model->record().indexOf(COLUMN_ID);
-  tag_column_index = this->_tags_combo_box_model->record().indexOf(COLUMN_TAG);
+  id_column_index = this->_tags_combo_box_model->record().indexOf(
+      StringManager::get(StringID::ColumnId));
+  tag_column_index = this->_tags_combo_box_model->record().indexOf(
+      StringManager::get(StringID::ColumnTag));
 
   id = this->_tags_combo_box_model->index(index, id_column_index)
            .data(Qt::DisplayRole)
@@ -76,13 +85,14 @@ void RelationView::on_lv_questions_clicked(const QModelIndex &index) {
   QString value, answer;
   bool is_active;
 
-  id_column_index = this->_questions_table_model->record().indexOf(COLUMN_ID);
-  value_column_index =
-      this->_questions_table_model->record().indexOf(COLUMN_VALUE);
-  answer_column_index =
-      this->_questions_table_model->record().indexOf(COLUMN_ANSWER);
-  is_active_column_index =
-      this->_questions_table_model->record().indexOf(COLUMN_IS_ACTIVE);
+  id_column_index = this->_questions_table_model->record().indexOf(
+      StringManager::get(StringID::ColumnId));
+  value_column_index = this->_questions_table_model->record().indexOf(
+      StringManager::get(StringID::ColumnValue));
+  answer_column_index = this->_questions_table_model->record().indexOf(
+      StringManager::get(StringID::ColumnAnswer));
+  is_active_column_index = this->_questions_table_model->record().indexOf(
+      StringManager::get(StringID::ColumnIsActive));
 
   id = this->_questions_table_model->index(index.row(), id_column_index)
            .data(Qt::DisplayRole)
@@ -123,12 +133,13 @@ void RelationView::on_lv_question_tags_clicked(const QModelIndex &index) {
 
 void RelationView::on_b_create_relation_clicked() {
   if (!this->_selected_tag_to_question_add) {
-    this->printInfo(TAG_FROM_COMBO_BOX_SHOULD_BE_SELECTED, true);
+    this->printInfo(
+        StringManager::get(StringID::TagFromComboBoxShlouldBeSelected), true);
     return;
   }
 
   if (!this->_selected_question) {
-    this->printInfo(SELECT_QUESTION_FIRST);
+    this->printInfo(StringManager::get(StringID::SelectQuestionFirst), true);
     return;
   }
 
@@ -143,25 +154,26 @@ void RelationView::on_b_create_relation_clicked() {
 
     if (relation.isInsertedSql()) {
       this->_questions_table_model->select();
-      this->printInfo(RELATION_QUESTION_WIT_TAG_CREATED);
+      this->printInfo(
+          StringManager::get(StringID::RelationBetweenTagAndQuestionCreated));
     }
 
     emit create_relation();
 
   } catch (std::invalid_argument &e) {
     qWarning() << "RelationView::on_b_create_relation_clicked" << e.what();
-    this->printInfo(DATABASE_ERROR, true);
+    this->printInfo(StringManager::get(StringID::ErrorDatabase), true);
   }
 }
 
 void RelationView::on_b_remove_relation_clicked() {
   if (!this->_tag_from_selected_question) {
-    this->printInfo(SELECT_TAG_FROM_QUESTION, true);
+    this->printInfo(StringManager::get(StringID::SelectTagFromQuestion), true);
     return;
   }
 
   if (!this->_selected_question) {
-    this->printInfo(SELECT_QUESTION_FIRST, true);
+    this->printInfo(StringManager::get(StringID::SelectQuestionFirst), true);
     return;
   }
 
@@ -171,14 +183,15 @@ void RelationView::on_b_remove_relation_clicked() {
 
     if (relation.isDeletedSql()) {
       this->_questions_table_model->select();
-      this->printInfo(REMOVED_RELATION_QUESTION_AND_TAG_SUCCESFULLY);
+      this->printInfo(
+          StringManager::get(StringID::RemoveRelationQuestionAndTagSuccesfull));
     }
 
     emit remove_relation();
 
   } catch (std::invalid_argument &e) {
     qWarning() << "RelationView::on_b_remove_relation_clicked" << e.what();
-    printInfo(DATABASE_ERROR, true);
+    printInfo(StringManager::get(StringID::ErrorDatabase), true);
   }
 }
 
@@ -199,7 +212,8 @@ void RelationView::remove_tag_from_db() { this->initialTagsComboBox(); }
 void RelationView::update_tag_from_db() { this->initialTagsComboBox(); }
 
 void RelationView::on_le_filter_textChanged(const QString &arg1) {
-  this->_questions_table_model->setFilter(TABLE_QUESTIONS + "." + COLUMN_VALUE +
-                                          " LIKE \"%" + arg1 + "%\"");
+  this->_questions_table_model->setFilter(
+      StringManager::get(StringID::TableQuestions) + "." +
+      StringManager::get(StringID::ColumnValue) + " LIKE \"%" + arg1 + "%\"");
   this->_questions_table_model->select();
 }

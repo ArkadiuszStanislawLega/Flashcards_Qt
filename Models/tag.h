@@ -21,7 +21,7 @@ public:
   Tag(int, QString, QObject *parent = nullptr);
 
   int getId();
-  QString getTag();
+  const QString getTag();
 
   void setId(int);
   void setTag(QString);

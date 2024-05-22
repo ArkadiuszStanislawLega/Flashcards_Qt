@@ -36,9 +36,11 @@ void LearnView::prepare_tags_list(QList<QString> &list) {
   for (Tag *t : sqlModel.getAllTags()) {
     TagAndQuestionRelationSql relation =
         TagAndQuestionRelationSql(t, new Question(this), this);
+
     int question_number = relation.getRelatedActiveQuesitons().size();
-    QString value =
-        t->getTag() + " [" + std::to_string(question_number).c_str() + "]";
+
+    QString value = t->getTag() + "[" + QString::number(question_number) + "]";
+
     this->_tags_list.append(t);
     list.append(value);
     this->_max_question_number_in_tag.append(question_number);

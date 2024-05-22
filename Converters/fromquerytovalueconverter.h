@@ -26,7 +26,7 @@ public:
     };
 
     if constexpr (std::is_same_v<T, QString>) {
-      return query->value(columnIndex).toString();
+      return query->value(columnIndex).toString().toStdString().c_str();
     };
   }
 };

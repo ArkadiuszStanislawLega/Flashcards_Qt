@@ -1,13 +1,15 @@
 #include "dbmanager.h"
 
+#include <stringmanager.h>
+
 DbManager::DbManager() {
   this->_database = QSqlDatabase::addDatabase("QSQLITE");
-  this->_database.setDatabaseName(DATABASE_NAME);
+  this->_database.setDatabaseName(StringManager::get(StringID::DatabaseName));
 
   if (!this->_database.open()) {
-    qDebug() << ERROR_CONNECTION_WITH_DATABASE;
+    qDebug() << StringManager::get(StringID::ErrorConnectionWithDatabase);
   } else {
-    qDebug() << CONNECTION_OK;
+    qDebug() << StringManager::get(StringID::ConnectionOk);
     this->CreateTables();
   }
 }
@@ -17,9 +19,9 @@ DbManager::DbManager(const QString &path) {
   this->_database.setDatabaseName(path);
 
   if (!this->_database.open()) {
-    qDebug() << ERROR_CONNECTION_WITH_DATABASE;
+    qDebug() << StringManager::get(StringID::ErrorConnectionWithDatabase);
   } else {
-    qDebug() << CONNECTION_OK;
+    qDebug() << StringManager::get(StringID::ConnectionOk);
     this->CreateTables();
   }
 }
@@ -32,28 +34,39 @@ void DbManager::CreateTables() {
 
 void DbManager::CreateTableQuestions() {
   QSqlQuery query;
-  query.prepare(CREATE_TABLE_IF_NOT_EXISTS + TABLE_QUESTIONS + "(" + COLUMN_ID +
-                " " + PRIMARY_KEY + ", " + COLUMN_IS_ACTIVE + " " +
-                INTEGER_NOT_NULL + " DEFAULT 1" + ", " + COLUMN_VALUE + " " +
-                TEXT + ", " + COLUMN_ANSWER + " " + TEXT + ")");
+  query.prepare(CREATE_TABLE_IF_NOT_EXISTS +
+                StringManager::get(StringID::TableQuestions) + "(" +
+                StringManager::get(StringID::ColumnId) + " " + PRIMARY_KEY +
+                ", " + StringManager::get(StringID::ColumnIsActive) + " " +
+                INTEGER_NOT_NULL + " DEFAULT 1" + ", " +
+                StringManager::get(StringID::ColumnValue) + " " + TEXT + ", " +
+                StringManager::get(StringID::ColumnAnswer) + " " + TEXT + ")");
   query.exec();
 }
 
 void DbManager::CreateTableTags() {
   QSqlQuery query;
-  query.prepare(CREATE_TABLE_IF_NOT_EXISTS + TABLE_TAGS + "(" + COLUMN_ID +
-                " " + PRIMARY_KEY + ", " + COLUMN_TAG + " " + TEXT + ")");
+  query.prepare(
+      CREATE_TABLE_IF_NOT_EXISTS + StringManager::get(StringID::TableTags) +
+      "(" + StringManager::get(StringID::ColumnId) + " " + PRIMARY_KEY + ", " +
+      StringManager::get(StringID::ColumnTag) + " " + TEXT + ")");
   query.exec();
 }
 
 void DbManager::CreateTableQuestionsTags() {
   QSqlQuery query;
-  query.prepare(CREATE_TABLE_IF_NOT_EXISTS + TABLE_QUESTIONS_TAGS + "(" +
-                COLUMN_ID + " " + PRIMARY_KEY + ", " + COLUMN_QUESTION_ID +
-                " " + INTEGER_NOT_NULL + ", " + COLUMN_TAG_ID + " " +
+  query.prepare(CREATE_TABLE_IF_NOT_EXISTS +
+                StringManager::get(StringID::TableQuestionsTags) + "(" +
+                StringManager::get(StringID::ColumnId) + " " + PRIMARY_KEY +
+                ", " + StringManager::get(StringID::ColumnQuestionId) + " " +
+                INTEGER_NOT_NULL + ", " +
+                StringManager::get(StringID::ColumnTagId) + " " +
                 INTEGER_NOT_NULL + "," + FOREIGN_KEY + "(" +
-                COLUMN_QUESTION_ID + ")" + REFERENCES + TABLE_QUESTIONS + "(" +
-                COLUMN_ID + ")" + FOREIGN_KEY + "(" + COLUMN_TAG_ID + ")" +
-                REFERENCES + TABLE_TAGS + "(" + COLUMN_ID + "))");
+                StringManager::get(StringID::ColumnQuestionId) + ")" +
+                REFERENCES + StringManager::get(StringID::TableQuestions) +
+                "(" + StringManager::get(StringID::ColumnId) + ")" +
+                FOREIGN_KEY + "(" + StringManager::get(StringID::ColumnTagId) +
+                ")" + REFERENCES + StringManager::get(StringID::TableTags) +
+                "(" + StringManager::get(StringID::ColumnId) + "))");
   query.exec();
 }

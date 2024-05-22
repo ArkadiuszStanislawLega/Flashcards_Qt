@@ -1,5 +1,7 @@
 #include "fromquerytoquestionconverter.h"
 
+#include <stringmanager.h>
+
 Question *FromQueryToQuestionConverter::get(QSqlQuery *query) {
   if (!query) {
     throw std::invalid_argument(
@@ -8,10 +10,15 @@ Question *FromQueryToQuestionConverter::get(QSqlQuery *query) {
 
   try {
     return new Question(
-        FromQueryToValueConverter::get<int>(query, COLUMN_ID),
-        FromQueryToValueConverter::get<QString>(query, COLUMN_ANSWER),
-        FromQueryToValueConverter::get<QString>(query, COLUMN_VALUE),
-        FromQueryToValueConverter::get<bool>(query, COLUMN_IS_ACTIVE), {});
+        FromQueryToValueConverter::get<int>(
+            query, StringManager::get(StringID::ColumnId)),
+        FromQueryToValueConverter::get<QString>(
+            query, StringManager::get(StringID::ColumnAnswer)),
+        FromQueryToValueConverter::get<QString>(
+            query, StringManager::get(StringID::ColumnValue)),
+        FromQueryToValueConverter::get<bool>(
+            query, StringManager::get(StringID::ColumnIsActive)),
+        {});
   } catch (std::invalid_argument &e) {
     qWarning() << "FromQueryToQuestionConverter::get" << e.what();
   }

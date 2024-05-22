@@ -1,24 +1,28 @@
 #include "questionview.h"
 
+#include <stringmanager.h>
+
 void QuestionView::initialQuestionsListView() {
   this->_table_model = new QSqlRelationalTableModel;
-  this->_table_model->setTable(TABLE_QUESTIONS);
-  this->_table_model->setSort(
-      this->_table_model->record().indexOf(COLUMN_VALUE), Qt::AscendingOrder);
+  this->_table_model->setTable(StringManager::get(StringID::TableQuestions));
+  this->_table_model->setSort(this->_table_model->record().indexOf(
+                                  StringManager::get(StringID::ColumnValue)),
+                              Qt::AscendingOrder);
   this->_table_model->select();
 
   this->ui->lv_created_quesions->setModel(this->_table_model);
   this->ui->lv_created_quesions->setModelColumn(
-      this->_table_model->record().indexOf(COLUMN_VALUE));
+      this->_table_model->record().indexOf(
+          StringManager::get(StringID::ColumnValue)));
 }
 
 void QuestionView::initialTagsComboBoxData() {
   this->_cb_tags_model = new QSqlRelationalTableModel;
-  this->_cb_tags_model->setTable(TABLE_TAGS);
+  this->_cb_tags_model->setTable(StringManager::get(StringID::TableTags));
   this->_cb_tags_model->select();
   this->ui->cb_tags->setModel(this->_cb_tags_model);
-  this->ui->cb_tags->setModelColumn(
-      this->_cb_tags_model->record().indexOf(COLUMN_TAG));
+  this->ui->cb_tags->setModelColumn(this->_cb_tags_model->record().indexOf(
+      StringManager::get(StringID::ColumnTag)));
 }
 
 void QuestionView::cleanTextEditors() {
@@ -44,12 +48,12 @@ QuestionView::QuestionView(QWidget *parent)
 
 void QuestionView::on_b_create_question_clicked() {
   if (ui->te_answer->toPlainText().isEmpty()) {
-    this->printInfo(FIELD_ANSWER_CANT_EMPTY, true);
+    this->printInfo(StringManager::get(StringID::FieldAnswerCantEmpty), true);
     return;
   }
 
   if (ui->te_value->toPlainText().isEmpty()) {
-    this->printInfo(FIELD_VALUE_CANT_EMPTY, true);
+    this->printInfo(StringManager::get(StringID::FieldValueCantEmpty), true);
     return;
   }
 
@@ -75,10 +79,10 @@ Question *QuestionView::addQuestionToDb() {
     if (sqlModel.isInsertedSql()) {
       this->_table_model->select();
       this->cleanTextEditors();
-      this->printInfo(QUESTION_CREATED_CORRECTLY);
+      this->printInfo(StringManager::get(StringID::QuestionCreatedCorrectly));
     }
   } catch (std::invalid_argument &e) {
-    this->printInfo(DATABASE_ERROR, true);
+    this->printInfo(StringManager::get(StringID::ErrorDatabase), true);
     qWarning() << "QuestionView::addQuestionToDb" << e.what();
   }
 
@@ -116,17 +120,18 @@ void QuestionView::createRelationQuestionAndTag(Question *q) {
 
 void QuestionView::on_b_update_question_clicked() {
   if (!this->_selected_question) {
-    this->printInfo(INFO_FIRST_SELECT_QUESTION, true);
+    this->printInfo(StringManager::get(StringID::InfoFirstSelectQuestion),
+                    true);
     return;
   }
 
   if (ui->te_answer->toPlainText().isEmpty()) {
-    this->printInfo(FIELD_ANSWER_CANT_EMPTY, true);
+    this->printInfo(StringManager::get(StringID::FieldAnswerCantEmpty), true);
     return;
   }
 
   if (ui->te_value->toPlainText().isEmpty()) {
-    this->printInfo(FIELD_VALUE_CANT_EMPTY, true);
+    this->printInfo(StringManager::get(StringID::FieldValueCantEmpty), true);
     return;
   }
 
@@ -139,19 +144,20 @@ void QuestionView::on_b_update_question_clicked() {
   try {
     if (sqlModel.updateSql()) {
       this->_table_model->select();
-      this->printInfo(QUESTION_UPDATED);
+      this->printInfo(StringManager::get(StringID::QuestionUpdated));
       this->cleanTextEditors();
     }
     emit update_question_from_db();
   } catch (std::invalid_argument &e) {
-    this->printInfo(DATABASE_ERROR, true);
+    this->printInfo(StringManager::get(StringID::ErrorDatabase), true);
     qWarning() << "QuestionView::on_b_update_question_clicked" << e.what();
   }
 }
 
 void QuestionView::on_b_remove_question_clicked() {
   if (this->_selected_question == nullptr) {
-    this->printInfo(INFO_FIRST_SELECT_QUESTION, true);
+    this->printInfo(StringManager::get(StringID::InfoFirstSelectQuestion),
+                    true);
     return;
   }
 
@@ -169,11 +175,11 @@ void QuestionView::on_b_remove_question_clicked() {
       this->_selected_question = nullptr;
       this->_table_model->select();
       this->cleanTextEditors();
-      this->printInfo(QUESTION_SUCCESFULLY_REMOVED);
+      this->printInfo(StringManager::get(StringID::QuestionSuccesfullyRemoved));
     }
     emit remove_question_from_db();
   } catch (std::invalid_argument &e) {
-    this->printInfo(DATABASE_ERROR, true);
+    this->printInfo(StringManager::get(StringID::ErrorDatabase), true);
     qWarning() << "QuestionView::on_b_remove_question_clicked" << e.what();
   }
 }
@@ -186,12 +192,15 @@ void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index) {
   QString value, answer;
   bool isActive;
 
-  id_column_index = this->_table_model->record().indexOf(COLUMN_ID);
-  value_column_index = this->_table_model->record().indexOf(COLUMN_VALUE);
-  answer_column_index = this->_table_model->record().indexOf(COLUMN_ANSWER);
+  id_column_index = this->_table_model->record().indexOf(
+      StringManager::get(StringID::ColumnId));
+  value_column_index = this->_table_model->record().indexOf(
+      StringManager::get(StringID::ColumnValue));
+  answer_column_index = this->_table_model->record().indexOf(
+      StringManager::get(StringID::ColumnAnswer));
 
-  is_active_column_index =
-      this->_table_model->record().indexOf(COLUMN_IS_ACTIVE);
+  is_active_column_index = this->_table_model->record().indexOf(
+      StringManager::get(StringID::ColumnIsActive));
 
   id = this->_table_model->index(index.row(), id_column_index)
            .data(Qt::DisplayRole)
@@ -217,7 +226,7 @@ void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index) {
     this->_selected_question->setParent(this);
   } catch (std::invalid_argument &e) {
     qWarning() << "QuestionView::on_lv_created_quesions_pressed" << e.what();
-    this->printInfo(DATABASE_ERROR, true);
+    this->printInfo(StringManager::get(StringID::ErrorDatabase), true);
   }
 
   this->ui->te_answer->setText(answer);
@@ -229,8 +238,10 @@ void QuestionView::on_cb_tags_currentIndexChanged(int index) {
   int id, id_column, tag_column_index;
   QString tag;
 
-  id_column = this->_cb_tags_model->record().indexOf(COLUMN_ID);
-  tag_column_index = this->_cb_tags_model->record().indexOf(COLUMN_TAG);
+  id_column = this->_cb_tags_model->record().indexOf(
+      StringManager::get(StringID::ColumnId));
+  tag_column_index = this->_cb_tags_model->record().indexOf(
+      StringManager::get(StringID::ColumnTag));
 
   id = this->_cb_tags_model->index(index, id_column)
            .data(Qt::DisplayRole)
@@ -243,8 +254,9 @@ void QuestionView::on_cb_tags_currentIndexChanged(int index) {
 }
 
 void QuestionView::on_le_searching_bar_textChanged(const QString &arg1) {
-  this->_table_model->setFilter(TABLE_QUESTIONS + "." + COLUMN_VALUE +
-                                " LIKE \"%" + arg1 + "%\"");
+  this->_table_model->setFilter(
+      StringManager::get(StringID::TableQuestions) + "." +
+      StringManager::get(StringID::ColumnValue) + " LIKE \"%" + arg1 + "%\"");
   this->_table_model->select();
 }
 

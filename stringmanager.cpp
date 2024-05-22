@@ -1,0 +1,47 @@
+#include "stringmanager.h"
+
+QMap<StringID, QString> StringManager::_stringMap = {
+    {StringID::ColumnAnswer, tr("Answer")},
+    {StringID::ColumnId, tr("Id")},
+    {StringID::ColumnIsActive, tr("Is_active")},
+    {StringID::ColumnTag, tr("Tag")},
+    {StringID::ColumnTagId, tr("Tag_id")},
+    {StringID::ColumnValue, tr("Value")},
+    {StringID::ColumnQuestionId, tr("Question_id")},
+    {StringID::ConnectionOk, tr("Database: connection ok")},
+    {StringID::DatabaseName, tr("fiszka.db")},
+    {StringID::ErrorConnectionWithDatabase,
+     tr("Error: connection with database failed")},
+    {StringID::ErrorDatabase, tr("Database error")},
+    {StringID::FieldAnswerCantEmpty, tr("The answer field can't be empty.")},
+    {StringID::FieldTagCantEmpty, tr("The tag field can't be empty.")},
+    {StringID::FieldValueCantEmpty, tr("The value field can't be empty.")},
+    {StringID::InfoFirstSelectQuestion, tr("Select question first")},
+    {StringID::QuestionCreatedCorrectly, tr("The question created correctly")},
+    {StringID::QuestionSuccesfullyRemoved,
+     tr("The question has been succesfully removed form database")},
+    {StringID::QuestionUpdated, tr("Question has been sucessfully updated")},
+    {StringID::RemoveRelationQuestionAndTagSuccesfull,
+     tr("Removing relation of the question with the tag has been succesfully "
+        "finished")},
+    {StringID::RelationBetweenTagAndQuestionCreated,
+     tr("Relation between question and tag was corectly created")},
+    {StringID::SelectQuestionFirst, tr("The question should be selected")},
+    {StringID::SelectTagFirst, tr("The tag should be selected")},
+    {StringID::SelectTagFromQuestion,
+     tr("Tag from question should be selected")},
+    {StringID::SettingsFilename, tr("settings.ini")},
+    {StringID::TableQuestions, tr("Questions")},
+    {StringID::TableQuestionsTags, tr("Questions_tags")},
+    {StringID::TableTags, tr("Tags")},
+    {StringID::TagCreatedCorrectly, tr("The tag created correctly")},
+    {StringID::TagFromComboBoxShlouldBeSelected,
+     tr("Tag from combo box should be selected")},
+    {StringID::TagSuccesfullyRemoved,
+     tr("The tag has been successfully removed from database")},
+    {StringID::TagUpdateSuccesfully, tr("Tag updated succesfully")},
+    {StringID::TheQueryFailed, tr("The query failed")},
+
+};
+
+const QString StringManager::get(StringID id) { return *_stringMap.find(id); }
