@@ -10,35 +10,37 @@ TagAndQuestionRelationSql::TagAndQuestionRelationSql(Tag *tag,
   this->_question = question;
 }
 
-bool TagAndQuestionRelationSql::isQuestionAndTagValid() {
+bool TagAndQuestionRelationSql::isQuestionAndTagValid(QString method) {
+  QString errorMessage = this->metaObject()->className();
+  errorMessage += "::" + method + "-->";
+  errorMessage += "isQuestionAndTagValid -- ";
+
   if (!this->_tag) {
-    throw std::invalid_argument(
-        "TagAndQuestionRelationSql::isQuestionAndTagValid -- "
-        "poninter to tag is empty.");
+    errorMessage += StringManager::get(StringID::ErrorPointerToTagEmpty);
+    throw std::invalid_argument(errorMessage.toStdString());
   }
+
   if (!this->_question) {
-    throw std::invalid_argument(
-        "TagAndQuestionRelationSql::isQuestionAndTagValid -- "
-        "pointer to question is empty.");
+    errorMessage += StringManager::get(StringID::ErrorPropertyIdInQuestionZero);
+    throw std::invalid_argument(errorMessage.toStdString());
   }
 
   if (this->_tag->getId() <= 0) {
-    throw std::invalid_argument(
-        "TagAndQuestionRelationSql::isQuestionAndTagValid -- "
-        "property id in tag is zero or subzero.");
+    errorMessage += StringManager::get(StringID::ErrorPropertyIdInTagZero);
+    throw std::invalid_argument(errorMessage.toStdString());
   }
 
   if (this->_question->getId() <= 0) {
-    throw std::invalid_argument(
-        "TagAndQuestionRelationSql::isQuestionAndTagValid -- property id in "
-        "question is zero or subzero.");
+    errorMessage += StringManager::get(StringID::ErrorPropertyIdInQuestionZero);
+    throw std::invalid_argument(errorMessage.toStdString());
   }
+
   return true;
 }
 
 bool TagAndQuestionRelationSql::isInsertedSql() {
   try {
-    if (!isQuestionAndTagValid()) {
+    if (!isQuestionAndTagValid("isInsertedSql")) {
       return false;
     }
 
@@ -51,7 +53,8 @@ bool TagAndQuestionRelationSql::isInsertedSql() {
     executeQuery<InsertSql>(sql);
 
   } catch (std::invalid_argument &e) {
-    qWarning() << "TagAndQuestionRelationSql::isInsertedSql" << e.what();
+    qWarning() << this->metaObject()->className() << "::isInsertedSql"
+               << e.what();
     return false;
   }
 
@@ -60,7 +63,7 @@ bool TagAndQuestionRelationSql::isInsertedSql() {
 
 bool TagAndQuestionRelationSql::isDeletedSql() {
   try {
-    if (!(isQuestionAndTagValid())) {
+    if (!(isQuestionAndTagValid("isDeletedSql"))) {
       return false;
     }
     DeleteSql *sql =
@@ -81,7 +84,7 @@ bool TagAndQuestionRelationSql::isDeletedSql() {
 
 bool TagAndQuestionRelationSql::isSelectedSql() {
   try {
-    if (!isQuestionAndTagValid()) {
+    if (!isQuestionAndTagValid("isSelectedSql")) {
       return false;
     }
 
@@ -102,7 +105,7 @@ bool TagAndQuestionRelationSql::isSelectedSql() {
 }
 
 bool TagAndQuestionRelationSql::isAlreadyRelated() {
-  if (!isQuestionAndTagValid()) {
+  if (!isQuestionAndTagValid("isAlreadyRelated")) {
     return false;
   }
   QString criteria = StringManager::get(StringID::ColumnTagId) +
@@ -121,8 +124,8 @@ bool TagAndQuestionRelationSql::isAlreadyRelated() {
 
   if (!query.exec()) {
     QString message = this->metaObject()->className();
-    message +=
-        "::isAlreadyRelated --" + StringManager::get(StringID::TheQueryFailed);
+    message += "::isAlreadyRelated --";
+    message += StringManager::get(StringID::TheQueryFailed);
     throw std::invalid_argument(message.toStdString());
   }
   return query.next();
@@ -130,9 +133,11 @@ bool TagAndQuestionRelationSql::isAlreadyRelated() {
 
 bool TagAndQuestionRelationSql::isAllRelationRemoved() {
   if (!this->_question && !this->_tag) {
-    throw std::invalid_argument(
-        "TagAndQuestionRelationSql::isAllRelationRemoved -- question and tag "
-        "pointers are null.");
+    QString message = this->metaObject()->className();
+    message += "::isAllRelationRemoved --";
+    message += StringManager::get(StringID::ErrorPointerToTagAndQuestionEmpty);
+
+    throw std::invalid_argument(message.toStdString());
   }
 
   QSqlQuery query;
@@ -154,23 +159,27 @@ bool TagAndQuestionRelationSql::isAllRelationRemoved() {
   }
 
   if (!query.exec()) {
-    throw std::invalid_argument(
-        "TagAndQuestionRelationSql::isAllRelationRemoved -- the query failed.");
+    QString message = this->metaObject()->className();
+    message += "::isAllRelationRemoved --";
+    message += StringManager::get(StringID::ErrorQueryFailed);
+    throw std::invalid_argument(message.toStdString());
   }
   return true;
 }
 
 QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
   if (!this->_question) {
-    throw std::invalid_argument(
-        "TagAndQuestionRelationSql::getRelatedTags -- poninter to question "
-        "is empty.");
+    QString message = this->metaObject()->className();
+    message += "::getRelatedTags --";
+    message += StringManager::get(StringID::ErrorPointerToQuestionEmpty);
+    throw std::invalid_argument(message.toStdString());
   }
 
   if (this->_question->getId() <= 0) {
-    throw std::invalid_argument(
-        "TagAndQuestionRelationSql::getRelatedTags -- property id in "
-        "question is zero or subzero.");
+    QString message = this->metaObject()->className();
+    message += "::getRelatedTags --";
+    message += StringManager::get(StringID::ErrorPropertyIdInQuestionZero);
+    throw std::invalid_argument(message.toStdString());
   }
   QList<Tag *> tags;
 
@@ -206,8 +215,10 @@ QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
                   this->_question->getId());
 
   if (!query.exec()) {
-    throw std::invalid_argument(
-        "TagAndQuestionRelationSql::getRelatedTags -- the query failed.");
+    QString message = this->metaObject()->className();
+    message += "::getRelatedTags --";
+    message += StringManager::get(StringID::ErrorQueryFailed);
+    throw std::invalid_argument(message.toStdString());
   }
 
   while (query.next()) {
@@ -230,15 +241,17 @@ QList<Question *> TagAndQuestionRelationSql::getRelatedQuestions() {
   QList<Question *> questions;
 
   if (!this->_tag) {
-    throw std::invalid_argument(
-        "TagAndQuestionRelationSql::getRelatedQuestions -- pointer to tag "
-        "is empty.");
+    QString message = this->metaObject()->className();
+    message += "::getRelatedQuestions --";
+    message += StringManager::get(StringID::ErrorPointerToTagAndQuestionEmpty);
+    throw std::invalid_argument(message.toStdString());
   }
 
   if (this->_tag->getId() <= 0) {
-    throw std::invalid_argument(
-        "TagAndQuestionRelationSql::getRelatedQuestions -- property id in "
-        "tag is zero or subzero.");
+    QString message = this->metaObject()->className();
+    message += "::getRelatedQuestions --";
+    message += StringManager::get(StringID::ErrorPropertyIdInTagZero);
+    throw std::invalid_argument(message.toStdString());
   }
 
   FindByKeySql *sql =
@@ -251,8 +264,10 @@ QList<Question *> TagAndQuestionRelationSql::getRelatedQuestions() {
                   this->_tag->getId());
 
   if (!query.exec()) {
-    throw std::invalid_argument(
-        "TagAndQuestionRelationSql::getRelatedTags -- the query failed.");
+    QString message = this->metaObject()->className();
+    message += "::getRelatedQuestions --";
+    message += StringManager::get(StringID::ErrorQueryFailed);
+    throw std::invalid_argument(message.toStdString());
   }
 
   while (query.next()) {
@@ -271,15 +286,17 @@ QList<Question *> TagAndQuestionRelationSql::getRelatedQuestions() {
 
 QList<Question *> TagAndQuestionRelationSql::getRelatedActiveQuesitons() {
   if (!this->_tag) {
-    throw std::invalid_argument(
-        "TagAndQuestionRelationSql::getRelatedActiveQuesitons -- poninter to "
-        "tag is empty.");
+    QString message = this->metaObject()->className();
+    message += "::getRelatedActiveQuestions --";
+    message += StringManager::get(StringID::ErrorPointerToTagEmpty);
+    throw std::invalid_argument(message.toStdString());
   }
 
   if (this->_tag->getId() <= 0) {
-    throw std::invalid_argument("TagAndQuestionRelationSql::"
-                                "getRelatedActiveQuesitons -- property id in "
-                                "tag is zero or subzero.");
+    QString message = this->metaObject()->className();
+    message += "::getRelatedActiveQuestions --";
+    message += StringManager::get(StringID::ErrorPropertyIdInTagZero);
+    throw std::invalid_argument(message.toStdString());
   }
   QList<Question *> questions;
 
@@ -323,9 +340,10 @@ QList<Question *> TagAndQuestionRelationSql::getRelatedActiveQuesitons() {
                   this->_tag->getId());
 
   if (!query.exec()) {
-    throw std::invalid_argument(
-        "TagAndQuestionRelationSql::getRelatedActiveQuesitons -- the query "
-        "failed.");
+    QString message = this->metaObject()->className();
+    message += "::getRelatedActiveQuestions --";
+    message += StringManager::get(StringID::ErrorQueryFailed);
+    throw std::invalid_argument(message.toStdString());
   }
 
   while (query.next()) {
@@ -350,7 +368,9 @@ template <typename T> void TagAndQuestionRelationSql::executeQuery(T *sql) {
                   this->_question->getId());
 
   if (!query.exec()) {
-    throw std::invalid_argument(
-        "TagAndQuestionRelationSql::isDeleteSql -- the query failed.");
+    QString message = this->metaObject()->className();
+    message += "::isDeleteSql --";
+    message += StringManager::get(StringID::ErrorQueryFailed);
+    throw std::invalid_argument(message.toStdString());
   }
 }

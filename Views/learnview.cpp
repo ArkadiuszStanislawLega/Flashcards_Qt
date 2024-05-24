@@ -52,8 +52,7 @@ void LearnView::make_randomised_questions_list_new() {
   QList<Question *> questions;
   TagAndQuestionRelationSql relation = TagAndQuestionRelationSql(
       this->_tags_list.at(this->_selected_index), new Question(this), this);
-  // questions =
-  // this->_tags_list.at(this->_selected_index)->getAllActiveRelated();
+
   questions = relation.getRelatedActiveQuesitons();
 
   for (i = this->_max_questions_number; i > 0; i--) {

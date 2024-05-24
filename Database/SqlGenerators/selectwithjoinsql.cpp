@@ -16,6 +16,7 @@ SelectWithJoinSql::SelectWithJoinSql(
 
 QString SelectWithJoinSql::generate() {
   if (this->_table.isEmpty()) {
+
     throw std::invalid_argument(
         "SelectWithJoinSql::generate -- property table is empty.");
   }
