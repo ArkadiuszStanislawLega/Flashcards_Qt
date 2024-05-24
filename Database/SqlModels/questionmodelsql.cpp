@@ -9,8 +9,10 @@ QuestionModelSql::QuestionModelSql(Question *model, QObject *parent)
 
 bool QuestionModelSql::isInsertedSql() {
   if (!this->_model) {
-    throw std::invalid_argument(
-        "QuestionModelSql::isInsertedSql -- pointer to question is null.");
+    QString message = this->metaObject()->className();
+    message += "::isInsertedSql --";
+    message += StringManager::get(StringID::ErrorPointerToQuestionEmpty);
+    throw std::invalid_argument(message.toStdString());
   }
   InsertSql insert = InsertSql(StringManager::get(StringID::TableQuestions),
                                {StringManager::get(StringID::ColumnValue),
@@ -28,8 +30,10 @@ bool QuestionModelSql::isInsertedSql() {
                   this->_model->getIsActive());
 
   if (!query.exec()) {
-    throw std::invalid_argument(
-        "QuestionModelSql::isInsertSql -- the query failed.");
+    QString message = this->metaObject()->className();
+    message += "::isInsertedSql --";
+    message += StringManager::get(StringID::ErrorQueryFailed);
+    throw std::invalid_argument(message.toStdString());
   }
   this->findByCriteria();
   return true;
@@ -37,13 +41,17 @@ bool QuestionModelSql::isInsertedSql() {
 
 bool QuestionModelSql::isDeleteSql() {
   if (!this->_model) {
-    throw std::invalid_argument(
-        "QuestionModelSql::isDeleteSql -- pointer to question is null.");
+    QString message = this->metaObject()->className();
+    message += "::isDeleteSql --";
+    message += StringManager::get(StringID::ErrorPointerToQuestionEmpty);
+    throw std::invalid_argument(message.toStdString());
   }
 
   if (this->_model->getId() <= 0) {
-    throw std::invalid_argument("QuestionModelSql::isDeleteSql -- property id "
-                                "of the model is zero or below zero");
+    QString message = this->metaObject()->className();
+    message += "::isDeleteSql --";
+    message += StringManager::get(StringID::ErrorPropertyIdInQuestionZero);
+    throw std::invalid_argument(message.toStdString());
   }
   DeleteSql queryS = DeleteSql(StringManager::get(StringID::TableQuestions),
                                {StringManager::get(StringID::ColumnId)}, this);
@@ -54,16 +62,20 @@ bool QuestionModelSql::isDeleteSql() {
                   this->_model->getId());
 
   if (!query.exec()) {
-    throw std::invalid_argument(
-        "QuestionModelSql::isDeleteSql -- the query failed.");
+    QString message = this->metaObject()->className();
+    message += "::isDeleteSql --";
+    message += StringManager::get(StringID::ErrorQueryFailed);
+    throw std::invalid_argument(message.toStdString());
   }
   return true;
 }
 
 Question *QuestionModelSql::selectQuestion(int id) {
   if (id <= 0) {
-    throw std::invalid_argument(
-        "QuestionModelSql::selectQuestion - property id is zero or subzero.");
+    QString message = this->metaObject()->className();
+    message += "::selectQuestion --";
+    message += StringManager::get(StringID::ErrorPropertyIdInQuestionZero);
+    throw std::invalid_argument(message.toStdString());
   }
 
   FindByKeySql *sql =
@@ -73,8 +85,10 @@ Question *QuestionModelSql::selectQuestion(int id) {
   query.bindValue(":" + StringManager::get(StringID::ColumnId), id);
 
   if (!query.exec()) {
-    throw std::invalid_argument(
-        "QuestionSql::selectQuestion - the query failed.");
+    QString message = this->metaObject()->className();
+    message += "::selectQuestion --";
+    message += StringManager::get(StringID::ErrorQueryFailed);
+    throw std::invalid_argument(message.toStdString());
   }
 
   this->convertQueryToQuestion(&query);
@@ -84,12 +98,16 @@ Question *QuestionModelSql::selectQuestion(int id) {
 
 Question *QuestionModelSql::findByCriteria() {
   if (this->_model->getValue().isEmpty()) {
-    throw std::invalid_argument(
-        "QuestionModelSql::selectQuestion -- value is empty.");
+    QString message = this->metaObject()->className();
+    message += "::findByCriteria --";
+    message += StringManager::get(StringID::ErrorPropertyValueIsEmpty);
+    throw std::invalid_argument(message.toStdString());
   }
   if (this->_model->getAnswer().isEmpty()) {
-    throw std::invalid_argument(
-        "QuestionModelSql::selectQuestion -- answer is empty.");
+    QString message = this->metaObject()->className();
+    message += "::findByCriteria --";
+    message += StringManager::get(StringID::ErrorPropertyAnswerIsEmpty);
+    throw std::invalid_argument(message.toStdString());
   }
 
   QString criteria = StringManager::get(StringID::ColumnValue) +
@@ -108,13 +126,17 @@ Question *QuestionModelSql::findByCriteria() {
                   this->_model->getAnswer());
 
   if (!query.exec()) {
-    throw std::invalid_argument(
-        "QuestionModelSql::findByCriteria - the query failed.");
+    QString message = this->metaObject()->className();
+    message += "::findByCriteria --";
+    message += StringManager::get(StringID::ErrorQueryFailed);
+    throw std::invalid_argument(message.toStdString());
   }
 
   if (!query.next()) {
-    throw std::invalid_argument(
-        "QuestionModelSql::findByCriteria - can't find question in database.");
+    QString message = this->metaObject()->className();
+    message += "::findByCriteria --";
+    message += StringManager::get(StringID::ErrorCantFindQuestion);
+    throw std::invalid_argument(message.toStdString());
   }
 
   this->convertQueryToQuestion(&query);
@@ -124,13 +146,17 @@ Question *QuestionModelSql::findByCriteria() {
 
 bool QuestionModelSql::updateSql() {
   if (!this->_model) {
-    throw std::invalid_argument(
-        "QuestionModelSql::updateSql -- question reference is empty.");
+    QString message = this->metaObject()->className();
+    message += "::updateSql --";
+    message += StringManager::get(StringID::ErrorPointerToQuestionEmpty);
+    throw std::invalid_argument(message.toStdString());
   }
 
   if (this->_model->getId() <= 0) {
-    throw std::invalid_argument("QuestionModelSql::updateSql -- property id in "
-                                "question is zero or subzero.");
+    QString message = this->metaObject()->className();
+    message += "::updateSql --";
+    message += StringManager::get(StringID::ErrorPropertyIdInQuestionZero);
+    throw std::invalid_argument(message.toStdString());
   }
 
   UpdateSql sql = UpdateSql(StringManager::get(StringID::TableQuestions),
@@ -152,8 +178,10 @@ bool QuestionModelSql::updateSql() {
   qDebug() << query.lastQuery();
 
   if (!query.exec()) {
-    throw std::invalid_argument(
-        "QuestionModelSql::updateSql -- query does not execute.");
+    QString message = this->metaObject()->className();
+    message += "::updateSql --";
+    message += StringManager::get(StringID::ErrorQueryFailed);
+    throw std::invalid_argument(message.toStdString());
   }
 
   return true;
