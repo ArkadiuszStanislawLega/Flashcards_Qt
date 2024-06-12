@@ -25,26 +25,13 @@ void LearnView::initialTagListView() {
 }
 
 void LearnView::make_randomised_questions_list_new() {
-  int i;
-  QList<Question *> questions;
-  TagAndQuestionRelationSql relation =
-      TagAndQuestionRelationSql(this->_selected_tag, new Question(this), this);
+  long index;
 
-  questions = relation.getRelatedActiveQuesitons();
-
-  this->_max_questions_number = questions.size();
-  this->ui->sb_questions_number->setMaximum(this->_max_questions_number);
-  this->ui->sb_questions_number->setValue(this->_max_questions_number);
-
-  for (i = this->_max_questions_number; i > 0; i--) {
-    long index = QRandomGenerator::global()->bounded(questions.size());
-    this->_randomised_questions.push_back(
-        new Question(questions[index]->getId(), questions[index]->getValue(),
-                     questions[index]->getAnswer(), true, {}, this));
-
-    questions.removeAt(index);
+  for (size_t i = this->_max_questions_number; i > 0; i--) {
+    index = QRandomGenerator::global()->bounded(this->_temp_questions.size());
+    this->_randomised_questions.push_back(this->_temp_questions[index]);
+    this->_temp_questions.removeAt(index);
   }
-  qDeleteAll(questions);
 }
 
 void LearnView::show_first_card_attribute() {
@@ -181,13 +168,16 @@ void LearnView::on_cb_tags_currentIndexChanged(int index) {
             .toString();
 
   this->_selected_tag = new Tag(id, tag, this);
+  this->_relation = new TagAndQuestionRelationSql(this->_selected_tag,
+                                                  new Question(this), this);
+  this->_temp_questions = this->_relation->getRelatedActiveQuesitons();
+
+  this->_max_questions_number = this->_temp_questions.size();
+  this->ui->sb_questions_number->setMaximum(this->_max_questions_number);
+  this->ui->sb_questions_number->setValue(this->_max_questions_number);
 }
 
 void LearnView::on_b_start_clicked() {
-  /*if (this->ui->sb_questions_number->value() == 0) {
-    return;
-  }*/
-
   this->ui->l_answer->setText("");
   this->ui->l_value->setText("");
   this->ui->pb_answers->setValue(0);

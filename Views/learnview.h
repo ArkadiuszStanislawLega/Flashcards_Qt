@@ -24,7 +24,8 @@ private:
   const int PENALTY_TIME_IN_SECOND = 1;
   Ui::LearnView *ui;
   QSqlRelationalTableModel *_tags_model;
-  QList<Question *> _randomised_questions;
+  TagAndQuestionRelationSql *_relation;
+  QList<Question *> _randomised_questions, _temp_questions;
   int _correct_answer, _uncorrect_answer, _max_questions_number;
   bool _is_show_answer_first, _is_answer_was_visible;
 
