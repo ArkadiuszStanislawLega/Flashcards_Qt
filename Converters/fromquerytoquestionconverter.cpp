@@ -13,9 +13,9 @@ Question *FromQueryToQuestionConverter::get(QSqlQuery *query) {
         FromQueryToValueConverter::get<int>(
             query, StringManager::get(StringID::ColumnId)),
         FromQueryToValueConverter::get<QString>(
-            query, StringManager::get(StringID::ColumnAnswer)),
-        FromQueryToValueConverter::get<QString>(
             query, StringManager::get(StringID::ColumnValue)),
+        FromQueryToValueConverter::get<QString>(
+            query, StringManager::get(StringID::ColumnAnswer)),
         FromQueryToValueConverter::get<bool>(
             query, StringManager::get(StringID::ColumnIsActive)),
         {});

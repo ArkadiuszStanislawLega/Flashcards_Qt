@@ -8,6 +8,7 @@
 #include <Models/question.h>
 #include <Models/tag.h>
 #include <QRandomGenerator>
+#include <QSqlRelationalTableModel>
 #include <QStringListModel>
 #include <QThread>
 #include <QWidget>
@@ -22,14 +23,12 @@ private:
   Q_OBJECT
   const int PENALTY_TIME_IN_SECOND = 1;
   Ui::LearnView *ui;
-  QStringListModel *_tags_model;
-  QList<Tag *> _tags_list;
+  QSqlRelationalTableModel *_tags_model;
   QList<Question *> _randomised_questions;
-  int _selected_index, _correct_answer, _uncorrect_answer,
-      _max_questions_number;
+  int _correct_answer, _uncorrect_answer, _max_questions_number;
   bool _is_show_answer_first, _is_answer_was_visible;
 
-  QList<unsigned int> _max_question_number_in_tag;
+  Tag *_selected_tag;
 
   void initialTagListView();
   void prepare_tags_list(QList<QString> &);

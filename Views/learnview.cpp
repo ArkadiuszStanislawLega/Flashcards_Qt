@@ -1,66 +1,47 @@
 #include "learnview.h"
 
+#include <stringmanager.h>
+
 LearnView::LearnView(QWidget *parent) : QWidget{parent}, ui(new Ui::LearnView) {
   this->ui->setupUi(this);
   this->ui->l_answer->setText("");
   this->ui->l_value->setText("");
   this->ui->pb_answers->setValue(0);
-  this->_tags_model = new QStringListModel;
   this->initialTagListView();
   this->_correct_answer = 0;
   this->_uncorrect_answer = 0;
   this->_is_answer_was_visible = false;
 }
 
-LearnView::~LearnView() {
-  qDeleteAll(this->_tags_list);
-  qDeleteAll(this->_randomised_questions);
-  qDeleteAll(this->_tags_list);
-}
+LearnView::~LearnView() { qDeleteAll(this->_randomised_questions); }
 
 void LearnView::initialTagListView() {
-  QList<QString> cb_values;
-
-  if (this->_max_question_number_in_tag.size() > 0) {
-    this->_max_question_number_in_tag.clear();
-  }
-
-  this->prepare_tags_list(cb_values);
-  this->_tags_model->setStringList(cb_values);
+  this->_tags_model = new QSqlRelationalTableModel;
+  this->_tags_model->setTable(StringManager::get(StringID::TableTags));
+  this->_tags_model->select();
   this->ui->cb_tags->setModel(this->_tags_model);
-}
-
-void LearnView::prepare_tags_list(QList<QString> &list) {
-  TagModelSql sqlModel = TagModelSql(new Tag(this), this);
-
-  for (Tag *t : sqlModel.getAllTags()) {
-    TagAndQuestionRelationSql relation =
-        TagAndQuestionRelationSql(t, new Question(this), this);
-
-    int question_number = relation.getRelatedActiveQuesitons().size();
-
-    QString value = t->getTag() + "[" + QString::number(question_number) + "]";
-
-    this->_tags_list.append(t);
-    list.append(value);
-    this->_max_question_number_in_tag.append(question_number);
-  }
+  this->ui->cb_tags->setModelColumn(this->_tags_model->record().indexOf(
+      StringManager::get(StringID::ColumnTag)));
 }
 
 void LearnView::make_randomised_questions_list_new() {
   int i;
   QList<Question *> questions;
-  TagAndQuestionRelationSql relation = TagAndQuestionRelationSql(
-      this->_tags_list.at(this->_selected_index), new Question(this), this);
+  TagAndQuestionRelationSql relation =
+      TagAndQuestionRelationSql(this->_selected_tag, new Question(this), this);
 
   questions = relation.getRelatedActiveQuesitons();
 
+  this->_max_questions_number = questions.size();
+  this->ui->sb_questions_number->setMaximum(this->_max_questions_number);
+  this->ui->sb_questions_number->setValue(this->_max_questions_number);
+
   for (i = this->_max_questions_number; i > 0; i--) {
     long index = QRandomGenerator::global()->bounded(questions.size());
-    // std::srand(time(NULL));
-    // long index = std::rand() % questions.size();
+    this->_randomised_questions.push_back(
+        new Question(questions[index]->getId(), questions[index]->getValue(),
+                     questions[index]->getAnswer(), true, {}, this));
 
-    this->_randomised_questions.push_back(questions.at(index));
     questions.removeAt(index);
   }
   qDeleteAll(questions);
@@ -186,21 +167,26 @@ void LearnView::clean_view() {
 }
 
 void LearnView::on_cb_tags_currentIndexChanged(int index) {
-  this->ui->sb_questions_number->setMaximum(
-      this->_max_question_number_in_tag[index]);
-  this->ui->sb_questions_number->setValue(
-      this->_max_question_number_in_tag[index]);
-  this->_selected_index = index;
+  int id, id_column, tag_column_index;
+  QString tag;
+
+  id_column = this->_tags_model->record().indexOf(
+      StringManager::get(StringID::ColumnId));
+  tag_column_index = this->_tags_model->record().indexOf(
+      StringManager::get(StringID::ColumnTag));
+
+  id = this->_tags_model->index(index, id_column).data(Qt::DisplayRole).toInt();
+  tag = this->_tags_model->index(index, tag_column_index)
+            .data(Qt::DisplayRole)
+            .toString();
+
+  this->_selected_tag = new Tag(id, tag, this);
 }
 
 void LearnView::on_b_start_clicked() {
-  if (this->_selected_index >= this->_tags_list.size()) {
+  /*if (this->ui->sb_questions_number->value() == 0) {
     return;
-  }
-
-  if (this->ui->sb_questions_number->value() == 0) {
-    return;
-  }
+  }*/
 
   this->ui->l_answer->setText("");
   this->ui->l_value->setText("");
