@@ -46,6 +46,7 @@ private:
   void set_progress_bar();
   void set_questions_number();
   void clean_view();
+  void refreshRelatedQuestions();
 
 public:
   explicit LearnView(QWidget *parent = nullptr);

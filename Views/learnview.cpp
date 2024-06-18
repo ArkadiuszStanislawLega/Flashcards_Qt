@@ -27,6 +27,9 @@ void LearnView::initialTagListView() {
 void LearnView::make_randomised_questions_list_new() {
   long index;
 
+  this->_randomised_questions.clear();
+  refreshRelatedQuestions();
+
   for (size_t i = this->_max_questions_number; i > 0; i--) {
     index = QRandomGenerator::global()->bounded(this->_temp_questions.size());
     this->_randomised_questions.push_back(this->_temp_questions[index]);
@@ -168,6 +171,10 @@ void LearnView::on_cb_tags_currentIndexChanged(int index) {
             .toString();
 
   this->_selected_tag = new Tag(id, tag, this);
+  refreshRelatedQuestions();
+}
+
+void LearnView::refreshRelatedQuestions() {
   this->_relation = new TagAndQuestionRelationSql(this->_selected_tag,
                                                   new Question(this), this);
   this->_temp_questions = this->_relation->getRelatedActiveQuesitons();
