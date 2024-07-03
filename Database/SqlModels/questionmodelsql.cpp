@@ -2,6 +2,8 @@
 
 #include <stringmanager.h>
 
+#include <Exceptions/nullpointertoquestionexception.h>
+
 QuestionModelSql::QuestionModelSql(Question *model, QObject *parent)
     : QObject{parent} {
   this->_model = model;
@@ -9,10 +11,8 @@ QuestionModelSql::QuestionModelSql(Question *model, QObject *parent)
 
 bool QuestionModelSql::isInsertedSql() {
   if (!this->_model) {
-    QString message = this->metaObject()->className();
-    message += "::isInsertedSql --";
-    message += StringManager::get(StringID::ErrorPointerToQuestionEmpty);
-    throw std::invalid_argument(message.toStdString());
+    throw new NullPointerToQuestionException(this->metaObject()->className(),
+                                             "::isInsertedSql --");
   }
   InsertSql insert = InsertSql(StringManager::get(StringID::TableQuestions),
                                {StringManager::get(StringID::ColumnValue),
@@ -30,6 +30,7 @@ bool QuestionModelSql::isInsertedSql() {
                   this->_model->getIsActive());
 
   if (!query.exec()) {
+
     QString message = this->metaObject()->className();
     message += "::isInsertedSql --";
     message += StringManager::get(StringID::ErrorQueryFailed);
