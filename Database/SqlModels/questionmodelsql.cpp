@@ -61,6 +61,7 @@ bool QuestionModelSql::isDeleteSql() {
 
 Question *QuestionModelSql::selectQuestion(int id) {
   const char *methodName = "selectQuestion";
+
   if (id <= 0) {
     throw new BelowZeroIdException(this->metaObject()->className(), methodName);
   }
