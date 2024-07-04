@@ -27,6 +27,7 @@ SOURCES += \
     Database/SqlModels/tagandquestionrelationsql.cpp \
     Exceptions/defaultexception.cpp \
     Exceptions/nullpointertoquestionexception.cpp \
+    Exceptions/nullpointertotagexception.cpp \
     Exceptions/queryfiledexception.cpp \
     Models/question.cpp \
     Models/tag.cpp \
@@ -59,6 +60,7 @@ HEADERS += \
     Enums/StringID.h \
     Exceptions/defaultexception.h \
     Exceptions/nullpointertoquestionexception.h \
+    Exceptions/nullpointertotagexception.h \
     Exceptions/queryfiledexception.h \
     Models/question.h \
     Models/tag.h \

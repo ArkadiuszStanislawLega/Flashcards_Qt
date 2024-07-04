@@ -2,6 +2,8 @@
 
 #include <stringmanager.h>
 
+#include <Exceptions/defaultexception.h>
+
 void QuestionView::initialQuestionsListView() {
   this->_table_model = new QSqlRelationalTableModel;
   this->_table_model->setTable(StringManager::get(StringID::TableQuestions));
@@ -81,7 +83,7 @@ Question *QuestionView::addQuestionToDb() {
       this->cleanTextEditors();
       this->printInfo(StringManager::get(StringID::QuestionCreatedCorrectly));
     }
-  } catch (std::invalid_argument &e) {
+  } catch (DefaultException &e) {
     this->printInfo(StringManager::get(StringID::ErrorDatabase), true);
     qWarning() << "QuestionView::addQuestionToDb" << e.what();
   }

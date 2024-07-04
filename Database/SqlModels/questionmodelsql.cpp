@@ -32,7 +32,7 @@ bool QuestionModelSql::isInsertedSql() {
 
   if (!query.exec()) {
     throw new QueryFiledException(this->metaObject()->className(),
-                                  "isInsertedSql")
+                                  "isInsertedSql");
   }
   this->findByCriteria();
   return true;
@@ -40,10 +40,8 @@ bool QuestionModelSql::isInsertedSql() {
 
 bool QuestionModelSql::isDeleteSql() {
   if (!this->_model) {
-    QString message = this->metaObject()->className();
-    message += "::isDeleteSql --";
-    message += StringManager::get(StringID::ErrorPointerToQuestionEmpty);
-    throw std::invalid_argument(message.toStdString());
+    throw new NullPointerToQuestionException(this->metaObject()->className(),
+                                             "isDeleteSql");
   }
 
   if (this->_model->getId() <= 0) {

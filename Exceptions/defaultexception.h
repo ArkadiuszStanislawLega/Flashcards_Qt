@@ -10,6 +10,7 @@ protected:
 
 public:
   DefaultException(const char *className, const char *methodName);
+  const char *what();
 };
 
 #endif // DEFAULTEXCEPTION_H
