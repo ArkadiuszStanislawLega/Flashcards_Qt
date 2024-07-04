@@ -3,6 +3,7 @@
 #include <stringmanager.h>
 
 #include <Exceptions/nullpointertoquestionexception.h>
+#include <Exceptions/queryfiledexception.h>
 
 QuestionModelSql::QuestionModelSql(Question *model, QObject *parent)
     : QObject{parent} {
@@ -12,7 +13,7 @@ QuestionModelSql::QuestionModelSql(Question *model, QObject *parent)
 bool QuestionModelSql::isInsertedSql() {
   if (!this->_model) {
     throw new NullPointerToQuestionException(this->metaObject()->className(),
-                                             "::isInsertedSql --");
+                                             "isInsertedSql");
   }
   InsertSql insert = InsertSql(StringManager::get(StringID::TableQuestions),
                                {StringManager::get(StringID::ColumnValue),
@@ -30,11 +31,8 @@ bool QuestionModelSql::isInsertedSql() {
                   this->_model->getIsActive());
 
   if (!query.exec()) {
-
-    QString message = this->metaObject()->className();
-    message += "::isInsertedSql --";
-    message += StringManager::get(StringID::ErrorQueryFailed);
-    throw std::invalid_argument(message.toStdString());
+    throw new QueryFiledException(this->metaObject()->className(),
+                                  "isInsertedSql")
   }
   this->findByCriteria();
   return true;

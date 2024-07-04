@@ -25,7 +25,9 @@ SOURCES += \
     Database/SqlModels/questionmodelsql.cpp \
     Database/SqlModels/tagmodelsql.cpp \
     Database/SqlModels/tagandquestionrelationsql.cpp \
+    Exceptions/defaultexception.cpp \
     Exceptions/nullpointertoquestionexception.cpp \
+    Exceptions/queryfiledexception.cpp \
     Models/question.cpp \
     Models/tag.cpp \
     Views/learnview.cpp \
@@ -55,7 +57,9 @@ HEADERS += \
     Database/SqlGenerators/wheresql.h \
     Database/SqlGenerators/selectsql.h \
     Enums/StringID.h \
+    Exceptions/defaultexception.h \
     Exceptions/nullpointertoquestionexception.h \
+    Exceptions/queryfiledexception.h \
     Models/question.h \
     Models/tag.h \
     Views/learnview.h \
