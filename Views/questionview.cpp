@@ -128,6 +128,8 @@ void QuestionView::createRelationQuestionAndTag(Question *q) {
 }
 
 void QuestionView::on_b_update_question_clicked() {
+  const char *methodName = "on_b_update_question_clicked";
+
   if (!this->_selected_question) {
     this->printInfo(StringManager::get(StringID::InfoFirstSelectQuestion),
                     true);
@@ -157,13 +159,23 @@ void QuestionView::on_b_update_question_clicked() {
       this->cleanTextEditors();
     }
     emit update_question_from_db();
-  } catch (std::invalid_argument &e) {
+  } catch (NullPointerToQuestionException &e) {
+    this->printInfo(StringManager::get(StringID::UnexpectedError), true);
+    qWarning() << this->metaObject()->className() << "::" << methodName
+               << e.what();
+  } catch (BelowZeroIdException &e) {
+    this->printInfo(StringManager::get(StringID::UnexpectedError), true);
+    qWarning() << this->metaObject()->className() << "::" << methodName
+               << e.what();
+  } catch (QueryFiledException &e) {
     this->printInfo(StringManager::get(StringID::ErrorDatabase), true);
-    qWarning() << "QuestionView::on_b_update_question_clicked" << e.what();
+    qWarning() << this->metaObject()->className() << "::" << methodName
+               << e.what();
   }
 }
 
 void QuestionView::on_b_remove_question_clicked() {
+  const char *methodName = "on_b_remove_question_clicked";
   if (this->_selected_question == nullptr) {
     this->printInfo(StringManager::get(StringID::InfoFirstSelectQuestion),
                     true);
@@ -171,8 +183,7 @@ void QuestionView::on_b_remove_question_clicked() {
   }
 
   if (this->_selected_question->getId() <= 0) {
-    throw std::invalid_argument("QuestionView::on_b_remove_question_clicked -- "
-                                "id property in question is zero or subzero.");
+    throw BelowZeroIdException(this->metaObject()->className(), methodName);
   }
 
   QuestionModelSql sqlModel = QuestionModelSql(this->_selected_question, this);
@@ -189,7 +200,8 @@ void QuestionView::on_b_remove_question_clicked() {
     emit remove_question_from_db();
   } catch (std::invalid_argument &e) {
     this->printInfo(StringManager::get(StringID::ErrorDatabase), true);
-    qWarning() << "QuestionView::on_b_remove_question_clicked" << e.what();
+    qWarning() << this->metaObject()->className() << "::" << methodName
+               << e.what();
   }
 }
 

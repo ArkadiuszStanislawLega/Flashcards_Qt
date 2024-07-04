@@ -27,6 +27,7 @@ SOURCES += \
     Database/SqlModels/tagandquestionrelationsql.cpp \
     Exceptions/answerisemptyexception.cpp \
     Exceptions/belowzeroidexception.cpp \
+    Exceptions/cantfindquestionexception.cpp \
     Exceptions/defaultexception.cpp \
     Exceptions/nullpointertoquestionexception.cpp \
     Exceptions/nullpointertotagexception.cpp \
@@ -63,6 +64,7 @@ HEADERS += \
     Enums/StringID.h \
     Exceptions/answerisemptyexception.h \
     Exceptions/belowzeroidexception.h \
+    Exceptions/cantfindquestionexception.h \
     Exceptions/defaultexception.h \
     Exceptions/nullpointertoquestionexception.h \
     Exceptions/nullpointertotagexception.h \

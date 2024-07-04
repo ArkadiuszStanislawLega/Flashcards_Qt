@@ -1,9 +1,12 @@
 #ifndef ANSWERISEMPTYEXCEPTION_H
 #define ANSWERISEMPTYEXCEPTION_H
 
-class AnswerIsEmptyException {
+#include "defaultexception.h"
+
+class AnswerIsEmptyException : DefaultException {
 public:
-  AnswerIsEmptyException();
+  AnswerIsEmptyException(const char *className, const char *methodName);
+  const char *what();
 };
 
 #endif // ANSWERISEMPTYEXCEPTION_H

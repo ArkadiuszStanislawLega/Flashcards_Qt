@@ -1,5 +1,9 @@
 #include "questionmodelsql.h"
 
+#include <Exceptions/answerisemptyexception.h>
+#include <Exceptions/cantfindquestionexception.h>
+#include <Exceptions/valueisemptyexception.h>
+
 QuestionModelSql::QuestionModelSql(Question *model, QObject *parent)
     : QObject{parent} {
   this->_model = model;
@@ -8,8 +12,8 @@ QuestionModelSql::QuestionModelSql(Question *model, QObject *parent)
 bool QuestionModelSql::isInsertedSql() {
   const char *methodName = "isInsertedSql";
   if (!this->_model) {
-    throw new NullPointerToQuestionException(this->metaObject()->className(),
-                                             methodName);
+    throw NullPointerToQuestionException(this->metaObject()->className(),
+                                         methodName);
   }
   InsertSql insert = InsertSql(StringManager::get(StringID::TableQuestions),
                                {StringManager::get(StringID::ColumnValue),
@@ -27,9 +31,24 @@ bool QuestionModelSql::isInsertedSql() {
                   this->_model->getIsActive());
 
   if (!query.exec()) {
-    throw new QueryFiledException(this->metaObject()->className(), methodName);
+    throw QueryFiledException(this->metaObject()->className(), methodName);
   }
-  this->findByCriteria();
+  try {
+    this->findByCriteria();
+  } catch (ValueIsEmptyException &e) {
+    qWarning() << this->metaObject()->className() << methodName << e.what();
+    return false;
+  } catch (AnswerIsEmptyException &e) {
+    qWarning() << this->metaObject()->className() << methodName << e.what();
+    return false;
+  } catch (QueryFiledException &e) {
+    qWarning() << this->metaObject()->className() << methodName << e.what();
+    return false;
+  } catch (CantFindQuestionException &e) {
+    qWarning() << this->metaObject()->className() << methodName << e.what();
+    return false;
+  }
+
   return true;
 }
 
@@ -37,8 +56,8 @@ bool QuestionModelSql::isDeleteSql() {
   const char *methodName = "isDeleteSql";
 
   if (!this->_model) {
-    throw new NullPointerToQuestionException(this->metaObject()->className(),
-                                             methodName);
+    throw NullPointerToQuestionException(this->metaObject()->className(),
+                                         methodName);
   }
 
   if (this->_model->getId() <= 0) {
@@ -54,7 +73,7 @@ bool QuestionModelSql::isDeleteSql() {
                   this->_model->getId());
 
   if (!query.exec()) {
-    throw new QueryFiledException(this->metaObject()->className(), methodName);
+    throw QueryFiledException(this->metaObject()->className(), methodName);
   }
   return true;
 }
@@ -63,7 +82,7 @@ Question *QuestionModelSql::selectQuestion(int id) {
   const char *methodName = "selectQuestion";
 
   if (id <= 0) {
-    throw new BelowZeroIdException(this->metaObject()->className(), methodName);
+    throw BelowZeroIdException(this->metaObject()->className(), methodName);
   }
 
   FindByKeySql *sql =
@@ -73,7 +92,7 @@ Question *QuestionModelSql::selectQuestion(int id) {
   query.bindValue(":" + StringManager::get(StringID::ColumnId), id);
 
   if (!query.exec()) {
-    throw new QueryFiledException(this->metaObject()->className(), methodName);
+    throw QueryFiledException(this->metaObject()->className(), methodName);
   }
 
   this->convertQueryToQuestion(&query);
@@ -82,17 +101,14 @@ Question *QuestionModelSql::selectQuestion(int id) {
 }
 
 Question *QuestionModelSql::findByCriteria() {
+  const char *methodName = "findByCriteria";
+
   if (this->_model->getValue().isEmpty()) {
-    QString message = this->metaObject()->className();
-    message += "::findByCriteria --";
-    message += StringManager::get(StringID::ErrorPropertyValueIsEmpty);
-    throw std::invalid_argument(message.toStdString());
+    throw ValueIsEmptyException(this->metaObject()->className(), methodName);
   }
+
   if (this->_model->getAnswer().isEmpty()) {
-    QString message = this->metaObject()->className();
-    message += "::findByCriteria --";
-    message += StringManager::get(StringID::ErrorPropertyAnswerIsEmpty);
-    throw std::invalid_argument(message.toStdString());
+    throw AnswerIsEmptyException(this->metaObject()->className(), methodName);
   }
 
   QString criteria = StringManager::get(StringID::ColumnValue) +
@@ -111,17 +127,12 @@ Question *QuestionModelSql::findByCriteria() {
                   this->_model->getAnswer());
 
   if (!query.exec()) {
-    QString message = this->metaObject()->className();
-    message += "::findByCriteria --";
-    message += StringManager::get(StringID::ErrorQueryFailed);
-    throw std::invalid_argument(message.toStdString());
+    throw QueryFiledException(this->metaObject()->className(), methodName);
   }
 
   if (!query.next()) {
-    QString message = this->metaObject()->className();
-    message += "::findByCriteria --";
-    message += StringManager::get(StringID::ErrorCantFindQuestion);
-    throw std::invalid_argument(message.toStdString());
+    throw CantFindQuestionException(this->metaObject()->className(),
+                                    methodName);
   }
 
   this->convertQueryToQuestion(&query);
@@ -130,18 +141,14 @@ Question *QuestionModelSql::findByCriteria() {
 }
 
 bool QuestionModelSql::updateSql() {
+  const char *methodName = "updateSql";
   if (!this->_model) {
-    QString message = this->metaObject()->className();
-    message += "::updateSql --";
-    message += StringManager::get(StringID::ErrorPointerToQuestionEmpty);
-    throw std::invalid_argument(message.toStdString());
+    throw NullPointerToQuestionException(this->metaObject()->className(),
+                                         methodName);
   }
 
   if (this->_model->getId() <= 0) {
-    QString message = this->metaObject()->className();
-    message += "::updateSql --";
-    message += StringManager::get(StringID::ErrorPropertyIdInQuestionZero);
-    throw std::invalid_argument(message.toStdString());
+    throw BelowZeroIdException(this->metaObject()->className(), methodName);
   }
 
   UpdateSql sql = UpdateSql(StringManager::get(StringID::TableQuestions),
@@ -163,10 +170,7 @@ bool QuestionModelSql::updateSql() {
   qDebug() << query.lastQuery();
 
   if (!query.exec()) {
-    QString message = this->metaObject()->className();
-    message += "::updateSql --";
-    message += StringManager::get(StringID::ErrorQueryFailed);
-    throw std::invalid_argument(message.toStdString());
+    throw QueryFiledException(this->metaObject()->className(), methodName);
   }
 
   return true;
