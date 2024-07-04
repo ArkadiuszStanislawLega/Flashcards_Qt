@@ -43,5 +43,6 @@ enum class StringID {
   TagSuccesfullyRemoved,
   TagUpdateSuccesfully,
   TheQueryFailed,
+  UnexpectedError,
 };
 #endif

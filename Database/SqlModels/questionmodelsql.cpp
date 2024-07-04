@@ -1,19 +1,15 @@
 #include "questionmodelsql.h"
 
-#include <stringmanager.h>
-
-#include <Exceptions/nullpointertoquestionexception.h>
-#include <Exceptions/queryfiledexception.h>
-
 QuestionModelSql::QuestionModelSql(Question *model, QObject *parent)
     : QObject{parent} {
   this->_model = model;
 }
 
 bool QuestionModelSql::isInsertedSql() {
+  const char *methodName = "isInsertedSql";
   if (!this->_model) {
     throw new NullPointerToQuestionException(this->metaObject()->className(),
-                                             "isInsertedSql");
+                                             methodName);
   }
   InsertSql insert = InsertSql(StringManager::get(StringID::TableQuestions),
                                {StringManager::get(StringID::ColumnValue),
@@ -31,25 +27,24 @@ bool QuestionModelSql::isInsertedSql() {
                   this->_model->getIsActive());
 
   if (!query.exec()) {
-    throw new QueryFiledException(this->metaObject()->className(),
-                                  "isInsertedSql");
+    throw new QueryFiledException(this->metaObject()->className(), methodName);
   }
   this->findByCriteria();
   return true;
 }
 
 bool QuestionModelSql::isDeleteSql() {
+  const char *methodName = "isDeleteSql";
+
   if (!this->_model) {
     throw new NullPointerToQuestionException(this->metaObject()->className(),
-                                             "isDeleteSql");
+                                             methodName);
   }
 
   if (this->_model->getId() <= 0) {
-    QString message = this->metaObject()->className();
-    message += "::isDeleteSql --";
-    message += StringManager::get(StringID::ErrorPropertyIdInQuestionZero);
-    throw std::invalid_argument(message.toStdString());
+    throw new BelowZeroIdException(this->metaObject()->className(), methodName);
   }
+
   DeleteSql queryS = DeleteSql(StringManager::get(StringID::TableQuestions),
                                {StringManager::get(StringID::ColumnId)}, this);
 
@@ -59,20 +54,15 @@ bool QuestionModelSql::isDeleteSql() {
                   this->_model->getId());
 
   if (!query.exec()) {
-    QString message = this->metaObject()->className();
-    message += "::isDeleteSql --";
-    message += StringManager::get(StringID::ErrorQueryFailed);
-    throw std::invalid_argument(message.toStdString());
+    throw new QueryFiledException(this->metaObject()->className(), methodName);
   }
   return true;
 }
 
 Question *QuestionModelSql::selectQuestion(int id) {
+  const char *methodName = "selectQuestion";
   if (id <= 0) {
-    QString message = this->metaObject()->className();
-    message += "::selectQuestion --";
-    message += StringManager::get(StringID::ErrorPropertyIdInQuestionZero);
-    throw std::invalid_argument(message.toStdString());
+    throw new BelowZeroIdException(this->metaObject()->className(), methodName);
   }
 
   FindByKeySql *sql =
@@ -82,10 +72,7 @@ Question *QuestionModelSql::selectQuestion(int id) {
   query.bindValue(":" + StringManager::get(StringID::ColumnId), id);
 
   if (!query.exec()) {
-    QString message = this->metaObject()->className();
-    message += "::selectQuestion --";
-    message += StringManager::get(StringID::ErrorQueryFailed);
-    throw std::invalid_argument(message.toStdString());
+    throw new QueryFiledException(this->metaObject()->className(), methodName);
   }
 
   this->convertQueryToQuestion(&query);

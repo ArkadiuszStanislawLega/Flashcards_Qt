@@ -54,6 +54,8 @@ QMap<StringID, QString> StringManager::_stringMap = {
      tr("The tag has been successfully removed from database")},
     {StringID::TagUpdateSuccesfully, tr("Tag updated succesfully")},
     {StringID::TheQueryFailed, tr("The query failed")},
+    {StringID::UnexpectedError,
+     tr("It seems that the program has encountered an unusual problem.")}
 
 };
 

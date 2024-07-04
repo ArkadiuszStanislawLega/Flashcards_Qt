@@ -25,10 +25,12 @@ SOURCES += \
     Database/SqlModels/questionmodelsql.cpp \
     Database/SqlModels/tagmodelsql.cpp \
     Database/SqlModels/tagandquestionrelationsql.cpp \
+    Exceptions/belowzeroidexception.cpp \
     Exceptions/defaultexception.cpp \
     Exceptions/nullpointertoquestionexception.cpp \
     Exceptions/nullpointertotagexception.cpp \
     Exceptions/queryfiledexception.cpp \
+    Exceptions/valueisemptyexception.cpp \
     Models/question.cpp \
     Models/tag.cpp \
     Views/learnview.cpp \
@@ -58,10 +60,12 @@ HEADERS += \
     Database/SqlGenerators/wheresql.h \
     Database/SqlGenerators/selectsql.h \
     Enums/StringID.h \
+    Exceptions/belowzeroidexception.h \
     Exceptions/defaultexception.h \
     Exceptions/nullpointertoquestionexception.h \
     Exceptions/nullpointertotagexception.h \
     Exceptions/queryfiledexception.h \
+    Exceptions/valueisemptyexception.h \
     Models/question.h \
     Models/tag.h \
     Views/learnview.h \

@@ -70,6 +70,8 @@ void QuestionView::on_b_create_question_clicked() {
 /// \return Created question with Id from database.
 ///
 Question *QuestionView::addQuestionToDb() {
+  const char *methodName = "addQuestionToDb";
+
   Question *q = new Question(this);
   q->setAnswer(ui->te_answer->toPlainText());
   q->setValue(ui->te_value->toPlainText());
@@ -83,9 +85,14 @@ Question *QuestionView::addQuestionToDb() {
       this->cleanTextEditors();
       this->printInfo(StringManager::get(StringID::QuestionCreatedCorrectly));
     }
-  } catch (DefaultException &e) {
+  } catch (NullPointerToQuestionException &e) {
+    this->printInfo(StringManager::get(StringID::UnexpectedError), true);
+    qWarning() << this->metaObject()->className() << "::" << methodName
+               << e.what();
+  } catch (QueryFiledException &e) {
     this->printInfo(StringManager::get(StringID::ErrorDatabase), true);
-    qWarning() << "QuestionView::addQuestionToDb" << e.what();
+    qWarning() << this->metaObject()->className() << "::" << methodName
+               << e.what();
   }
 
   return q;

@@ -11,7 +11,11 @@
 #include <Database/SqlGenerators/selectwithcriteriasql.h>
 #include <Database/SqlGenerators/updatesql.h>
 #include <Database/SqlGenerators/wheresql.h>
+#include <Exceptions/belowzeroidexception.h>
+#include <Exceptions/nullpointertoquestionexception.h>
+#include <Exceptions/queryfiledexception.h>
 #include <Models/question.h>
+#include <stringmanager.h>
 
 class QuestionModelSql : public QObject {
 private:
