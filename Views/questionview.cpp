@@ -176,6 +176,7 @@ void QuestionView::on_b_update_question_clicked() {
 
 void QuestionView::on_b_remove_question_clicked() {
   const char *methodName = "on_b_remove_question_clicked";
+
   if (this->_selected_question == nullptr) {
     this->printInfo(StringManager::get(StringID::InfoFirstSelectQuestion),
                     true);

@@ -26,7 +26,7 @@ private:
   Q_OBJECT
   Tag *_tag;
   Question *_question;
-  bool isQuestionAndTagValid(QString);
+  bool isQuestionAndTagValid(const char *methoName);
   template <typename T> void executeQuery(T *);
 
 public:

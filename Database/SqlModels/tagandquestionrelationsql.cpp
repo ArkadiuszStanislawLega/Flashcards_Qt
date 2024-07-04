@@ -2,6 +2,12 @@
 
 #include <stringmanager.h>
 
+#include <Exceptions/belowzeroidexception.h>
+#include <Exceptions/nullpointertoquestionandtagexception.h>
+#include <Exceptions/nullpointertoquestionexception.h>
+#include <Exceptions/nullpointertotagexception.h>
+#include <Exceptions/queryfiledexception.h>
+
 TagAndQuestionRelationSql::TagAndQuestionRelationSql(Tag *tag,
                                                      Question *question,
                                                      QObject *parent)
@@ -10,37 +16,28 @@ TagAndQuestionRelationSql::TagAndQuestionRelationSql(Tag *tag,
   this->_question = question;
 }
 
-bool TagAndQuestionRelationSql::isQuestionAndTagValid(QString method) {
-  QString errorMessage = this->metaObject()->className();
-  errorMessage += "::" + method + "-->";
-  errorMessage += "isQuestionAndTagValid -- ";
-
+bool TagAndQuestionRelationSql::isQuestionAndTagValid(const char *methodName) {
   if (!this->_tag) {
-    errorMessage += StringManager::get(StringID::ErrorPointerToTagEmpty);
-    throw std::invalid_argument(errorMessage.toStdString());
+    throw NullPointerToTagException(this->metaObject()->className(),
+                                    methodName);
   }
 
   if (!this->_question) {
-    errorMessage += StringManager::get(StringID::ErrorPropertyIdInQuestionZero);
-    throw std::invalid_argument(errorMessage.toStdString());
+    throw NullPointerToQuestionException(this->metaObject()->className(),
+                                         methodName);
   }
 
-  if (this->_tag->getId() <= 0) {
-    errorMessage += StringManager::get(StringID::ErrorPropertyIdInTagZero);
-    throw std::invalid_argument(errorMessage.toStdString());
-  }
-
-  if (this->_question->getId() <= 0) {
-    errorMessage += StringManager::get(StringID::ErrorPropertyIdInQuestionZero);
-    throw std::invalid_argument(errorMessage.toStdString());
+  if (this->_tag->getId() <= 0 || this->_question->getId() <= 0) {
+    throw BelowZeroIdException(this->metaObject()->className(), methodName);
   }
 
   return true;
 }
 
 bool TagAndQuestionRelationSql::isInsertedSql() {
+  const char *methodName = "isInsertedSl";
   try {
-    if (!isQuestionAndTagValid("isInsertedSql")) {
+    if (!isQuestionAndTagValid(methodName)) {
       return false;
     }
 
@@ -53,7 +50,7 @@ bool TagAndQuestionRelationSql::isInsertedSql() {
     executeQuery<InsertSql>(sql);
 
   } catch (std::invalid_argument &e) {
-    qWarning() << this->metaObject()->className() << "::isInsertedSql"
+    qWarning() << this->metaObject()->className() << "::" << methodName
                << e.what();
     return false;
   }
@@ -62,8 +59,9 @@ bool TagAndQuestionRelationSql::isInsertedSql() {
 }
 
 bool TagAndQuestionRelationSql::isDeletedSql() {
+  const char *methodName = "isDeletedSql";
   try {
-    if (!(isQuestionAndTagValid("isDeletedSql"))) {
+    if (!(isQuestionAndTagValid(methodName))) {
       return false;
     }
     DeleteSql *sql =
@@ -75,7 +73,7 @@ bool TagAndQuestionRelationSql::isDeletedSql() {
     executeQuery<DeleteSql>(sql);
 
   } catch (std::invalid_argument &e) {
-    qWarning() << this->metaObject()->className() << "::isDeleteSql"
+    qWarning() << this->metaObject()->className() << "::" << methodName
                << e.what();
     return false;
   }
@@ -83,8 +81,9 @@ bool TagAndQuestionRelationSql::isDeletedSql() {
 }
 
 bool TagAndQuestionRelationSql::isSelectedSql() {
+  const char *methodName = "isSelectedSql";
   try {
-    if (!isQuestionAndTagValid("isSelectedSql")) {
+    if (!isQuestionAndTagValid(methodName)) {
       return false;
     }
 
@@ -97,7 +96,7 @@ bool TagAndQuestionRelationSql::isSelectedSql() {
     executeQuery<FindByKeySql>(sql);
 
   } catch (std::invalid_argument &e) {
-    qWarning() << this->metaObject()->className() << "::isDeleteSql"
+    qWarning() << this->metaObject()->className() << "::" << methodName
                << e.what();
     return false;
   }
@@ -105,7 +104,8 @@ bool TagAndQuestionRelationSql::isSelectedSql() {
 }
 
 bool TagAndQuestionRelationSql::isAlreadyRelated() {
-  if (!isQuestionAndTagValid("isAlreadyRelated")) {
+  const char *methodName = "isAlreadyRelated";
+  if (!isQuestionAndTagValid(methodName)) {
     return false;
   }
   QString criteria = StringManager::get(StringID::ColumnTagId) +
@@ -123,21 +123,16 @@ bool TagAndQuestionRelationSql::isAlreadyRelated() {
                   this->_question->getId());
 
   if (!query.exec()) {
-    QString message = this->metaObject()->className();
-    message += "::isAlreadyRelated --";
-    message += StringManager::get(StringID::TheQueryFailed);
-    throw std::invalid_argument(message.toStdString());
+    throw QueryFiledException(this->metaObject()->className(), methodName);
   }
   return query.next();
 }
 
 bool TagAndQuestionRelationSql::isAllRelationRemoved() {
+  const char *methodName = "isAllRelationRemoved";
   if (!this->_question && !this->_tag) {
-    QString message = this->metaObject()->className();
-    message += "::isAllRelationRemoved --";
-    message += StringManager::get(StringID::ErrorPointerToTagAndQuestionEmpty);
-
-    throw std::invalid_argument(message.toStdString());
+    throw NullPointerToQuestionAndTagException(this->metaObject()->className(),
+                                               methodName);
   }
 
   QSqlQuery query;
