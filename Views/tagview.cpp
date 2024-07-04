@@ -2,6 +2,9 @@
 
 #include <stringmanager.h>
 
+#include <Exceptions/nullpointertoquestionandtagexception.h>
+#include <Exceptions/queryfiledexception.h>
+
 TagView::TagView(QWidget *parent) : QWidget{parent}, ui(new Ui::TagView) {
   ui->setupUi(this);
   this->_selected_tag = nullptr;
@@ -83,6 +86,7 @@ void TagView::on_b_update_tag_clicked() {
 }
 
 void TagView::on_b_remove_tag_clicked() {
+  const char *methodName = "on_b_remove_tag_clicked";
   if (!this->_selected_tag) {
     this->printInfo(StringManager::get(StringID::SelectTagFirst), true);
     return;
@@ -102,8 +106,13 @@ void TagView::on_b_remove_tag_clicked() {
     this->cleanTextEditors();
     emit remove_tag_from_db();
 
-  } catch (std::invalid_argument &e) {
-    qWarning() << "TagView::on_b_remove_tag_clicked" << e.what();
+  } catch (NullPointerToQuestionAndTagException &e) {
+    qWarning() << this->metaObject()->className() << "::" << methodName
+               << e.what();
+    this->printInfo(StringManager::get(StringID::UnexpectedError), true);
+  } catch (QueryFiledException &e) {
+    qWarning() << this->metaObject()->className() << "::" << methodName
+               << e.what();
     this->printInfo(StringManager::get(StringID::ErrorDatabase), true);
   }
 }

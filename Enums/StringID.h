@@ -25,6 +25,7 @@ enum class StringID {
   FieldTagCantEmpty,
   FieldValueCantEmpty,
   InfoFirstSelectQuestion,
+  QuestionAndTagAlreadyRelated,
   QuestionCreatedCorrectly,
   QuestionSuccesfullyRemoved,
   QuestionUpdated,

@@ -3,6 +3,8 @@
 #include <stringmanager.h>
 
 #include <Exceptions/defaultexception.h>
+#include <Exceptions/nullpointertoquestionandtagexception.h>
+#include <Exceptions/nullpointertotagexception.h>
 
 void QuestionView::initialQuestionsListView() {
   this->_table_model = new QSqlRelationalTableModel;
@@ -99,30 +101,26 @@ Question *QuestionView::addQuestionToDb() {
 }
 
 void QuestionView::createRelationQuestionAndTag(Question *q) {
+  const char *methodName = "createRelationQuestionAndTag";
   if (!q) {
-    throw std::invalid_argument("QuestionView::createRelationQuestionAndTag -- "
-                                "pointer to question is empty.");
+    throw NullPointerToQuestionException(this->metaObject()->className(),
+                                         methodName);
   }
 
   if (!this->_selected_tag) {
-    throw std::invalid_argument("QuestionView::createRelationQuestionAndTag -- "
-                                "pointer to tag is empty.");
+    throw NullPointerToTagException(this->metaObject()->className(),
+                                    methodName);
   }
 
-  if (q->getId() <= 0) {
-    throw std::invalid_argument("QuestionView::createRelationQuestionAndTag -- "
-                                "porperty id in quesiton is zero or subzero.");
-  }
-
-  if (this->_selected_tag->getId() <= 0) {
-    throw std::invalid_argument("QuestionView::createRelationQuestionAndTag -- "
-                                "property id in quesiton is zer or subzero");
+  if (q->getId() <= 0 || this->_selected_tag->getId() <= 0) {
+    throw BelowZeroIdException(this->metaObject()->className(), methodName);
   }
 
   if (q && this->_selected_tag) {
     TagAndQuestionRelationSql relation =
         TagAndQuestionRelationSql(this->_selected_tag, q, this);
     relation.isInsertedSql();
+
     delete q;
   }
 }
@@ -199,15 +197,19 @@ void QuestionView::on_b_remove_question_clicked() {
       this->printInfo(StringManager::get(StringID::QuestionSuccesfullyRemoved));
     }
     emit remove_question_from_db();
-  } catch (std::invalid_argument &e) {
+  } catch (QueryFiledException &e) {
     this->printInfo(StringManager::get(StringID::ErrorDatabase), true);
+    qWarning() << this->metaObject()->className() << "::" << methodName
+               << e.what();
+  } catch (NullPointerToQuestionAndTagException &e) {
+    this->printInfo(StringManager::get(StringID::UnexpectedError), true);
     qWarning() << this->metaObject()->className() << "::" << methodName
                << e.what();
   }
 }
 
 void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index) {
-
+  const char *methodName = "on_lv_created_quesions_pressed";
   int id, id_column_index, value_column_index, answer_column_index,
       is_active_column_index;
 
@@ -246,8 +248,17 @@ void QuestionView::on_lv_created_quesions_pressed(const QModelIndex &index) {
 
     this->_selected_question->setTags(relation->getRelatedTags());
     this->_selected_question->setParent(this);
-  } catch (std::invalid_argument &e) {
-    qWarning() << "QuestionView::on_lv_created_quesions_pressed" << e.what();
+  } catch (NullPointerToQuestionException &e) {
+    qWarning() << this->metaObject()->className() << "::" << methodName
+               << e.what();
+    this->printInfo(StringManager::get(StringID::UnexpectedError), true);
+  } catch (BelowZeroIdException &e) {
+    qWarning() << this->metaObject()->className() << "::" << methodName
+               << e.what();
+    this->printInfo(StringManager::get(StringID::UnexpectedError), true);
+  } catch (QueryFiledException &e) {
+    qWarning() << this->metaObject()->className() << "::" << methodName
+               << e.what();
     this->printInfo(StringManager::get(StringID::ErrorDatabase), true);
   }
 

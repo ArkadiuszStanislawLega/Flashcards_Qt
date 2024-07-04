@@ -30,6 +30,8 @@ QMap<StringID, QString> StringManager::_stringMap = {
     {StringID::FieldTagCantEmpty, tr("The tag field can't be empty.")},
     {StringID::FieldValueCantEmpty, tr("The value field can't be empty.")},
     {StringID::InfoFirstSelectQuestion, tr("Select question first")},
+    {StringID::QuestionAndTagAlreadyRelated,
+     tr("Question and Tag are already related.")},
     {StringID::QuestionCreatedCorrectly, tr("The question created correctly")},
     {StringID::QuestionSuccesfullyRemoved,
      tr("The question has been succesfully removed form database")},

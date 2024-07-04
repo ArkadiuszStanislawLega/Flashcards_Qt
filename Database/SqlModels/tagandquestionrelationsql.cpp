@@ -48,14 +48,17 @@ bool TagAndQuestionRelationSql::isInsertedSql() {
                       this);
 
     executeQuery<InsertSql>(sql);
+    return true;
 
-  } catch (std::invalid_argument &e) {
-    qWarning() << this->metaObject()->className() << "::" << methodName
-               << e.what();
-    return false;
+  } catch (NullPointerToTagException &e) {
+    qWarning() << e.what();
+  } catch (NullPointerToQuestionException &e) {
+    qWarning() << e.what();
+  } catch (BelowZeroIdException &e) {
+    qWarning() << e.what();
   }
 
-  return true;
+  return false;
 }
 
 bool TagAndQuestionRelationSql::isDeletedSql() {
@@ -71,13 +74,16 @@ bool TagAndQuestionRelationSql::isDeletedSql() {
                       this);
 
     executeQuery<DeleteSql>(sql);
+    return true;
 
-  } catch (std::invalid_argument &e) {
-    qWarning() << this->metaObject()->className() << "::" << methodName
-               << e.what();
-    return false;
+  } catch (NullPointerToTagException &e) {
+    qWarning() << e.what();
+  } catch (NullPointerToQuestionException &e) {
+    qWarning() << e.what();
+  } catch (BelowZeroIdException &e) {
+    qWarning() << e.what();
   }
-  return true;
+  return false;
 }
 
 bool TagAndQuestionRelationSql::isSelectedSql() {
@@ -94,38 +100,53 @@ bool TagAndQuestionRelationSql::isSelectedSql() {
                          this);
 
     executeQuery<FindByKeySql>(sql);
+    return true;
 
-  } catch (std::invalid_argument &e) {
-    qWarning() << this->metaObject()->className() << "::" << methodName
-               << e.what();
-    return false;
+  } catch (NullPointerToTagException &e) {
+    qWarning() << e.what();
+  } catch (NullPointerToQuestionException &e) {
+    qWarning() << e.what();
+  } catch (BelowZeroIdException &e) {
+    qWarning() << e.what();
   }
-  return true;
+
+  return false;
 }
 
 bool TagAndQuestionRelationSql::isAlreadyRelated() {
   const char *methodName = "isAlreadyRelated";
-  if (!isQuestionAndTagValid(methodName)) {
-    return false;
-  }
-  QString criteria = StringManager::get(StringID::ColumnTagId) +
-                     "=:" + StringManager::get(StringID::ColumnTagId) +
-                     " AND " + StringManager::get(StringID::ColumnQuestionId) +
-                     "=:" + StringManager::get(StringID::ColumnQuestionId);
-  SelectWithCriteriaSql *sql = new SelectWithCriteriaSql(
-      StringManager::get(StringID::TableQuestionsTags), {}, criteria, this);
+  try {
+    if (!isQuestionAndTagValid(methodName)) {
+      return false;
+    }
+    QString criteria = StringManager::get(StringID::ColumnTagId) +
+                       "=:" + StringManager::get(StringID::ColumnTagId) +
+                       " AND " +
+                       StringManager::get(StringID::ColumnQuestionId) +
+                       "=:" + StringManager::get(StringID::ColumnQuestionId);
+    SelectWithCriteriaSql *sql = new SelectWithCriteriaSql(
+        StringManager::get(StringID::TableQuestionsTags), {}, criteria, this);
 
-  QSqlQuery query;
-  query.prepare(sql->generate());
-  query.bindValue(":" + StringManager::get(StringID::ColumnTagId),
-                  this->_tag->getId());
-  query.bindValue(":" + StringManager::get(StringID::ColumnQuestionId),
-                  this->_question->getId());
+    QSqlQuery query;
+    query.prepare(sql->generate());
+    query.bindValue(":" + StringManager::get(StringID::ColumnTagId),
+                    this->_tag->getId());
+    query.bindValue(":" + StringManager::get(StringID::ColumnQuestionId),
+                    this->_question->getId());
 
-  if (!query.exec()) {
-    throw QueryFiledException(this->metaObject()->className(), methodName);
+    if (!query.exec()) {
+      throw QueryFiledException(this->metaObject()->className(), methodName);
+    }
+    return query.next();
+
+  } catch (NullPointerToTagException &e) {
+    qWarning() << e.what();
+  } catch (NullPointerToQuestionException &e) {
+    qWarning() << e.what();
+  } catch (BelowZeroIdException &e) {
+    qWarning() << e.what();
   }
-  return query.next();
+  return false;
 }
 
 bool TagAndQuestionRelationSql::isAllRelationRemoved() {
@@ -331,8 +352,8 @@ QList<Question *> TagAndQuestionRelationSql::getRelatedActiveQuesitons() {
       questions.push_back(FromQueryToQuestionConverter::get(&query));
       questions.back()->setParent(this);
     } catch (std::invalid_argument &e) {
-      qWarning() << this->metaObject()->className()
-                 << "::getRelatedActiveQuesitons -- " << e.what();
+      qWarning() << this->metaObject()->className() << "::" << methodName
+                 << e.what();
     }
   }
 
@@ -340,6 +361,7 @@ QList<Question *> TagAndQuestionRelationSql::getRelatedActiveQuesitons() {
 }
 
 template <typename T> void TagAndQuestionRelationSql::executeQuery(T *sql) {
+  const char *methodName = "executeQuery";
   QSqlQuery query;
   query.prepare(sql->generate());
   query.bindValue(":" + StringManager::get(StringID::ColumnTagId),
@@ -348,9 +370,6 @@ template <typename T> void TagAndQuestionRelationSql::executeQuery(T *sql) {
                   this->_question->getId());
 
   if (!query.exec()) {
-    QString message = this->metaObject()->className();
-    message += "::isDeleteSql --";
-    message += StringManager::get(StringID::ErrorQueryFailed);
-    throw std::invalid_argument(message.toStdString());
+    throw QueryFiledException(this->metaObject()->className(), methodName);
   }
 }

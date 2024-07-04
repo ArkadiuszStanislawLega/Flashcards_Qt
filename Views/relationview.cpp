@@ -2,6 +2,10 @@
 
 #include <stringmanager.h>
 
+#include <Exceptions/belowzeroidexception.h>
+#include <Exceptions/nullpointertoquestionexception.h>
+#include <Exceptions/queryfiledexception.h>
+
 RelationView::RelationView(QWidget *parent)
     : QWidget{parent}, ui(new Ui::RelationView) {
   this->ui->setupUi(this);
@@ -80,6 +84,7 @@ void RelationView::on_cb_tags_currentIndexChanged(int index) {
 }
 
 void RelationView::on_lv_questions_clicked(const QModelIndex &index) {
+  const char *methodName = "on_lv_questions_clicked";
   int id, id_column_index, value_column_index, answer_column_index,
       is_active_column_index;
   QString value, answer;
@@ -117,9 +122,18 @@ void RelationView::on_lv_questions_clicked(const QModelIndex &index) {
     this->_selected_question->setTags(relation->getRelatedTags());
     this->_selected_question->setParent(this);
 
-  } catch (std::invalid_argument &e) {
-    qWarning() << "RelationView::on_lv_questions_clicked " << e.what();
-    this->_selected_question = {};
+  } catch (NullPointerToQuestionException &e) {
+    qWarning() << this->metaObject()->className() << "::" << methodName
+               << e.what();
+    this->printInfo(StringManager::get(StringID::UnexpectedError), true);
+  } catch (BelowZeroIdException &e) {
+    qWarning() << this->metaObject()->className() << "::" << methodName
+               << e.what();
+    this->printInfo(StringManager::get(StringID::UnexpectedError), true);
+  } catch (QueryFiledException &e) {
+    qWarning() << this->metaObject()->className() << "::" << methodName
+               << e.what();
+    this->printInfo(StringManager::get(StringID::ErrorDatabase), true);
   }
 
   this->_tag_from_selected_question = nullptr;
@@ -132,6 +146,7 @@ void RelationView::on_lv_question_tags_clicked(const QModelIndex &index) {
 }
 
 void RelationView::on_b_create_relation_clicked() {
+  const char *methodName = "on_b_create_relation_clicked";
   if (!this->_selected_tag_to_question_add) {
     this->printInfo(
         StringManager::get(StringID::TagFromComboBoxShlouldBeSelected), true);
@@ -148,7 +163,8 @@ void RelationView::on_b_create_relation_clicked() {
         this->_selected_tag_to_question_add, this->_selected_question, this);
 
     if (relation.isAlreadyRelated()) {
-      this->printInfo("Question and Tag are already related.");
+      this->printInfo(
+          StringManager::get(StringID::QuestionAndTagAlreadyRelated));
       return;
     }
 
@@ -161,12 +177,14 @@ void RelationView::on_b_create_relation_clicked() {
     emit create_relation();
 
   } catch (std::invalid_argument &e) {
-    qWarning() << "RelationView::on_b_create_relation_clicked" << e.what();
+    qWarning() << this->metaObject()->className() << "::" << methodName
+               << e.what();
     this->printInfo(StringManager::get(StringID::ErrorDatabase), true);
   }
 }
 
 void RelationView::on_b_remove_relation_clicked() {
+  const char *methodName = "on_b_remove_relation_clicked";
   if (!this->_tag_from_selected_question) {
     this->printInfo(StringManager::get(StringID::SelectTagFromQuestion), true);
     return;
@@ -190,7 +208,8 @@ void RelationView::on_b_remove_relation_clicked() {
     emit remove_relation();
 
   } catch (std::invalid_argument &e) {
-    qWarning() << "RelationView::on_b_remove_relation_clicked" << e.what();
+    qWarning() << this->metaObject()->className() << "::" << methodName
+               << e.what();
     printInfo(StringManager::get(StringID::ErrorDatabase), true);
   }
 }
