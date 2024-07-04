@@ -154,28 +154,22 @@ bool TagAndQuestionRelationSql::isAllRelationRemoved() {
   }
 
   if (!query.exec()) {
-    QString message = this->metaObject()->className();
-    message += "::isAllRelationRemoved --";
-    message += StringManager::get(StringID::ErrorQueryFailed);
-    throw std::invalid_argument(message.toStdString());
+    throw QueryFiledException(this->metaObject()->className(), methodName);
   }
   return true;
 }
 
 QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
+  const char *methodName = "getRelatedTags";
   if (!this->_question) {
-    QString message = this->metaObject()->className();
-    message += "::getRelatedTags --";
-    message += StringManager::get(StringID::ErrorPointerToQuestionEmpty);
-    throw std::invalid_argument(message.toStdString());
+    throw NullPointerToQuestionException(this->metaObject()->className(),
+                                         methodName);
   }
 
   if (this->_question->getId() <= 0) {
-    QString message = this->metaObject()->className();
-    message += "::getRelatedTags --";
-    message += StringManager::get(StringID::ErrorPropertyIdInQuestionZero);
-    throw std::invalid_argument(message.toStdString());
+    throw BelowZeroIdException(this->metaObject()->className(), methodName);
   }
+
   QList<Tag *> tags;
 
   QList<QString> requriedFields = {
@@ -210,10 +204,7 @@ QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
                   this->_question->getId());
 
   if (!query.exec()) {
-    QString message = this->metaObject()->className();
-    message += "::getRelatedTags --";
-    message += StringManager::get(StringID::ErrorQueryFailed);
-    throw std::invalid_argument(message.toStdString());
+    throw QueryFiledException(this->metaObject()->className(), methodName);
   }
 
   while (query.next()) {
@@ -221,7 +212,7 @@ QList<Tag *> TagAndQuestionRelationSql::getRelatedTags() {
       tags.push_back(FromQueryToTagConverter::get(&query));
       tags.back()->setParent(this);
     } catch (std::invalid_argument &e) {
-      qWarning() << this->metaObject()->className() << "::getRelatedTags -- "
+      qWarning() << this->metaObject()->className() << "::" << methodName
                  << e.what();
     }
   }
@@ -280,19 +271,16 @@ QList<Question *> TagAndQuestionRelationSql::getRelatedQuestions() {
 }
 
 QList<Question *> TagAndQuestionRelationSql::getRelatedActiveQuesitons() {
+  const char *methodName = "getRelatedActiveQuesitons";
   if (!this->_tag) {
-    QString message = this->metaObject()->className();
-    message += "::getRelatedActiveQuestions --";
-    message += StringManager::get(StringID::ErrorPointerToTagEmpty);
-    throw std::invalid_argument(message.toStdString());
+    throw NullPointerToTagException(this->metaObject()->className(),
+                                    methodName);
   }
 
   if (this->_tag->getId() <= 0) {
-    QString message = this->metaObject()->className();
-    message += "::getRelatedActiveQuestions --";
-    message += StringManager::get(StringID::ErrorPropertyIdInTagZero);
-    throw std::invalid_argument(message.toStdString());
+    throw BelowZeroIdException(this->metaObject()->className(), methodName);
   }
+
   QList<Question *> questions;
 
   QList<QString> requriedFields = {
@@ -335,10 +323,7 @@ QList<Question *> TagAndQuestionRelationSql::getRelatedActiveQuesitons() {
                   this->_tag->getId());
 
   if (!query.exec()) {
-    QString message = this->metaObject()->className();
-    message += "::getRelatedActiveQuestions --";
-    message += StringManager::get(StringID::ErrorQueryFailed);
-    throw std::invalid_argument(message.toStdString());
+    throw QueryFiledException(this->metaObject()->className(), methodName);
   }
 
   while (query.next()) {
