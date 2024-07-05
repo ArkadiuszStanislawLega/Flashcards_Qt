@@ -8,14 +8,8 @@ DeleteSql::DeleteSql(QString table, QList<QString> columns, QObject *parent)
 }
 
 QString DeleteSql::generate() {
-  if (this->_table.isEmpty()) {
-    throw std::invalid_argument("DeleteSql::generate -- table name is empty.");
-  }
-
-  if (this->_columns.empty()) {
-    throw std::invalid_argument(
-        "DeleteSql::generate -- list with coulmns is emtpy.");
-  }
+  assert(!this->_table.isEmpty());
+  assert(!this->_columns.empty());
 
   QString query{};
 

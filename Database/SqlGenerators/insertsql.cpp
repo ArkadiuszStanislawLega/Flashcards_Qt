@@ -8,13 +8,8 @@ InsertSql::InsertSql(QString table, QList<QString> columns, QObject *parent)
 }
 
 QString InsertSql::generate() {
-  if (this->_table.isEmpty()) {
-    throw std::invalid_argument("Property table is empty.");
-  }
-
-  if (this->_columns.empty()) {
-    throw std::invalid_argument("Property columns is empty.");
-  }
+  assert(!this->_table.isEmpty());
+  assert(!this->_columns.empty());
 
   QString sQuery{};
 

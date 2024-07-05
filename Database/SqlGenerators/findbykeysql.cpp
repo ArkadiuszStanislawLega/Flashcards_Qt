@@ -10,9 +10,7 @@ FindByKeySql::FindByKeySql(QString table, QList<QString> columns,
 }
 
 QString FindByKeySql::generate() {
-  if (this->_table.isEmpty()) {
-    throw std::invalid_argument("Property table (name) - is empty.");
-  }
+  assert(!this->_table.isEmpty());
 
   QString query{};
   query = SELECT;

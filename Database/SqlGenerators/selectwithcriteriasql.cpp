@@ -10,9 +10,7 @@ SelectWithCriteriaSql::SelectWithCriteriaSql(QString table,
 }
 
 QString SelectWithCriteriaSql::generate() {
-  if (this->_table.isEmpty()) {
-    throw std::invalid_argument("Select::generate -- table property is empty.");
-  }
+  assert(!this->_table.isEmpty());
 
   QString query;
   query = SELECT;

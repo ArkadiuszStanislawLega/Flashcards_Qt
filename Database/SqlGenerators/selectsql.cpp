@@ -18,9 +18,7 @@ SelectSql::SelectSql(QString table, QList<QString> columns, QObject *parent)
 /// empty get all columns from database. \return SelectSql Query to database.
 ///
 QString SelectSql::generate() {
-  if (this->_table.isEmpty()) {
-    throw std::invalid_argument("Select::generate -- table property is empty.");
-  }
+  assert(!this->_table.isEmpty());
 
   QString query;
   query = SELECT;

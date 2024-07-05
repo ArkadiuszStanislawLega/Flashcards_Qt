@@ -15,32 +15,11 @@ SelectWithJoinSql::SelectWithJoinSql(
 }
 
 QString SelectWithJoinSql::generate() {
-  if (this->_table.isEmpty()) {
-
-    throw std::invalid_argument(
-        "SelectWithJoinSql::generate -- property table is empty.");
-  }
-
-  if (this->_connectedTables.empty()) {
-    throw std::invalid_argument(
-        "SelectWithJoinSql::generate -- property tables is empty.");
-  }
-
-  if (this->_connectedValues.empty()) {
-    throw std::invalid_argument(
-        "SelectWithJoinSql::generate -- property tables is empty.");
-  }
-
-  if (this->_connectedValues.size() != this->_connectedTables.size()) {
-    throw std::invalid_argument(
-        "SelectWithJoinSql::generate -- properties the values and the tables "
-        "must have the same size.");
-  }
-
-  if (this->_criteria.isEmpty()) {
-    throw std::invalid_argument(
-        "SelectWithJoinSql::generate -- property criteria is empty.");
-  }
+  assert(!this->_table.isEmpty());
+  assert(!this->_connectedTables.isEmpty());
+  assert(!this->_connectedValues.isEmpty());
+  assert(!this->_criteria.isEmpty());
+  assert(this->_connectedValues.size() == this->_connectedTables.size());
 
   QString query;
   query = SELECT;
