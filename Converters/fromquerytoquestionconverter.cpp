@@ -3,10 +3,7 @@
 #include <stringmanager.h>
 
 Question *FromQueryToQuestionConverter::get(QSqlQuery *query) {
-  if (!query) {
-    throw std::invalid_argument(
-        "FromQueryToQuestionConverter::get -- pointer to query is empty.");
-  }
+  assert(query);
 
   try {
     return new Question(

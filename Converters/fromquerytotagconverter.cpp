@@ -3,10 +3,8 @@
 #include <stringmanager.h>
 
 Tag *FromQueryToTagConverter::get(QSqlQuery *query) {
-  if (!query) {
-    throw std::invalid_argument(
-        "FromQueryToQuestionConverter::get -- pointer to query is empty.");
-  }
+  assert(query);
+
   try {
     return new Tag(FromQueryToValueConverter::get<int>(
                        query, StringManager::get(StringID::ColumnId)),

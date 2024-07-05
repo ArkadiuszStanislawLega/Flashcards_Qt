@@ -176,7 +176,7 @@ void RelationView::on_b_create_relation_clicked() {
 
     emit create_relation();
 
-  } catch (std::invalid_argument &e) {
+  } catch (QueryFiledException &e) {
     qWarning() << this->metaObject()->className() << "::" << methodName
                << e.what();
     this->printInfo(StringManager::get(StringID::ErrorDatabase), true);
@@ -207,7 +207,7 @@ void RelationView::on_b_remove_relation_clicked() {
 
     emit remove_relation();
 
-  } catch (std::invalid_argument &e) {
+  } catch (QueryFiledException &e) {
     qWarning() << this->metaObject()->className() << "::" << methodName
                << e.what();
     printInfo(StringManager::get(StringID::ErrorDatabase), true);
