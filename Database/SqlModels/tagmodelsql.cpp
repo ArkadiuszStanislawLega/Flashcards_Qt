@@ -2,14 +2,21 @@
 
 #include <stringmanager.h>
 
+#include <Exceptions/belowzeroidexception.h>
+#include <Exceptions/cantfindquestionexception.h>
+#include <Exceptions/nullpointertoqueryexception.h>
+#include <Exceptions/nullpointertotagexception.h>
+#include <Exceptions/queryfiledexception.h>
+#include <Exceptions/valueisemptyexception.h>
+
 TagModelSql::TagModelSql(Tag *model, QObject *parent) : QObject{parent} {
   this->_model = model;
 }
 
 void TagModelSql::convertQueryToTag(QSqlQuery *query) {
   if (!query) {
-    throw std::invalid_argument(
-        "TagModelSql::converterQueryToTag -- pointer to query is empty.");
+    throw NullPointerToQueryException(this->metaObject()->className(),
+                                      "converterQueryToTag");
   }
   this->_model->setId(FromQueryToValueConverter::get<int>(
       query, StringManager::get(StringID::ColumnId)));
@@ -18,9 +25,11 @@ void TagModelSql::convertQueryToTag(QSqlQuery *query) {
 }
 
 bool TagModelSql::isInsertedSql() {
+  const char *methodName = "isInsertedSql";
+
   if (!this->_model) {
-    throw std::invalid_argument(
-        "TagModelSql::isInsertedSql -- pointer to property model is empty.");
+    throw NullPointerToTagException(this->metaObject()->className(),
+                                    methodName);
   }
 
   InsertSql sql = InsertSql(StringManager::get(StringID::TableTags),
@@ -31,20 +40,21 @@ bool TagModelSql::isInsertedSql() {
                   this->_model->getTag());
 
   if (!query.exec()) {
-    throw std::invalid_argument("TagModelSql::isInsertedSql -- query failed.");
+    throw QueryFiledException(this->metaObject()->className(), methodName);
   }
   return true;
 }
 
 bool TagModelSql::isDeleteSql() {
+  const char *methodName = "isDeleteSql";
+
   if (!this->_model) {
-    throw std::invalid_argument(
-        "TagModelSql::isDeleteSql -- pointer to tag is null.");
+    throw NullPointerToTagException(this->metaObject()->className(),
+                                    methodName);
   }
 
   if (this->_model->getId() <= 0) {
-    throw std::invalid_argument("TagModelSql::isDeleteSql -- property id "
-                                "of the model is zero or below zero");
+    throw BelowZeroIdException(this->metaObject()->className(), methodName);
   }
   DeleteSql queryS = DeleteSql(StringManager::get(StringID::TableTags),
                                {StringManager::get(StringID::ColumnId)}, this);
@@ -55,21 +65,20 @@ bool TagModelSql::isDeleteSql() {
                   this->_model->getId());
 
   if (!query.exec()) {
-    throw std::invalid_argument(
-        "TagModelSql::isDeleteSql -- the query failed.");
+    throw QueryFiledException(this->metaObject()->className(), methodName);
   }
   return true;
 }
 
 bool TagModelSql::updateSql() {
+  const char *methodName = "updateSql";
   if (!this->_model) {
-    throw std::invalid_argument(
-        "TagModelSql::updateSql -- tag reference is empty.");
+    throw NullPointerToTagException(this->metaObject()->className(),
+                                    methodName);
   }
 
   if (this->_model->getId() <= 0) {
-    throw std::invalid_argument("TagModelSql::updateSql -- property id in "
-                                "tag is zero or subzero.");
+    throw BelowZeroIdException(this->metaObject()->className(), methodName);
   }
 
   UpdateSql sql = UpdateSql(StringManager::get(StringID::TableTags),
@@ -84,16 +93,16 @@ bool TagModelSql::updateSql() {
   qDebug() << query.lastQuery();
 
   if (!query.exec()) {
-    throw std::invalid_argument("TagModelSql::updateSql -- the query failed.");
+    throw QueryFiledException(this->metaObject()->className(), methodName);
   }
 
   return true;
 }
 
 Tag *TagModelSql::selectTag(int id) {
+  const char *methodName = "selectTag";
   if (id <= 0) {
-    throw std::invalid_argument(
-        "TagModel::selectTag -- id is zero or subzero.");
+    throw BelowZeroIdException(this->metaObject()->className(), methodName);
   }
 
   FindByKeySql *sql =
@@ -103,7 +112,7 @@ Tag *TagModelSql::selectTag(int id) {
   query.bindValue(":" + StringManager::get(StringID::ColumnId), id);
 
   if (!query.exec()) {
-    throw std::invalid_argument("TagMedelSql::selectTag -- the query failed.");
+    throw QueryFiledException(this->metaObject()->className(), methodName);
   }
 
   this->convertQueryToTag(&query);
@@ -112,9 +121,9 @@ Tag *TagModelSql::selectTag(int id) {
 }
 
 Tag *TagModelSql::findByCriteria() {
+  const char *methodName = "findByCriteria";
   if (this->_model->getTag().isEmpty()) {
-    throw std::invalid_argument(
-        "TagModelSql::findByCriteria -- value is empty.");
+    throw ValueIsEmptyException(this->metaObject()->className(), methodName);
   }
   QString criteria = StringManager::get(StringID::ColumnTag) +
                      "=:" + StringManager::get(StringID::ColumnTag);
@@ -128,19 +137,18 @@ Tag *TagModelSql::findByCriteria() {
                   this->_model->getTag());
 
   if (!query.exec()) {
-    throw std::invalid_argument(
-        "TagModelSql::findByCriteria - the query failed.");
+    throw QueryFiledException(this->metaObject()->className(), methodName);
   }
 
   if (!query.next()) {
-    throw std::invalid_argument(
-        "TagModelSql::findByCriteria - can't find question in database.");
+    throw CantFindQuestionException(this->metaObject()->className(),
+                                    methodName);
   }
 
   try {
     this->convertQueryToTag(&query);
-  } catch (std::invalid_argument &e) {
-    qWarning() << "TagModelSql::findByCriteria -- " << e.what();
+  } catch (NullPointerToQueryException &e) {
+    qWarning() << this->metaObject()->className() << methodName << e.what();
   }
 
   return this->_model;
@@ -152,7 +160,7 @@ QList<Tag *> TagModelSql::getAllTags() {
   query.prepare(sql.generate());
 
   if (!query.exec()) {
-    throw std::invalid_argument("TagModelSql::getAllTags -- the query failed.");
+    throw QueryFiledException(this->metaObject()->className(), "getAllTags");
   }
   QList<Tag *> tags;
   while (query.next()) {
