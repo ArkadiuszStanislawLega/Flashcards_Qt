@@ -14,8 +14,6 @@ Question::Question(QObject *parent) : QObject(parent) {
   this->_id = 0;
   this->_value = "";
   this->_answer = "";
-  // this->setObjectName("Question");
-  metaObject()->className();
 }
 
 Question::Question(int id, QObject *parent) : Question(parent) {

@@ -19,6 +19,7 @@ QMap<StringID, QString> StringManager::_stringMap = {
      tr("pointer to tag and questin is empty.")},
     {StringID::ErrorPointerToQuestionEmpty,
      tr("pointer to question is empty.")},
+    {StringID::ErrorPointerToQueryEmpty, tr("pointer to query is emtpy.")},
     {StringID::ErrorPropertyIdInTagZero,
      tr("property id in tag is zero or subzero.")},
     {StringID::ErrorPropertyIdInQuestionZero,

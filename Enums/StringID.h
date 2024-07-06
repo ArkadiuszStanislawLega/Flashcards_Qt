@@ -16,6 +16,7 @@ enum class StringID {
   ErrorPointerToTagEmpty,
   ErrorPointerToTagAndQuestionEmpty,
   ErrorPointerToQuestionEmpty,
+  ErrorPointerToQueryEmpty,
   ErrorPropertyIdInTagZero,
   ErrorPropertyIdInQuestionZero,
   ErrorPropertyValueIsEmpty,

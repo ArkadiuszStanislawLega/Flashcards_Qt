@@ -29,6 +29,7 @@ SOURCES += \
     Exceptions/belowzeroidexception.cpp \
     Exceptions/cantfindquestionexception.cpp \
     Exceptions/defaultexception.cpp \
+    Exceptions/nullpointertoqueryexception.cpp \
     Exceptions/nullpointertoquestionandtagexception.cpp \
     Exceptions/nullpointertoquestionexception.cpp \
     Exceptions/nullpointertotagexception.cpp \
@@ -67,6 +68,7 @@ HEADERS += \
     Exceptions/belowzeroidexception.h \
     Exceptions/cantfindquestionexception.h \
     Exceptions/defaultexception.h \
+    Exceptions/nullpointertoqueryexception.h \
     Exceptions/nullpointertoquestionandtagexception.h \
     Exceptions/nullpointertoquestionexception.h \
     Exceptions/nullpointertotagexception.h \
