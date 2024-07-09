@@ -2,7 +2,9 @@
 
 #include <stringmanager.h>
 
+#include <Exceptions/belowzeroidexception.h>
 #include <Exceptions/nullpointertoquestionandtagexception.h>
+#include <Exceptions/nullpointertotagexception.h>
 #include <Exceptions/queryfiledexception.h>
 
 TagView::TagView(QWidget *parent) : QWidget{parent}, ui(new Ui::TagView) {
@@ -50,7 +52,10 @@ void TagView::on_b_create_tag_clicked() {
     this->cleanTextEditors();
     emit added_tag_to_db();
 
-  } catch (std::invalid_argument &e) {
+  } catch (NullPointerToTagException &e) {
+    qWarning() << "TagView::no_b_create_tag_clicked" << e.what();
+    this->printInfo(StringManager::get(StringID::UnexpectedError), true);
+  } catch (QueryFiledException &e) {
     qWarning() << "TagView::no_b_create_tag_clicked" << e.what();
     this->printInfo(StringManager::get(StringID::ErrorDatabase), true);
   }
@@ -79,7 +84,13 @@ void TagView::on_b_update_tag_clicked() {
     this->cleanTextEditors();
     emit updated_tag_from_db();
 
-  } catch (std::invalid_argument &e) {
+  } catch (NullPointerToTagException &e) {
+    qWarning() << "TagView::on_b_update_tag_clicked" << e.what();
+    this->printInfo(StringManager::get(StringID::UnexpectedError), true);
+  } catch (BelowZeroIdException &e) {
+    qWarning() << "TagView::on_b_update_tag_clicked" << e.what();
+    this->printInfo(StringManager::get(StringID::UnexpectedError), true);
+  } catch (QueryFiledException &e) {
     qWarning() << "TagView::on_b_update_tag_clicked" << e.what();
     this->printInfo(StringManager::get(StringID::ErrorDatabase), true);
   }
